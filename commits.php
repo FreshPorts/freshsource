@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.12 2002-07-26 21:38:50 dan Exp $
+	# $Id: commits.php,v 1.13 2002-07-27 19:54:34 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -229,7 +229,7 @@ source.
 								$HTML .= '&nbsp;' . freshports_Encoding_Errors();
 							}
 
-							$HTML .= '&nbsp;&nbsp;' . str_replace("cvs commit: ", "", $myrow["message_subject"]);
+#							$HTML .= '&nbsp;&nbsp;' . str_replace("cvs commit: ", "", $myrow["message_subject"]);
 							$HTML .= "<BR>\n\n";
 							$HTML .= "\n\n<BLOCKQUOTE>";
 						}
