@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.22 2003-04-14 00:39:44 dan Exp $
+	# $Id: commits.php,v 1.23 2003-04-23 22:16:31 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -14,7 +14,7 @@
 	freshports_Start($FreshPortsSlogan,
 					"$FreshSourceName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug=0;
+$Debug = 0;
 
 if ($Debug) echo "UserID='$UserID'";
 
