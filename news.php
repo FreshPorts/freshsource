@@ -1,7 +1,9 @@
-<?
-	# $Id: news.php,v 1.2 2002-06-24 18:16:10 dan Exp $
+<?php
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# $Id: news.php,v 1.3 2003-04-14 01:04:22 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
