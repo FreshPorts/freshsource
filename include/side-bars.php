@@ -1,5 +1,5 @@
 <?
-	# $Id: side-bars.php,v 1.2 2002-06-24 19:56:51 dan Exp $
+	# $Id: side-bars.php,v 1.3 2002-06-26 19:54:27 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -7,20 +7,7 @@
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/include/burstmedia.php");
 
-	BurstMediaCode();
-	echo '<TABLE BORDER="0" CELLPADDING=5">
-		  <TR><TD ALIGN="center">
-		 ';
-
-	BurstSkyscraperAd();
-	echo '</TD></TR>
-		  </TABLE>
-		 ';
-
 ?>
-
-
-<BR>
 
 <TABLE WIDTH="<? echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
 	<TR>
@@ -30,8 +17,9 @@
 	<TD VALIGN="top">
 <?
 	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/about.php",            "What is FreshSource?") . '</FONT><BR>';
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/authors.php",          "About the Authors")   . '</FONT><BR>';
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/privacy.php",          "Privacy")             . '</FONT><BR>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/phorum/",              "Forums")               . '</FONT><BR>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/authors.php",          "About the Authors")    . '</FONT><BR>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/privacy.php",          "Privacy")              . '</FONT><BR>';
 ?>
 	</TD>
 	</TR>
@@ -59,6 +47,23 @@
 //-->
 
 </SCRIPT>
+
+<?
+	BurstMediaCode();
+	echo '<TABLE BORDER="0" CELLPADDING=5">
+		  <TR><TD ALIGN="center">
+		 ';
+
+	BurstSkyscraperAd();
+	echo '</TD></TR>
+		  </TABLE>
+		 ';
+
+?>
+
+
+<BR>
+
 
 <CENTER>
 <A NAME="button_image"></A><A HREF="javascript:addNetscapePanel();"><IMG SRC="/images/sidebar-add-button.gif" BORDER="0" HEIGHT="45" WIDTH="100" ALT="Add tab to Netscape 6"></A>
