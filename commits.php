@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.6 2002-06-28 16:51:28 dan Exp $
+	# $Id: commits.php,v 1.7 2002-07-26 19:04:37 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -12,7 +12,7 @@
 	freshports_Start($FreshPortsSlogan,
 					"$FreshSourceName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug=0;
+$Debug=1;
 
 if ($Debug) echo "UserID='$UserID'";
 
@@ -109,35 +109,43 @@ function GetPortNameFromFileName($file_name) {
 #
 #$numrows=400;
 
-if ($Debug) {
-	echo "\$WatchListID = '$WatchListID'\n";
-}
+		if ($Debug) {
+			echo "\$WatchListID = '$WatchListID'\n";
+		}
 
-if ($WatchListID) {
-	$sql = " SELECT	commits_latest.*, 
-				 	CASE when watch_list_element.element_id is null
-						then 0
-						else 1
-					END as watch
-			   FROM	commits_latest left outer join watch_list_element
-					 ON commits_latest.element_id        = watch_list_element.element_id
-					AND watch_list_element.watch_list_id = $WatchListID
-		   ORDER BY commit_date_raw desc, category, port";
-} else {
-	$sql = "select id, message_id, message_date, message_subject, date_added,
-	               to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
-    	           to_char(commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
-	               committer, description, system_id, encoding_losses
-	          from commit_log order by commit_log.commit_date desc limit $MaxNumberOfPorts";
-}
+		if ($WatchListID) {
+			$sql = "select commit_log.id, commit_log.message_id, commit_log.message_date, commit_log.message_subject, 
+			               commit_log.date_added,
+	    	               to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
+    	                   to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
+			               commit_log.committer, commit_log.description, commit_log.system_id, commit_log.encoding_losses,
+			               CASE when watch_list_element.element_id is null
+			                   then 0
+			                   else 1
+			               END as watch
+			          from commit_log, 
+			               commit_log_elements left outer join watch_list_element
+					                       ON commit_log_elements.element_id    = watch_list_element.element_id
+					                      AND watch_list_element.watch_list_id = $WatchListID
+			         WHERE commit_log_elements.commit_log_id = commit_log.id
+			           AND EXISTS (select * from commit_log_elements order by id desc limit 100)
+			      order by commit_log.commit_date desc
+			         limit $MaxNumberOfPorts";
+		} else {
+			$sql = "select id, message_id, message_date, message_subject, date_added,
+	    		           to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
+    	    		       to_char(commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
+	            		   committer, description, system_id, encoding_losses
+			          from commit_log
+			      order by commit_log.commit_date desc
+			         limit $MaxNumberOfPorts";
+		}
 
-if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
+		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
-#exit;
-
-         $result = pg_exec($database, $sql);
-         if ($result) {
-            $numrows = pg_numrows($result);
+		$result = pg_exec($database, $sql);
+		if ($result) {
+			$numrows = pg_numrows($result);
 #			echo $numrows . " rows to fetch\n";
 			if ($numrows) { 
 
@@ -160,7 +168,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits", 3); ?>
+		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits (errr.. actually, it's elements, not commits)", 3); ?>
         <? //echo ($StartAt + 1) . " - " . ($StartAt + $MaxNumberOfPorts) ?>
 </TR>
 <TR><TD>
