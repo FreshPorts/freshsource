@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.8 2002-11-27 15:44:36 dan Exp $
+	# $Id: freshports.php,v 1.9 2003-04-24 12:32:38 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -202,8 +202,8 @@ function freshports_CommitterEmailLinkExtra($committer, $extrabits) {
 
 function freshports_Start($ArticleTitle, $Description, $Keywords, $Phorum=0) {
 
-GLOBAL $ShowAds;
-GLOBAL $BannerAd;
+	GLOBAL $ShowAds;
+	GLOBAL $BannerAd;
 
    freshports_HTML_Start();
    freshports_Header($ArticleTitle, $Description, $Keywords, $Phorum);

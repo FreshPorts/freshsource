@@ -1,5 +1,5 @@
 <?
-	# $Id: side-bars.php,v 1.11 2002-09-27 12:22:03 dan Exp $
+	# $Id: side-bars.php,v 1.12 2003-04-24 12:32:38 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -112,16 +112,22 @@
 
 </SCRIPT>
 
-<?
-	BurstMediaCode();
-	echo '<TABLE BORDER="0" CELLPADDING=5">
-		  <TR><TD ALIGN="center">
-		 ';
+<?php
+	GLOBAL $BannerAd;
+	GLOBAL $ShowAds;
 
-	BurstSkyscraperAd();
-	echo '</TD></TR>
-		  </TABLE>
-		 ';
+	if ($ShowAds) {
+
+		BurstMediaCode();
+		echo '<TABLE BORDER="0" CELLPADDING=5">
+			  <TR><TD ALIGN="center">
+			 ';
+
+		BurstSkyscraperAd();
+		echo '</TD></TR>
+			  </TABLE>
+			 ';
+	}
 
 ?>
 
