@@ -1,7 +1,9 @@
-<?
-	# $Id: customize.php,v 1.1 2002-07-26 20:52:25 dan Exp $
+<?php
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# $Id: customize.php,v 1.2 2003-12-10 13:51:24 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
@@ -29,7 +31,6 @@ if ($submit) {
    $Password1				= AddSlashes($_POST["$Password1"]);
    $Password2				= AddSlashes($_POST["Password2"]);
    $emailsitenotices_yn		= AddSlashes($_POST["emailsitenotices_yn"]);
-   $watchnotifyfrequency	= AddSlashes($_POST["watchnotifyfrequency"]);
    $numberofdays			= AddSlashes($_POST["numberofdays"]);
 
 
@@ -71,13 +72,9 @@ if ($submit) {
       if ($result) {
          $myrow = pg_fetch_array ($result, 0);
 
-		$WatchNotice = new WatchNotice($db);
-		$WatchNotice->FetchByFrequency($watchnotifyfrequency);
-
          $sql = "update users set ";
          $sql .= "email			= '$email', ";
          $sql .= "emailsitenotices_yn = '$emailsitenotices_yn_value',";
-         $sql .= "watch_notice_id     = $w$WatchNotice->id, ";
          $sql .= "number_of_days      = $numberofdays ";
 
          // if they are changing the email, reset the bouncecount.
