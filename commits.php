@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.4 2002-06-24 19:41:00 dan Exp $
+	# $Id: commits.php,v 1.5 2002-06-24 20:11:35 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -240,12 +240,6 @@ source.
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
-<?
-
-	for ($i = 0; $i < $NumberOfDays; $i++) {
-		freshports_SummaryForDay($i);
-	}
-?>
  </TD>
 </TR>
 </TABLE>
