@@ -1,5 +1,5 @@
 <?
-	# $Id: side-bars.php,v 1.10 2002-08-02 00:13:20 dan Exp $
+	# $Id: side-bars.php,v 1.11 2002-09-27 12:22:03 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -58,7 +58,7 @@
 				$args = '';
 		}
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/logout.php',           $args,                  "Logout"                 ) . '</FONT><BR>';
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/watch.php',            '',                     "your watched ports"     ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/watch.php',            '',                     "your watched sources"   ) . '</FONT><BR>';
 	} else {
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/login.php',            "?origin=$OriginLocal", "User Login"             ) . '</FONT><BR>';
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/new-user.php',         "?origin=$OriginLocal", "Create account"         ) . '</FONT><BR>';
