@@ -1,5 +1,5 @@
 <?
-	# $Id: footer.php,v 1.5 2003-04-24 14:44:41 dan Exp $
+	# $Id: footer.php,v 1.6 2003-04-24 15:07:21 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 ?>
@@ -52,7 +52,7 @@ ALT="powered by apache" BORDER="0" WIDTH="259" HEIGHT="32"></A>
 <a href="http://validator.w3.org/check/referer"><img border="0" 
 src="/images/valid-html401" alt="Valid HTML 4.01!" height="31" width="88"></a>
 </p>
-</td><td align="right">
+</td><td align="right" valign="top">
 
 <? echo freshports_copyright(); ?>
 
