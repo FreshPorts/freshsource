@@ -1,5 +1,5 @@
 <?
-	# $Id: sidebar.php,v 1.1 2002-06-24 19:37:51 dan Exp $
+	# $Id: sidebar.php,v 1.2 2002-06-24 19:58:09 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -75,7 +75,7 @@
 	$numrows = pg_numrows($result);
 	for ($i = 0; $i < $numrows; $i++) {
 		$myrow = pg_fetch_array ($result, $i);
-		echo '	<LI><SMALL><A HREF="http://' . $ServerName . '/commit.php?message_id=' . $myrow["message_id"] . '/" TARGET="_content">';
+		echo '	<LI><SMALL><A HREF="http://' . $ServerName . '/commit.php?message_id=' . $myrow["message_id"] . '" TARGET="_content">';
 		echo htmlspecialchars(str_replace("cvs commit: ", "", $myrow["message_subject"])) . '</A>';
 		echo '</SMALL></LI>';
 		echo "\n";
