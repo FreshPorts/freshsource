@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.4 2002-07-26 13:41:47 dan Exp $
+	# $Id: freshports.php,v 1.5 2002-07-27 23:22:24 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -1177,5 +1177,22 @@ echo '
 </TD>
 ';
 }
+
+function freshportsNextRevisionNumber($RevisionNumber) {
+	# very basic and not very widely tested function
+	# for 3.45 return 3.44, for 1.809, return 1.808
+
+	if (gettype($RevisionNumber) != "string") {
+		exit("freshportsNextRevisionNumber needs to have a string");
+	}
+
+	$RevisionFraction = substr($RevisionNumber, strpos($RevisionNumber, ".") + 1);
+#	print $RevisionFraction . "<BR>\n";
+
+	$PreviousRevision = $RevisionFraction - 1;
+
+	return floor($RevisionNumber) . "." . $PreviousRevision;
+}
+
 
 ?>

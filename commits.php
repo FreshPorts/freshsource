@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.13 2002-07-27 19:54:34 dan Exp $
+	# $Id: commits.php,v 1.14 2002-07-27 23:22:23 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -120,6 +120,7 @@ function GetPortNameFromFileName($file_name) {
 			               commits_latest.committer, commits_latest.commit_description as description,
 			               commits_latest.encoding_losses, commits_latest.message_subject,
 			               commits_latest.element_name,
+			               commits_latest.revision_name,
 			               commits_latest.element_pathname,
 			               CASE when watch_list_element.element_id is null
 			                   then 0
@@ -247,6 +248,11 @@ source.
 									$HTML .= '&nbsp; '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
 								}
 							}
+
+							# add a link to the diffs
+							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . ".diff?r1=";
+							$HTML .= $myrow["revision_name"] . '&r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
+							$HTML .= 'diff</A>';
 							$HTML .= "<BR>\n";
 						}
 						$j++;
