@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.10 2002-06-26 16:38:27 dan Exp $
+	# $Id: index.php,v 1.11 2002-07-26 20:52:25 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -12,7 +12,7 @@
 	freshports_Start($FreshPortsSlogan,
 					"$FreshPortsName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug=0;
+$Debug=1;
 
 ?>
 

@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.8 2002-07-26 20:31:22 dan Exp $
+	# $Id: commits.php,v 1.9 2002-07-26 20:52:24 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -114,12 +114,13 @@ function GetPortNameFromFileName($file_name) {
 		}
 
 		if ($WatchListID) {
-			$sql = "select commits_latest.commit_log_id, commits_latest.message_id, 
+			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
 	    	               commits_latest.commit_date           AS commit_date,
     	                   commits_latest.commit_time               AS commit_time,
 			               commits_latest.committer, commits_latest.commit_description as description,
 			               commits_latest.encoding_losses, commits_latest.message_subject,
 			               commits_latest.element_name,
+			               commits_latest.element_pathname,
 			               CASE when watch_list_element.element_id is null
 			                   then 0
 			                   else 1
@@ -202,7 +203,6 @@ source.
 					$NumberOfElementsInThisCommit = 0;
 	                $MaxNumberElementssToShow     = 10;
 					$j = $i;
-					$HTML .= "\n\n<BLOCKQUOTE>";
 					while ($j < $NumRows && $rows[$j]["commit_log_id"] == $ThisCommitLogID) {
 						$NumberOfElementsInThisCommit++;
 						$myrow = $rows[$j];
@@ -225,17 +225,21 @@ source.
 							}
 
 							$HTML .= '&nbsp;&nbsp;' . str_replace("cvs commit: ", "", $myrow["message_subject"]);
-							$HTML .= "<BR><BR>\n\n";
+							$HTML .= "<BR>\n\n";
+							$HTML .= "\n\n<BLOCKQUOTE>";
 						}
 
 						if ($NumberOfElementsInThisCommit <= $MaxNumberElementssToShow) {
+							$HTML .= '<BIG><B>';
+							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
 							$HTML .= $myrow["element_name"] . " ";
+							$HTML .= "</A></B></BIG>\n";
 
 							if ($WatchListID) {
 								if ($myrow["watch"]) {
-									$HTML .= ' '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
+									$HTML .= '&nbsp; '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
 								} else {
-									$HTML .= ' '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
+									$HTML .= '&nbsp; '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
 								}
 								$HTML .= "<BR>\n";
 							}
