@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.4 2002-06-24 17:36:38 dan Exp $
+	# $Id: index.php,v 1.5 2002-06-24 19:05:02 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -124,6 +124,13 @@ what needs to go into these things, we just need someone to write them)</LI>
 
 <A HREF="http://www.bchosting.com/">BChosting</A> provides the box on which <BIG>FreshSource</BIG> and 
 <A HREF="http://www.FreshPorts.org/"><BIG>FreshPorts</BIG></A> runs</A>.
+
+<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TR><TD>
+<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+</TD></TR>
+</TABLE>
+
 
 </BODY>
 
