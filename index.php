@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.7 2002-06-24 20:37:58 dan Exp $
+	# $Id: index.php,v 1.8 2002-06-24 20:41:28 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -122,6 +122,12 @@ We need help in the following areas:
 <LI>HTML coding (we need webpages designed and set up)</LI>
 <LI>Someone who can type (we need items written such as web page content, announcements, etc; we know 
 what needs to go into these things, we just need someone to write them)</LI>
+</UL>
+
+<H2>Ideas for future work</H2>
+<UL>
+<LI>watch lists (same as what FreshPorts does only bigger)</LI>
+<LI>filtering (not interested in an area of the tree?  filter it out)</LI>
 </UL>
 
 <H2>Who provides hosting services for <BIG>FreshSource</BIG>?</H2>
