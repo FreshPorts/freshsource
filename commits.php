@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.25 2003-04-24 14:36:12 dan Exp $
+	# $Id: commits.php,v 1.26 2003-04-24 14:38:26 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -225,7 +225,7 @@ runs off the same database and displays only the port commits.
 						if ($NumberOfElementsInThisCommit <= $MaxNumberElementssToShow) {
 							$HTML .= '<tr><td>';
 							$HTML .= '<BIG><B>';
-							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
+							$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . '">';
 							$HTML .= $myrow["element_pathname"] . " ";
 							$HTML .= "</A></B></BIG>\n";
 
@@ -244,7 +244,7 @@ runs off the same database and displays only the port commits.
 							$HTML .= '<td>';
 							if ($myrow["revision_name"] !== "1.1") {
 								# add a link to the diffs
-								$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . ".diff?r1=";
+								$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . ".diff?r1=";
 								$HTML .= $myrow["revision_name"] . '&amp;r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
 								$HTML .= 'diff</A>';
 							}
