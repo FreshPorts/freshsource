@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.1 2002-06-24 14:25:06 dan Exp $
+	# $Id: commits.php,v 1.2 2002-06-24 17:47:15 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -199,7 +199,7 @@ source.
 
 					$HTML .= "&nbsp;";
 
-					$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
+#					$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
 
 
 					$HTML .= "\n\n<BR>\n\n<BLOCKQUOTE>";
@@ -239,7 +239,7 @@ source.
 ?>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <? #include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
 <?
 
 	for ($i = 0; $i < $NumberOfDays; $i++) {
