@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.11 2002-07-26 20:52:25 dan Exp $
+	# $Id: index.php,v 1.12 2002-10-02 16:49:43 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -19,10 +19,6 @@ $Debug=1;
 
 <TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<P>
-<BIG>FreshSource</BIG> is still under development and should be launched in late 2002.
-&nbsp;<small>Dan Langille - 24 June 2002</small>
-</P>
 
 <H2>What is <BIG>FreshSource</BIG>?</H2>
 
