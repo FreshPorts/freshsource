@@ -1,5 +1,5 @@
 <?
-	# $Id: watch.php,v 1.2 2002-07-30 17:45:56 dan Exp $
+	# $Id: watch.php,v 1.3 2002-07-30 17:51:45 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -88,7 +88,7 @@ $sql = "
 select max(commit_log.commit_date) as commit_date, watch_list_element.element_id
  into temporary element_latest_commits
   from watch_list_element, commit_log_elements, commit_log 
- where watch_list_id = 2 
+ where watch_list_id = $WatchID
    and commit_log_elements.element_id = watch_list_element.element_id 
    and commit_log.id = commit_log_elements.commit_log_id
  group by watch_list_element.element_id ";
