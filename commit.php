@@ -1,5 +1,5 @@
 <?
-	# $Id: commit.php,v 1.2 2002-06-24 20:02:39 dan Exp $
+	# $Id: commit.php,v 1.3 2002-07-30 14:14:45 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -102,12 +102,57 @@ function GetPortNameFromFileName($file_name) {
 #	$commit_id  = '
 	
 
-	$sql = "select id, message_id, message_date, message_subject, date_added,
-	               to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
-    	           to_char(commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
-	               committer, description, system_id, encoding_losses
-	          from commit_log
-			  WHERE	commit_log.message_id = '$message_id'";
+	$sql = "
+	select	element_pathname(element.id) as element_pathname, 
+			commit_log_elements.commit_log_id, 
+			to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')  as commit_date,
+			to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI:SS')   as commit_time,
+			commit_log_elements.change_type,
+			element.name as filename,
+			commit_log.committer, 
+			commit_log.message_id,
+			commit_log.encoding_losses, 
+			commit_log.description,
+			commit_log_elements.revision_name as revision_name,
+			element.status,
+			element.id as element_id ";
+
+	if ($WatchListID) {
+		$sql .= ",
+	       CASE when watch_list_element.element_id is null
+    	      then 0
+        	  else 1
+	       END as watch ";
+	}
+
+
+	$sql .="
+		   from commit_log, element, commit_log_elements ";
+
+	#
+	# if the watch list id is provided (i.e. they are logged in and have a watch list id...)
+	#
+	if ($WatchListID) {
+		$sql .="
+	            left outer join watch_list_element
+				on (watch_list_element.element_id    = commit_log_elements.element_id
+			   and  watch_list_element.watch_list_id = $WatchListID) ";
+	}
+
+	$sql .= "
+	 where commit_log.message_id             = '$message_id'
+	   and commit_log_elements.commit_log_id = commit_log.id 
+	   and commit_log_elements.element_id    = element.id
+	 order by 1";
+
+	if ($Debug) echo '<PRE>' . $sql . '</PRE>';
+
+#	$sql = "select id, message_id, message_date, message_subject, date_added,
+#	               to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
+#    	           to_char(commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
+#	               committer, description, system_id, encoding_losses
+#	          from commit_log
+#			  WHERE	commit_log.message_id = '$message_id'";
 
 
 if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
@@ -176,19 +221,19 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 					$HTML .= "<TR><TD>\n";
 
 					// OK, while we have the log change log, let's put the port details here.
-					$MultiplePortsThisCommit = 0;
+					$MultipleFilesThisCommit = 0;
 					while ($j < $NumRows && $rows[$j]["commit_log_id"] == $ThisChangeLogID) {
 						$myrow = $rows[$j];
 
-						if ($MultiplePortsThisCommit) {
+						if ($MultipleFilesThisCommit) {
 							$HTML .= '<BR>';
 						}
 
-						if (!$MultiplePortsThisCommit) {
+						if (!$MultipleFilesThisCommit) {
 							GLOBAL $freshports_mail_archive;
 
 							$HTML .= '<SMALL>';
-							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . $myrow["committer"] . ' ]';
+							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]) . ' ]';
 							$HTML .= '</SMALL>';
 							$HTML .= '&nbsp;';
 							$HTML .= freshports_Email_Link($myrow["message_id"]);
@@ -197,18 +242,33 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 								$HTML .= '&nbsp;' . freshports_Encoding_Errors();
 							}
 
-							$HTML .= "<BR>\n";
+#							$HTML .= '&nbsp;&nbsp;' . str_replace("cvs commit: ", "", $myrow["message_subject"]);
+							$HTML .= "<BR>\n\n";
+							$HTML .= "\n\n<BLOCKQUOTE>";
 						}
 
-						if ($WatchListID) {
-							if ($myrow["watch"]) {
-								$HTML .= $FreshPortsWatchedPortPrefix    . $myrow["element_id"] . $FreshPortsWatchedPortSuffix;
-							} else {
-								$HTML .= $FreshPortsWatchedPortNotPrefix . $myrow["element_id"] . $FreshPortsWatchedPortNotSuffix;
+							$HTML .= '<BIG><B>';
+							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
+							$HTML .= $myrow["element_pathname"] . " ";
+							$HTML .= "</A></B></BIG>\n";
+
+							if ($WatchListID) {
+								if ($myrow["watch"]) {
+									$HTML .= '&nbsp; '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
+								} else {
+									$HTML .= '&nbsp; '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
+								}
 							}
-						}
 
-						$HTML .= "\n";
+							GLOBAL $freshports_FirstRevisionNumber;
+							if ($myrow["revision_name"] !== $freshports_FirstRevisionNumber) {
+								# add a link to the diffs
+								$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . ".diff?r1=";
+								$HTML .= $myrow["revision_name"] . '&r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
+								$HTML .= 'diff</A>';
+							}
+
+
 
 #						$HTML .= freshports_CommitFilesLink($myrow["commit_log_id"], $myrow["category"], $myrow["port"]);
 
@@ -217,36 +277,18 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 							$HTML .= " " . freshports_Deleted_Icon() . "\n";
 						}
 
-						// indicate if this port needs refreshing from CVS
-						if ($myrow["needs_refresh"]) {
-							$HTML .= " " . freshports_Refresh_Icon() . "\n";
-						}
-
 						if ($myrow["date_added"] > Time() - 3600 * 24 * $DaysMarkedAsNew) {
 							$MarkedAsNew = "Y";
 							$HTML .= freshports_New_Icon() . "\n";
 						}
 
-						if ($myrow["forbidden"]) {
-							$HTML .= ' ' . freshports_Forbidden_Icon() . "\n";
-						}
-
-						if ($myrow["broken"]) {
-							$HTML .= '&nbsp;' . freshports_Broken_Icon() . "\n";
-						}
-
-						$HTML .= ' ' . htmlspecialchars($myrow["short_description"]) . "\n";
-
 						$j++;
-						$MultiplePortsThisCommit = 1;
+						$MultipleFilesThisCommit = 1;
 					} // end while
 
 					$i = $j - 1;
 
-					$HTML .= "\n<BLOCKQUOTE>\n";
-
 					$HTML .= freshports_PortDescriptionPrint($myrow["description"], $myrow["encoding_losses"]);
-
 
 					$HTML .= "\n</BLOCKQUOTE>\n</TD></TR>\n\n\n";
 				}
