@@ -1,5 +1,5 @@
 <?
-	# $Id: footer.php,v 1.1 2002-06-24 18:17:22 dan Exp $
+	# $Id: footer.php,v 1.2 2002-06-24 19:53:59 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 ?>
@@ -18,7 +18,7 @@ ALT="powered by FreeBSD" BORDER="0" WIDTH="171" HEIGHT="64"></A>
 
 &nbsp;
 
-<A HREF="http://www.phorum.org/"><IMG SRC="/phorum/images/phorum.gif"
+<A HREF="http://www.phorum.org/"><IMG SRC="/images/phorum.gif"
 ALT="powered by phorum" BORDER="0" WIDTH="200" HEIGHT="50"></A>
 
 &nbsp;
