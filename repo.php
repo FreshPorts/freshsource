@@ -1,5 +1,5 @@
 <?
-	# $Id: repo.php,v 1.3 2002-07-26 13:24:15 dan Exp $
+	# $Id: repo.php,v 1.4 2002-07-26 13:45:43 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -79,6 +79,10 @@ $Debug=0;
 Welcome to FreshSource, where you can find the latest information on your favourite
 source.
 </P>
+
+<P>
+Eventually, you'll be able to browse this tree using /path/to/directory, and links
+will be provided from each page to various areas of the website.
 
 </TD></TR>
 
