@@ -1,5 +1,5 @@
 <?
-	# $Id: burstmedia.php,v 1.3 2002-06-27 13:46:59 dan Exp $
+	# $Id: burstmedia.php,v 1.4 2003-05-02 11:35:11 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -154,7 +154,7 @@ echo '  <!-- BEGIN BURST! CODE -->
 }
 
 function Burst_468x60_Below() {
-echo '	<P ALIGN="center">
+echo '	<div ALIGN="center">
 	<!-- BEGIN RICH-MEDIA BURST! CODE --> 
 	<SCRIPT TYPE="text/javascript">
 	<!--
@@ -163,7 +163,7 @@ echo '	<P ALIGN="center">
 	<noscript><a href="http://www.burstnet.com/ads/ba4556a-map.cgi/ns" target="_top"><img src="http://www.burstnet.com/cgi-bin/ads/ba4556a.cgi/ns" width="468" height="60" border="0" alt="Click Here"></a>
 	</noscript>
 	<!-- END BURST CODE -->
-	</P>
+	</div>
 ';
 }
 
