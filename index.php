@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.6 2002-06-24 20:11:45 dan Exp $
+	# $Id: index.php,v 1.7 2002-06-24 20:37:58 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -76,7 +76,7 @@ As the project progresses, other operating systems will be included.
 <H2>How do I get my source tree involved?</H2>
 
 <P>
-We won't be ready to include another other source trees until after we officially launch the project.
+We won't be ready to include other source trees until after we officially launch the project.
 But when we are ready, all we'll need is your source tree log changes in XML format according to the
 DTD (see below).  The DTD will be an evolving document.  It may need to change as new requirements
 come to our attention.  It was designed with the 
