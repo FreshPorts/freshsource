@@ -1,5 +1,5 @@
 <?
-	# $Id: repo.php,v 1.2 2002-06-27 21:00:38 dan Exp $
+	# $Id: repo.php,v 1.3 2002-07-26 13:24:15 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -25,32 +25,30 @@ $Debug=0;
 <?php
 
 
-      $numrows = $MaxNumberOfPorts;
-      $database=$db;
-      if ($database) {
+	$numrows = $MaxNumberOfPorts;
+	$database=$db;
+	if ($database) {
 #
 # we limit the select to recent things by using a date
 # otherwise, it joins the whole table and that takes quite a while
 #
 #$numrows=400;
 
-	$sql = "SELECT id, name, parent_id, directory_file_flag, status
-	          FROM element";
+		$sql = "SELECT id, name, parent_id, directory_file_flag, status
+				FROM element";
 
-	if ($parent_id) {
-		$sql .= " WHERE parent_id = $parent_id";
-	} else {
-		$sql .= " WHERE parent_id is NULL";
-	}
-	$sql .= " ORDER BY directory_file_flag, name";
+		if ($parent_id) {
+			$sql .= " WHERE parent_id = $parent_id";
+		} else {
+			$sql .= " WHERE parent_id is NULL";
+		}
+		$sql .= " ORDER BY directory_file_flag, name";
 
-if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
+		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
-#exit;
-
-         $result = pg_exec($database, $sql);
-         if ($result) {
-            $numrows = pg_numrows($result);
+		$result = pg_exec($database, $sql);
+		if ($result) {
+			$numrows = pg_numrows($result);
 #			echo $numrows . " rows to fetch\n";
 			if ($numrows) { 
 
@@ -91,25 +89,25 @@ source.
 				for ($i = 0; $i < $NumRows; $i++) {
 					$myrow = $rows[$i];
 					if ($myrow["directory_file_flag"] == 'D') {
-						$HTML .= 'D <A HREF="' . $_SERVER["REQUEST_URI"] . '?parent_id=' . $myrow["id"] . '">' . $myrow["name"] . '</A><BR>' . "\n";
+						$HTML .= freshsource_Directory_Icon() . ' <A HREF="' . $_SERVER["SCRIPT_NAME"] . '?parent_id=' . $myrow["id"] . '">' . $myrow["name"] . '</A><BR>' . "\n";
 					} else {
-						$HTML .= 'F ' . $myrow["name"] . "<BR>\n";
+						$HTML .= freshsource_File_Icon() . ' ' . $myrow["name"] . "<BR>\n";
 					}
 				}
 
 				echo $HTML;
 
 				echo "</TD></TR>\n";
-	            echo "</TABLE>\n";
+				echo "</TABLE>\n";
 			} else {
 				echo "<P>Sorry, nothing found in the database....</P>\n";
 			}
-         } else {
-            echo "read from test failed";
-         }
-      } else {
-         echo "no connection";
-      }
+		} else {
+			echo "read from test failed " . pg_errormessage() . ' ' . $sql;
+		}
+	} else {
+		echo "no connection";
+	}
 
 ?>
 </TD>
