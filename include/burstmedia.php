@@ -1,5 +1,5 @@
 <?
-	# $Id: burstmedia.php,v 1.4 2003-05-02 11:35:11 dan Exp $
+	# $Id: burstmedia.php,v 1.5 2003-05-12 16:00:37 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -41,14 +41,14 @@ function ShowBurstAd(adcode, width, height) {
   adcode + \'-map.cgi\'+Tv+\'"target=_top>\');
   document.write(\'<img src="\' + base + \'cgi-bin/ads/\' +
   adcode + \'.cgi\' + Tv + \'" width="\' + width + \'" height="\' + height + \'"\' +
-  \' border="0" alt="Click Here"></a>\');}   
+  \' border="0" alt="Click Here"><\/a>\');}   
 }
 if (bN==\'Microsoft Internet Explorer\')    
 document.write(\'<ifr\'+\'ame id="BURST" src="\'+base+\'cgi-bin/ads/\'  
 +     
 adcode + \'.cgi\' + Tv + \'/RETURN-CODE" width="\' + width + \'" height="\' + height + \'"\' +     
 \'marginwidth="0" marginheight="0" hspace="0" vspace="0" \' +     
-\'frameborder="0" scrolling="no"></ifr\'+\'ame>\');  
+\'frameborder="0" scrolling="no"><\/ifr\'+\'ame>\');  
 }
 //-->
 </script>
@@ -69,7 +69,7 @@ echo '	<!-- BEGIN RICH-MEDIA BURST! CODE -->
 	// --></script>
 	<noscript><a href="http://www.burstnet.com/ads/ad4556a-
 	map.cgi/ns" target="_top"><img src="http://www.burstnet.com/cgi-
-	bin/ads/ad4556a.cgi/ns" <width="468" height="60" 
+	bin/ads/ad4556a.cgi/ns" width="468" height="60" 
 	border="0" alt="Click Here"></a> 
 	</noscript>
 	<!-- END BURST CODE -->
@@ -119,8 +119,8 @@ if (rand(0, 1) == 0) {
 	echo '/ads/bch_banner_dedicated2.sky.gif';
 }
 
-echo '" width=160 height=600 BORDER="0"></A>\');
-  document.write(\'</ifr\'+\'ame>\');   
+echo '" width=160 height=600 BORDER="0"><\/A>\');
+  document.write(\'<\/ifr\'+\'ame>\');   
 // -->
 </script>';
 }
