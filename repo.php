@@ -1,5 +1,5 @@
 <?
-	# $Id: repo.php,v 1.4 2002-07-26 13:45:43 dan Exp $
+	# $Id: repo.php,v 1.5 2002-07-26 13:57:01 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -20,7 +20,7 @@ $Debug=0;
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="2" ALIGN="center">
+<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 
 <?php
 
