@@ -1,9 +1,9 @@
-# $Id: vhosts.conf.sample,v 1.1 2002-06-19 18:49:53 dan Exp $
+# $Id: vhosts.conf.sample,v 1.2 2002-09-10 12:47:27 dan Exp $
 #
-# FreshSource
+# Copyright (c) 1998-2002 DVL Software Limited
 #
 
-<VirtualHost	216.187.106.227>
+<VirtualHost	*>
 	ServerAdmin		dan@langille.org
 	DocumentRoot	/usr/websites/freshsource.org/www
 	ServerName		www.FreshSource.org
