@@ -1,5 +1,5 @@
 <?
-	# $Id: common.php.sample,v 1.2 2002-10-02 15:32:22 dan Exp $
+	# $Id: common.php.sample,v 1.3 2003-04-23 23:24:21 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -10,17 +10,17 @@
 
 # These are the default values
 
-$Debug					= 0;
-$ShowAds				= 1;
-$BannerAd				= 1;
-$BannerAdUnder			= 1;
+$Debug						= 0;
+$ShowAds						= 1;
+$BannerAd					= 1;
+$BannerAdUnder				= 1;
 $BurstFrontPage120x160	= 1;
 $BurstFrontPage125x125	= 1;
 $FrontPageAdsPayPal		= 1;
 $FrontPageAdsAmazon		= 1;
-$FrontPageDaemonNews	= 1;
+$FrontPageDaemonNews		= 1;
 
-$HeaderAdsPayPal		= 1;
+$HeaderAdsPayPal			= 1;
 $HeaderAdAmazon			= 1;
 $HeaderAdsBurst125x125	= 1;
 $HeaderAdsBurst120x160	= 1;
@@ -40,8 +40,8 @@ $PathToDatabaseConfigFile	= $_SERVER["DOCUMENT_ROOT"] . "/../configuration"; # n
 $FreshPortsName				= "FreshSource";
 
 $FreshPortsLogo				= "/images/freshsource.gif";
-$FreshPortsLogoWidth		= 600;
+$FreshPortsLogoWidth			= 600;
 $FreshPortsLogoHeight		= 147;
-$FreshPortsSlogan			= "the place for source";
+$FreshPortsSlogan				= "the place for source";
 
 ?>
