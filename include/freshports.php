@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.3 2002-06-27 13:46:59 dan Exp $
+	# $Id: freshports.php,v 1.4 2002-07-26 13:41:47 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -27,6 +27,14 @@ echo "
 # special HTMLified mailto to foil spam harvesters
 #
 $mailto = '&#109;&#97;&#105;&#108;&#116;&#111;';
+
+function freshsource_Directory_Icon() {
+	return '<IMG SRC="/images/dir.gif" ALT="[DIR]" BORDER="0" WIDTH="20" HEIGHT="22">';
+}
+
+function freshsource_File_Icon() {
+	return '<IMG SRC="/images/text.gif" ALT="[TXT]" BORDER="0" WIDTH="20" HEIGHT="22">';
+}
 
 function freshports_Files_Icon() {
 	return '<IMG SRC="/images/logs.gif" ALT="files touched by this commit" BORDER="0" WIDTH="17" HEIGHT="20">';
