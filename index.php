@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: index.php,v 1.14 2003-04-23 22:16:17 dan Exp $
+	# $Id: index.php,v 1.15 2003-04-24 12:23:33 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -35,6 +35,7 @@ The <BIG>FreshSource</BIG> project allows you to track source code changes.  Fea
 
 <H3>Example page</H3>
 
+<p>
 We know you want it.... Here's <A HREF="/commits.php">the working copy</A> of what the home page might look like.
 That page is live and shows the most recent commits.  Compare that page with the 
 <A HREF="http://www.FreshPorts.org/">FreshPorts</A> look.  You'll even see some overlap in the commit messages (i.e.
@@ -134,7 +135,7 @@ what needs to go into these things, we just need someone to write them)</LI>
 <H2>Who provides hosting services for <BIG>FreshSource</BIG>?</H2>
 
 <A HREF="http://www.bchosting.com/">BChosting</A> provides the box on which <BIG>FreshSource</BIG> and 
-<A HREF="http://www.FreshPorts.org/"><BIG>FreshPorts</BIG></A> runs</A>.
+<A HREF="http://www.FreshPorts.org/"><BIG>FreshPorts</BIG></A> runs.
 
 </TD>
 
