@@ -1,0 +1,17 @@
+# $Id: vhosts.conf.sample,v 1.1 2002-06-19 18:49:53 dan Exp $
+#
+# FreshSource
+#
+
+<VirtualHost	216.187.106.227>
+	ServerAdmin		dan@langille.org
+	DocumentRoot	/usr/websites/freshsource.org/www
+	ServerName		www.FreshSource.org
+	ServerAlias		FreshSource.org
+
+	ErrorLog		/usr/websites/log/freshsource.org-error.log
+	CustomLog		/usr/websites/log/freshsource.org-access.log combined
+
+	Alias		/icons/		"/usr/local/share/apache/icons/"
+
+</VirtualHost>
