@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.23 2003-04-23 22:16:31 dan Exp $
+	# $Id: commits.php,v 1.24 2003-04-24 12:32:08 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -298,11 +298,11 @@ runs off the same database and displays only the port commits.
 								}
 							}
 
-							$HTML .= '</td><td>';
+							$HTML .= '<td>';
 							if ($myrow["revision_name"] !== "1.1") {
 								# add a link to the diffs
 								$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . ".diff?r1=";
-								$HTML .= $myrow["revision_name"] . '&r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
+								$HTML .= $myrow["revision_name"] . '&amp;r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
 								$HTML .= 'diff</A>';
 							}
 							$HTML .= '</td></tr>' . "\n";
