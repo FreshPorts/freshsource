@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.5 2002-06-24 19:05:02 dan Exp $
+	# $Id: index.php,v 1.6 2002-06-24 20:11:45 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -17,6 +17,8 @@ $Debug=0;
 ?>
 
 
+<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TR><TD>
 <P>
 <BIG>FreshSource</BIG> is still under development and should be launched in late 2002.
 &nbsp;<small>Dan Langille - 24 June 2002</small>
@@ -44,7 +46,9 @@ database.
 
 <H3>All the news you want</H3>
 <P>
-We also have <A HREF="/news.php">a news feed</A>.
+We also have <A HREF="/news.php">an RSS news feed</A> and <A HREF="sidebar.php">a sidebar</A> (click on the "Add Tab to
+Netscape 6" link
+at the bottom of the right hand column of any page).
 </P>
 
 <H2>How does <BIG>FreshSource</BIG> work?</H2>
@@ -125,13 +129,23 @@ what needs to go into these things, we just need someone to write them)</LI>
 <A HREF="http://www.bchosting.com/">BChosting</A> provides the box on which <BIG>FreshSource</BIG> and 
 <A HREF="http://www.FreshPorts.org/"><BIG>FreshPorts</BIG></A> runs</A>.
 
+</TD>
+
+
+  <TD VALIGN="top" WIDTH="*" ALIGN="center">
+   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+ </TD>
+
+</TR>
+</TABLE>
+
+<BR>
+
 <TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
 <? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 
-
 </BODY>
-
 </HTML>
