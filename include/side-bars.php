@@ -1,5 +1,5 @@
 <?
-	# $Id: side-bars.php,v 1.6 2002-07-27 20:07:20 dan Exp $
+	# $Id: side-bars.php,v 1.7 2002-07-27 20:10:30 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -7,6 +7,7 @@
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/include/burstmedia.php");
 
+	$Debug=0;
 ?>
 
 <TABLE WIDTH="<? echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
