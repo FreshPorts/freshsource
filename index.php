@@ -1,7 +1,9 @@
-<?
-	# $Id: index.php,v 1.12 2002-10-02 16:49:43 dan Exp $
+<?php
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# $Id: index.php,v 1.13 2003-04-13 20:03:04 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
