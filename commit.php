@@ -1,5 +1,5 @@
 <?
-	# $Id: commit.php,v 1.1 2002-06-24 17:46:52 dan Exp $
+	# $Id: commit.php,v 1.2 2002-06-24 20:02:39 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -200,23 +200,6 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 							$HTML .= "<BR>\n";
 						}
 
-						$HTML .= '<BIG><B>';
-						$HTML .= '<A HREF="/' . $myrow["category"] . '/' . $myrow["port"] . '/">';
-						$HTML .= $myrow["port"];
-						
-						if (strlen($myrow["version"]) > 0) {
-							$HTML .= ' ' . $myrow["version"];
-							if (strlen($myrow["revision"]) > 0 && $myrow["revision"] != "0") {
-					    		$HTML .= '-' . $myrow["revision"];
-							}
-						}
-
-						$HTML .= "</A></B></BIG>\n";
-
-						$HTML .= '<A HREF="/' . $myrow["category"] . '/">';
-						$HTML .= $myrow["category"]. "</A>";
-						$HTML .= '&nbsp;';
-
 						if ($WatchListID) {
 							if ($myrow["watch"]) {
 								$HTML .= $FreshPortsWatchedPortPrefix    . $myrow["element_id"] . $FreshPortsWatchedPortSuffix;
@@ -227,7 +210,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
 						$HTML .= "\n";
 
-						$HTML .= freshports_CommitFilesLink($myrow["commit_log_id"], $myrow["category"], $myrow["port"]);
+#						$HTML .= freshports_CommitFilesLink($myrow["commit_log_id"], $myrow["category"], $myrow["port"]);
 
 						// indicate if this port has been removed from cvs
 						if ($myrow["status"] == "D") {
