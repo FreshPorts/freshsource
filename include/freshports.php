@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.9 2003-04-24 12:32:38 dan Exp $
+	# $Id: freshports.php,v 1.10 2003-04-28 20:10:14 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -308,9 +308,9 @@ if ($Phorum) {
 	GLOBAL $ForumName;
 
 ?>
-	<meta name="Phorum Version" content="<?php echo $phorumver; ?>">
-	<meta name="Phorum DB" content="<?php echo $DB->type; ?>">
-	<meta name="PHP Version" content="<?php echo phpversion(); ?>">
+	<meta name="PhorumVersion" content="<?php echo $phorumver; ?>">
+	<meta name="PhorumDB" content="<?php echo $DB->type; ?>">
+	<meta name="PHPVersion" content="<?php echo phpversion(); ?>">
 <?
 }
 
