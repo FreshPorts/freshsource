@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.17 2002-08-01 12:04:36 dan Exp $
+	# $Id: commits.php,v 1.18 2002-08-19 17:18:56 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -116,7 +116,7 @@ function GetPortNameFromFileName($file_name) {
 		if ($WatchListID) {
 			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
 	    	               commits_latest.commit_date           AS commit_date,
-    	                   commits_latest.commit_time               AS commit_time,
+    	                   commits_latest.commit_time           AS commit_time,
 			               commits_latest.committer, commits_latest.commit_description as description,
 			               commits_latest.encoding_losses, commits_latest.message_subject,
 			               commits_latest.element_name,
@@ -134,10 +134,11 @@ function GetPortNameFromFileName($file_name) {
 		} else {
 			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
 	    	               commits_latest.commit_date           AS commit_date,
-    	                   commits_latest.commit_time               AS commit_time,
+    	                   commits_latest.commit_time           AS commit_time,
 			               commits_latest.committer, commits_latest.commit_description as description,
 			               commits_latest.encoding_losses, commits_latest.message_subject,
 			               commits_latest.element_name,
+			               commits_latest.revision_name,
 			               commits_latest.element_pathname
 			          from commits_latest left outer join watch_list_element
 					                       ON commits_latest.element_id    = watch_list_element.element_id
@@ -180,6 +181,10 @@ function GetPortNameFromFileName($file_name) {
 <P>
 Welcome to FreshSource, where you can find the latest information on your favourite
 source.
+
+<P>
+See also <A HREF="http://www.FreshPorts.org/">FreshPorts</A> which
+runs off the same database and displays only the port commits.
 </P>
 
 </TD></TR>
@@ -240,6 +245,8 @@ source.
 							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
 							$HTML .= $myrow["element_pathname"] . " ";
 							$HTML .= "</A></B></BIG>\n";
+
+							$HTML .= '&nbsp;&nbsp;'. $myrow["revision_name"] . ' ';
 
 							if ($WatchListID) {
 								if ($myrow["watch"]) {
