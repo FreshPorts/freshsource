@@ -1,23 +1,25 @@
-<HTML>
+<?
+	# $Id: index.php,v 1.3 2002-06-24 14:20:14 dan Exp $
+	#
+	# Copyright (c) 1998-2002 DVL Software Limited
 
-<HEAD>
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
 
-<TITLE>FreshSource - the place for source</TITLE>
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
 
-	<STYLE>
-		A:hover { color: #666666; }
-		A.white:hover { text-decoration: underline; }
-	</STYLE>
+	freshports_Start("the place for ports",
+					"$FreshPortsName - new ports, applications",
+					"FreeBSD, index, applications, ports");
+$Debug=0;
 
-</HEAD>
+?>
 
-
-<IMG SRC="/images/freshsource.gif" ALT="FreshSource - the place for source" WIDTH="600" HEIGHT="100" BORDER="0">
-
-<P ALIGN="right"><small>Dan Langille - 13 January 2002</small></P>
 
 <P>
-<BIG>FreshSource</BIG> is still under development and should be launched in mid 2002.
+<BIG>FreshSource</BIG> is still under development and should be launched in late 2002.
+&nbsp;<small>Dan Langille - 24 June 2002</small>
 </P>
 
 <H2>What is <BIG>FreshSource</BIG>?</H2>
@@ -31,6 +33,11 @@ The <BIG>FreshSource</BIG> project allows you to track source code changes.  Fea
 <LI>optionally receive notification of the changes which occur to items on your watch list</LI>
 </UL>
 
+We know you want it.... Here's <A HREF="/commits.php">the working copy</A> of what the home page might look like.
+That page is live and shows the most recent commits.  Compare that page with the 
+<A HREF="http://www.FreshPorts.org/">FreshPorts</A> look.  You'll even see some overlap in the commit messages (i.e.
+the port commits will appear on both pages).  Also note that both websites are using the same data from the same 
+database.
 </P>
 
 <H2>How does <BIG>FreshSource</BIG> work?</H2>
