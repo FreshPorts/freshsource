@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.19 2002-09-30 16:43:25 dan Exp $
+	# $Id: commits.php,v 1.20 2002-10-04 14:38:06 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -181,22 +181,6 @@ function GetPortNameFromFileName($file_name) {
 <P>
 Welcome to FreshSource, where you can find the latest information on your favourite
 source.
-
-<P ALIGN="left">
-<BIG><BIG>
-Any Oracle 9 users out there?
-</BIG></BIG>
-<P ALIGN="left">
-I need this run:
-<PRE ALIGN="left">
-        BEGIN;
-        SELECT CURRENT_TIMESTAMP;
-        -- wait 5 seconds
-        SELECT CURRENT_TIMESTAMP;
-</PRE>
-<P ALIGN="left">
-Are those two timestamps the same?  Please email results to danl at freebsddiary in the .org domain.
-
 
 <P>
 See also <A HREF="http://www.FreshPorts.org/">FreshPorts</A> which
