@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.8 2002-06-24 20:41:28 dan Exp $
+	# $Id: index.php,v 1.9 2002-06-24 21:05:20 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -128,6 +128,9 @@ what needs to go into these things, we just need someone to write them)</LI>
 <UL>
 <LI>watch lists (same as what FreshPorts does only bigger)</LI>
 <LI>filtering (not interested in an area of the tree?  filter it out)</LI>
+<LI>add links to cvsweb and include commit history</LI>
+<LI>searching (all commits done by jmallett)</LI>
+<LI>commits to specific branches</LI>
 </UL>
 
 <H2>Who provides hosting services for <BIG>FreshSource</BIG>?</H2>
