@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.1 2002-06-24 18:17:22 dan Exp $
+	# $Id: freshports.php,v 1.2 2002-06-26 16:38:42 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -1100,6 +1100,9 @@ function freshports_UserSendToken($UserID, $dbh) {
 	# send the confirmation token to the user
 	#
 
+	GLOBAL $FreshPortsName;
+	GLOBAL $FreshPortsSlogan;
+
 	$sql = "select email, token 
 	          from users, user_confirmations
 	         where users.id = $UserID
@@ -1135,7 +1138,7 @@ function freshports_UserSendToken($UserID, $dbh) {
     	            "the request came from " . $_SERVER["REMOTE_ADDR"] . ":" . $_SERVER["REMOTE_PORT"] ."\n".
 					"\n".
 					"-- \n".
-					"FreshPorts - http://" . $_SERVER["HTTP_HOST"] . "/ - the place for ports";
+					$FreshPortsName . " - http://" . $_SERVER["HTTP_HOST"] . "/ - " . $FreshPortsSlogan;
 
 		$result = mail($email, "FreshPorts - user registration", $message,
 					"From: webmaster@" . $_SERVER["HTTP_HOST"] . "\nReply-To: webmaster@" . $_SERVER["HTTP_HOST"] . "\nX-Mailer: PHP/" . phpversion());
