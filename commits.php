@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.9 2002-07-26 20:52:24 dan Exp $
+	# $Id: commits.php,v 1.10 2002-07-26 21:05:10 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -131,11 +131,16 @@ function GetPortNameFromFileName($file_name) {
 			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
 			               commits_latest.element_name";
 		} else {
-			$sql = "select commits_latest.id, commits_latest.message_id, commits_latest.message_date, commits_latest.message_subject,
-	    		           to_char(commits_latest.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
-    	    		       to_char(commits_latest.commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
-	            		   commits_latest.committer, commits_latest.description, commits_latest.system_id
-			          from commits_latest
+			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
+	    	               commits_latest.commit_date           AS commit_date,
+    	                   commits_latest.commit_time               AS commit_time,
+			               commits_latest.committer, commits_latest.commit_description as description,
+			               commits_latest.encoding_losses, commits_latest.message_subject,
+			               commits_latest.element_name,
+			               commits_latest.element_pathname
+			          from commits_latest left outer join watch_list_element
+					                       ON commits_latest.element_id    = watch_list_element.element_id
+					                      AND watch_list_element.watch_list_id = $WatchListID
 			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
 			               commits_latest.element_name";
 		}
