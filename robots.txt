@@ -1,2 +1,6 @@
 # robots.txt for http://www.FreshSource.org/
 
+# all others, please don't...
+User-agent: *
+Disallow: /
+
