@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.2 2002-06-24 17:47:15 dan Exp $
+	# $Id: commits.php,v 1.3 2002-06-24 17:48:51 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -128,7 +128,7 @@ if ($WatchListID) {
 	               to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
     	           to_char(commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
 	               committer, description, system_id, encoding_losses
-	          from commit_log order by commit_log.commit_date desc limit 20";
+	          from commit_log order by commit_log.commit_date desc limit $MaxNumberOfPorts";
 }
 
 if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
