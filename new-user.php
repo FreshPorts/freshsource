@@ -1,5 +1,5 @@
 <?
-	# $Id: new-user.php,v 1.1 2002-07-30 15:07:59 dan Exp $
+	# $Id: new-user.php,v 1.2 2002-09-13 14:36:56 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -29,8 +29,6 @@ if ($submit) {
 	$email					= AddSlashes($_POST["email"]);
 	$Password1				= AddSlashes($_POST["Password1"]);
 	$Password2				= AddSlashes($_POST["Password2"]);
-	$emailsitenotices_yn	= AddSlashes($_POST["emailsitenotices_yn"]);
-	$watchnotifyfrequency	= AddSlashes($_POST["watchnotifyfrequency"]);
 	$numberofdays			= AddSlashes($_POST["numberofdays"]);
 
 	if ($UserLogin == '') {
@@ -52,26 +50,6 @@ if ($submit) {
 			$OK = 0;
 		}
 	}
-
-	#
-	# make sure we have valid values in this variable.
-	# by default, they don't get notified.
-	#
-
-	if ($watchnotifyfrequency == $WatchNoticeFrequencyNever       || $watchnotifyfrequency == $WatchNoticeFrequencyWeekly  ||
-	    $watchnotifyfrequency == $WatchNoticeFrequencyFortnightly || $watchnotifyfrequency == $WatchNoticeFrequencyMonthly) {
-		# do nothing
-	} else {
-		$watchnotifyfrequency == $WatchNoticeFrequencyDaily;
-	}
-
-	$WatchNotice = new WatchNotice($db);
-	$WatchNotice->FetchByFrequency($watchnotifyfrequency);
-	if (!IsSet($WatchNotice->id)) {
-		echo "<B>Sorry, I didn't find that watch notice frequency ('$watchnotifyfrequency').  Has the table been populated?</B><BR>";
-		exit;
-	}
-
 
 	$UserCreated = 0;
 	if ($OK) {
@@ -100,7 +78,7 @@ if ($submit) {
 				$sql = "insert into users (id, name, password, cookie, email, " . 
 						"watch_notice_id, emailsitenotices_yn, type, ip_address, number_of_days) values (";
 				$sql .= "$UserID, '$UserLogin', '$Password1', '$Cookie', '$email', " .
-						"'$WatchNotice->id', '$emailsitenotices_yn_value', 'S', '" . $_SERVER["REMOTE_ADDR"] . "', " .
+						"'1', 'Y', 'S', '" . $_SERVER["REMOTE_ADDR"] . "', " .
 						"$numberofdays)";
 
 				$errors .= "<BR>sql=" . $sql;
@@ -133,8 +111,6 @@ if ($submit) {
 	}
 } else {
 	// not submit
-
-	$watchnotifyfrequency = $WatchNoticeFrequencyDaily;
 
 	// we can't do this if we are submitting because it overwrites the incoming values
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
@@ -205,7 +181,8 @@ if (!$submit && !$errors) {
         <TD>
 
 <P><BIG><BIG>NOTE:</BIG>You must supply a valid email address.<BR>Instructions to enable your account 
-will be emailed to you at that address.</BIG></P>
+will be emailed to you at that address.  If you have are using a spam filter, please allow all
+mail from <CODE CLASS="code">unixathome.org</CODE> and <CODE CLASS="code">freshports.org</CODE>.</BIG></P>
 <P>Your browser must allow cookies for the login to work.</P>
 <P>&nbsp;</P>
 
