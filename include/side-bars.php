@@ -1,7 +1,9 @@
-<?
-	# $Id: side-bars.php,v 1.13 2003-05-02 11:41:23 dan Exp $
+<?php
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# $Id: side-bars.php,v 1.14 2003-05-15 18:41:38 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+	#
 
 	$ColumnWidth = 155;
 
@@ -69,7 +71,11 @@
 	</TR>
 </TABLE>
 
-<BR>
+<P>
+
+<SMALL>Server and bandwidth provided by <A HREF="http://www.bchosting.com/" TARGET="_new">BChosting.com</A></SMALL>
+
+</P>
 
 <TABLE WIDTH="<? echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
 	<TR>
