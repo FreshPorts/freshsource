@@ -1,12 +1,14 @@
 <?
 
-	# $Id: freshports.php,v 1.10 2003-04-28 20:10:14 dan Exp $
+	# $Id: freshports.php,v 1.11 2004-01-01 14:02:27 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/constants.php");
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/burstmedia.php");
 
+
+DEFINE('COPYRIGHTYEARS', '2000-2004');
 
 if ($Debug) echo "'" . $_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php'<BR>";
 
@@ -798,7 +800,7 @@ function freshports_navigation_bar_top() {
 
 
 function freshports_copyright() {
-	return '<SMALL><A HREF="/legal.php" target="_top">Copyright</A> &copy; 2000-2002 <A HREF="http://www.dvl-software.com/">DVL Software Limited</A>. All rights reserved.</SMALL>';
+	return '<SMALL><A HREF="/legal.php" target="_top">Copyright</A> &copy; ' . COPYRIGHTYEARS . ' <A HREF="http://www.dvl-software.com/">DVL Software Limited</A>. All rights reserved.</SMALL>';
 }
 
 
