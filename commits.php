@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.24 2003-04-24 12:32:08 dan Exp $
+	# $Id: commits.php,v 1.25 2003-04-24 14:36:12 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -17,56 +17,6 @@
 $Debug = 0;
 
 if ($Debug) echo "UserID='$UserID'";
-
-function freshports_SummaryForDay($MinusN) {          
-   $BaseDirectory = "./archives";                     
-   $Now = time();                                    
-//   echo "$MinusN<br>\n"; 
-   $File = $BaseDirectory . "/" . date("Y/m/d", $Now - 60*60*24*$MinusN) . ".inc";  
-//   echo "$File<br>\n";
-   if (file_exists($File)) {
-      echo '<br><TABLE WIDTH="152" BORDER="1" CELLSPACING="0" CELLPADDING="5">';
-      echo '  <TR>';
-      echo '<TD bgcolor="#AD0040" height="30"><font color="#FFFFFF" SIZE="+1">';
-      echo date("l j M", $Now - 60*60*24*$MinusN);
-      echo '</font></TD>';
-      echo '       </TR>';
-      echo '        <TR>';
-      echo '         <TD>';
-      include($File);
-      echo '   </TD>';
-      echo '   </TR>';
-      echo '   </TABLE>';
-   }
-}
-
-
-//$Debug = 1;
-
-if (!$StartAt) {
-   if ($Debug) {
-      echo "setting StartAt to zero<br>\n";
-      echo "UserID = $UserID<br>\n";
-   }
-   $StartAt = 0;
-} else {
-   $NewStart = floor($StartAt / $MaxNumberOfPorts) * $MaxNumberOfPorts;
-   if ($NewStart != $StartAt) {
-      $URL = basename($_SERVER["PHP_SELF"]);
-      if ($NewStart > 0) {
-         $URL .= "?StartAt=$NewStart";
-      } else {
-         $URL = "/";
-      }
-      header("Location: " . $URL );
-      // Make sure that code below does not get executed when we redirect.
-      exit;
-   }
-}
-
-if ($Debug) {
-   echo "StartAt = $StartAt<br>\n";
-}
 
 ?>
 
@@ -102,14 +52,8 @@ function GetPortNameFromFileName($file_name) {
 
 }
 
-      $numrows = $MaxNumberOfPorts;
       $database=$db;
       if ($database) {
-#
-# we limit the select to recent things by using a date
-# otherwise, it joins the whole table and that takes quite a while
-#
-#$numrows=400;
 
 		if ($Debug) {
 			echo "\$WatchListID = '$WatchListID'\n";
@@ -210,8 +154,7 @@ $sql .= "order by commit_date_raw desc, element_pathname";
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits (errr.. actually, it's elements, not commits...)", 3); ?>
-        <? //echo ($StartAt + 1) . " - " . ($StartAt + $MaxNumberOfPorts) ?>
+		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits", 3); ?>
 </TR>
 <TR><TD>
 <P>
@@ -236,7 +179,7 @@ runs off the same database and displays only the port commits.
 					if ($LastDate <> $myrow["commit_date"]) {
 						$LastDate = $myrow["commit_date"];
 						$HTML .= '<TR><TD COLSPAN="3" BGCOLOR="#AD0040" HEIGHT="0">' . "\n";
-						$HTML .= '   <FONT COLOR="#FFFFFF"><BIG>' . FormatTime($myrow["commit_date"], 0, "D, j M") . '</BIG></FONT>' . "\n";
+						$HTML .= '   <FONT COLOR="#FFFFFF"><BIG>' . FormatTime($myrow["commit_date"], 0, "D, j M Y") . '</BIG></FONT>' . "\n";
 						$HTML .= '</TD></TR>' . "\n\n";
 					}
 
