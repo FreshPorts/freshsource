@@ -1,5 +1,5 @@
 <?
-	# $Id: news.php,v 1.1 2002-06-24 17:34:49 dan Exp $
+	# $Id: news.php,v 1.2 2002-06-24 18:16:10 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -61,7 +61,7 @@
 		$myrow = pg_fetch_array ($result, $i);
 		$HTML .= '  <item>' . "\n";
 		$HTML .= '    <title>' . $myrow["message_subject"] . '</title>' . "\n";
-		$HTML .= '    <link>http://' . $ServerName . '/</link>' . "\n";
+		$HTML .= '    <link>http://' . $ServerName . '/commit.php?message_id=' . $myrow["message_id"] . '</link>' . "\n";
 		$HTML .= '    <description>' . htmlspecialchars(trim($myrow["description"])) . '</description>' . "\n";
 		$HTML .= '  </item>' . "\n";
 	}
