@@ -1,5 +1,5 @@
 <?
-	# $Id: repo.php,v 1.1 2002-06-27 20:47:34 dan Exp $
+	# $Id: repo.php,v 1.2 2002-06-27 21:00:38 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -91,7 +91,7 @@ source.
 				for ($i = 0; $i < $NumRows; $i++) {
 					$myrow = $rows[$i];
 					if ($myrow["directory_file_flag"] == 'D') {
-						$HTML .= 'D <A HREF="' . $_SERVER["PHP_SELF"] . '/repo.php?parent_id=' . $myrow["id"] . '">' . $myrow["name"] . '</A><BR>' . "\n";
+						$HTML .= 'D <A HREF="' . $_SERVER["REQUEST_URI"] . '?parent_id=' . $myrow["id"] . '">' . $myrow["name"] . '</A><BR>' . "\n";
 					} else {
 						$HTML .= 'F ' . $myrow["name"] . "<BR>\n";
 					}
