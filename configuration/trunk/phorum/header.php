@@ -12,6 +12,12 @@
 <div class="PhorumForumTitle"><strong><?php echo $ForumName; ?></strong></div>
 <br />
 <?php
-   function diary_bannerforum() {
-   }
+#
+# custom_BannerForum is invoked by read.php, post.php and list.php.
+# It is a place holder for any customizations by the local phorum
+#
+
+function custom_BannerForum($ForumName, $article_id) {
+	return '';
+}
 ?>
