@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.11 2002-07-26 21:08:24 dan Exp $
+	# $Id: commits.php,v 1.12 2002-07-26 21:38:50 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -129,7 +129,7 @@ function GetPortNameFromFileName($file_name) {
 					                       ON commits_latest.element_id    = watch_list_element.element_id
 					                      AND watch_list_element.watch_list_id = $WatchListID
 			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
-			               commits_latest.element_name";
+			               commits_latest.element_pathname";
 		} else {
 			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
 	    	               commits_latest.commit_date           AS commit_date,
@@ -142,7 +142,7 @@ function GetPortNameFromFileName($file_name) {
 					                       ON commits_latest.element_id    = watch_list_element.element_id
 					                      AND watch_list_element.watch_list_id = $WatchListID
 			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
-			               commits_latest.element_name";
+			               commits_latest.element_pathname";
 		}
 
 		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
@@ -237,7 +237,7 @@ source.
 						if ($NumberOfElementsInThisCommit <= $MaxNumberElementssToShow) {
 							$HTML .= '<BIG><B>';
 							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
-							$HTML .= $myrow["element_name"] . " ";
+							$HTML .= $myrow["element_pathname"] . " ";
 							$HTML .= "</A></B></BIG>\n";
 
 							if ($WatchListID) {
