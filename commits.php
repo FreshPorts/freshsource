@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.5 2002-06-24 20:11:35 dan Exp $
+	# $Id: commits.php,v 1.6 2002-06-28 16:51:28 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -202,13 +202,14 @@ source.
 #					$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
 
 
+					if ($myrow["encoding_losses"] == 't') {
+						$HTML .= '&nbsp;' . freshports_Encoding_Errors();
+					}
+
 					$HTML .= "\n\n<BR>\n\n<BLOCKQUOTE>";
 
 					$HTML .= str_replace("cvs commit: ", "", $myrow["message_subject"]);
 
-					if ($myrow["encoding_losses"] == 't') {
-						$HTML .= '&nbsp;' . freshports_Encoding_Errors();
-					}
 					if ($WatchListID) {
 						if ($myrow["watch"]) {
 							$HTML .= ' '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
