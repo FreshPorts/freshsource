@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.15 2002-07-30 12:47:10 dan Exp $
+	# $Id: commits.php,v 1.16 2002-07-30 14:16:12 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -249,7 +249,7 @@ source.
 								}
 							}
 
-							if ($myrow["revision_name"] != "1.1") {
+							if ($myrow["revision_name"] !== "1.1") {
 								# add a link to the diffs
 								$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . ".diff?r1=";
 								$HTML .= $myrow["revision_name"] . '&r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
