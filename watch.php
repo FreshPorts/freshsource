@@ -1,5 +1,5 @@
 <?
-	# $Id: watch.php,v 1.1 2002-07-30 17:37:14 dan Exp $
+	# $Id: watch.php,v 1.2 2002-07-30 17:45:56 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -11,6 +11,7 @@
 $Debug = 0;
 
 $visitor = $_COOKIE["visitor"];
+$PageTitle = "your watched sources";
 
 // if we don't know who they are, we'll make sure they login first
 if (!$visitor) {
@@ -18,7 +19,7 @@ if (!$visitor) {
         exit;  /* Make sure that code below does not get executed when we redirect. */
 }
 
-	freshports_Start("your watched sources",
+	freshports_Start($PageTitle,
 					$FreshPortsTitle . " - source applications",
 					"FreeBSD, index, applications, ports");
 ?>
@@ -28,11 +29,14 @@ if (!$visitor) {
 <tr><td valign="top" width="100%">
 <table width="100%" border="0">
 <tr>
-	<? freshports_PageBannerText("your watch list"); ?>
+	<? freshports_PageBannerText($PageTitle); ?>
 </tr>
 <tr><td>
-These are the sources which are on your watch list. 
-That link also occurs on the right hand side of this page, under Login.
+<UL>
+<LI>These are the sources which are on your watch list.<BR>
+<LI>At present, it shows only those elements which already have a commit found within the database.  In future
+it will show everything on your watch list.
+</UL>
 </td></tr>
 <script language="php">
 
@@ -49,20 +53,23 @@ $WatchID = freshports_MainWatchID($UserID, $db);
 
 // make sure the value for $sort is valid
 
-echo "<tr><td>\nThis page is ";
+echo '<TR HEIGHT="30" VALIGN="center"><td>' . "\nThis page is ";
 
 $sort = $_GET["sort"];
 
 switch ($sort) {
-   default:
-      $sort = "commit_date_sort_field desc, element_pathname";
-      echo 'sorted by last update date.  but you can sort by <a href="' . $_SERVER["PHP_SELF"] . '?sort=category">category</a>';
-      $ShowCategoryHeaders = 0;
-      break;
+	case "filename":
+		$sort ="element_pathname, commit_date_sort_field desc";
+		echo 'sorted by file name.  but you can sort by <a href="' . $_SERVER["PHP_SELF"] . '?sort=commit">commit date</a>';
+		break;
 
+	default:
+		$sort = "commit_date_sort_field desc, element_pathname";
+		echo 'sorted by commit date.  but you can sort by <a href="' . $_SERVER["PHP_SELF"] . '?sort=filename">file name</a>';
+		break;
 }
 
-echo "</td></tr>\n";
+echo "<BR></td></tr>\n";
 
 $UpdateCache = 1;
 
