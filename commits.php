@@ -1,7 +1,9 @@
-<?
-	# $Id: commits.php,v 1.20 2002-10-04 14:38:06 dan Exp $
+<?php
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# $Id: commits.php,v 1.21 2003-04-14 00:07:04 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
@@ -113,39 +115,73 @@ function GetPortNameFromFileName($file_name) {
 			echo "\$WatchListID = '$WatchListID'\n";
 		}
 
-		if ($WatchListID) {
-			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
-	    	               commits_latest.commit_date           AS commit_date,
-    	                   commits_latest.commit_time           AS commit_time,
-			               commits_latest.committer, commits_latest.commit_description as description,
-			               commits_latest.encoding_losses, commits_latest.message_subject,
-			               commits_latest.element_name,
-			               commits_latest.revision_name,
-			               commits_latest.element_pathname,
-			               CASE when watch_list_element.element_id is null
-			                   then 0
-			                   else 1
-			               END as watch
-			          from commits_latest left outer join watch_list_element
-					                       ON commits_latest.element_id    = watch_list_element.element_id
-					                      AND watch_list_element.watch_list_id = $WatchListID
-			      order by commits_latest.commit_date_raw desc, commits_latest.commit_log_id,
-			               commits_latest.element_pathname";
-		} else {
-			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
-	    	               commits_latest.commit_date           AS commit_date,
-    	                   commits_latest.commit_time           AS commit_time,
-			               commits_latest.committer, commits_latest.commit_description as description,
-			               commits_latest.encoding_losses, commits_latest.message_subject,
-			               commits_latest.element_name,
-			               commits_latest.revision_name,
-			               commits_latest.element_pathname
-			          from commits_latest left outer join watch_list_element
-					                       ON commits_latest.element_id    = watch_list_element.element_id
-					                      AND watch_list_element.watch_list_id = $WatchListID
-			      order by commits_latest.commit_date_raw desc, commits_latest.commit_log_id,
-			               commits_latest.element_pathname";
-		}
+if ($User->id) {
+	$sql = "
+SELECT SECURITY.*,
+       W.*
+FROM (
+";
+}
+
+$sql .= "
+SELECT COMMITELEMENT.*,
+       security_notice.id  AS security_notice_id
+FROM (
+SELECT LCCLLC.*,
+       element.name    AS name,
+       element.status  AS status,
+       element_pathname(element.id) as element_pathname
+
+
+FROM (
+ SELECT LCCL.*, 
+        commit_log_elements.element_id,
+        commit_log_elements.revision_name
+   FROM 
+   (SELECT commit_log.id     AS commit_log_id, 
+           commit_date       AS commit_date_raw,
+           message_subject,
+           message_id,
+           committer,
+           description       AS commit_description,
+           to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')  AS commit_date,
+           to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI')      AS commit_time,
+           encoding_losses
+     FROM commit_log JOIN
+
+
+               (SELECT latest_commits.commit_log_id
+                   FROM latest_commits
+               ORDER BY latest_commits.commit_date DESC
+                 LIMIT $MaxNumberOfPorts) AS LC
+
+
+           ON commit_log.id = LC.commit_log_id) AS LCCL JOIN commit_log_elements
+                         ON commit_log_elements.commit_log_id = LCCL.commit_log_id
+                        AND commit_log_elements.commit_log_id > latest_commits_Anchor()) AS LCCLLC JOIN element
+
+
+
+on LCCLLC.element_id = element.id
+
+) AS COMMITELEMENT LEFT OUTER JOIN security_notice
+ON COMMITELEMENT.commit_log_id = security_notice.commit_log_id
+";
+
+if ($User->id) {
+   $sql .= "
+) AS SECURITY LEFT OUTER JOIN
+(SELECT element_id as wle_element_id, COUNT(watch_list_id) as watch
+  FROM watch_list JOIN watch_list_element
+    ON watch_list.id      = watch_list_element.watch_list_id
+       AND watch_list.user_id = 1
+GROUP BY element_id) AS W
+ON        W.wle_element_id = SECURITY.element_id
+";
+}
+
+$sql .= "order by commit_date_raw desc, element_pathname";
+
 
 		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
@@ -212,7 +248,7 @@ runs off the same database and displays only the port commits.
 					GLOBAL $freshports_mail_archive;
 
 					$NumberOfElementsInThisCommit = 0;
-	                $MaxNumberElementssToShow     = 10;
+					$MaxNumberElementssToShow     = 10;
 					$j = $i;
 					while ($j < $NumRows && $rows[$j]["commit_log_id"] == $ThisCommitLogID) {
 						$NumberOfElementsInThisCommit++;
@@ -238,15 +274,21 @@ runs off the same database and displays only the port commits.
 #							$HTML .= '&nbsp;&nbsp;' . str_replace("cvs commit: ", "", $myrow["message_subject"]);
 							$HTML .= "<BR>\n\n";
 							$HTML .= "\n\n<BLOCKQUOTE>";
+
+							# put the elements items into a table
+							$HTML .= '<table border="0">' . "\n";
 						}
 
 						if ($NumberOfElementsInThisCommit <= $MaxNumberElementssToShow) {
+							$HTML .= '<tr><td>';
 							$HTML .= '<BIG><B>';
 							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
 							$HTML .= $myrow["element_pathname"] . " ";
 							$HTML .= "</A></B></BIG>\n";
 
+							$HTML .= '</td><td>';
 							$HTML .= '&nbsp;&nbsp;'. $myrow["revision_name"] . ' ';
+							$HTML .= '</td>';
 
 							if ($WatchListID) {
 								if ($myrow["watch"]) {
@@ -256,19 +298,20 @@ runs off the same database and displays only the port commits.
 								}
 							}
 
+							$HTML .= '</td><td>';
 							if ($myrow["revision_name"] !== "1.1") {
 								# add a link to the diffs
 								$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . ".diff?r1=";
 								$HTML .= $myrow["revision_name"] . '&r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
 								$HTML .= 'diff</A>';
 							}
-
-							$HTML .= "<BR>\n";
+							$HTML .= '</td></tr>' . "\n";
 						}
 						$j++;
 					}
 
-                    $HTML .= "\n</BLOCKQUOTE>\n";
+					$HTML .= '</table>' . "\n";
+					$HTML .= "\n</BLOCKQUOTE>\n";
 
 
 					if ($NumberOfElementsInThisCommit > $MaxNumberElementssToShow) {
@@ -278,8 +321,8 @@ runs off the same database and displays only the port commits.
 					$i = $j - 1;
 
 					$HTML .= "\n\n<BLOCKQUOTE>";
-					$HTML .= freshports_PortDescriptionPrint($myrow["description"], $myrow["encoding_losses"], $freshports_CommitMsgMaxNumOfLinesToShow, freshports_MoreCommitMsgToShow($myrow["message_id"], $freshports_CommitMsgMaxNumOfLinesToShow));
-                    $HTML .= "\n</BLOCKQUOTE>\n";
+					$HTML .= freshports_PortDescriptionPrint($myrow["commit_description"], $myrow["encoding_losses"], $freshports_CommitMsgMaxNumOfLinesToShow, freshports_MoreCommitMsgToShow($myrow["message_id"], $freshports_CommitMsgMaxNumOfLinesToShow));
+					$HTML .= "\n</BLOCKQUOTE>\n";
 
 					$HTML .= "\n</TD></TR>\n\n\n";
 					echo $HTML;
