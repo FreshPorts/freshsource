@@ -1,10 +1,9 @@
 <?
-	# $Id: burstmedia.php,v 1.1 2002-06-24 18:17:21 dan Exp $
+	# $Id: burstmedia.php,v 1.2 2002-06-24 18:45:55 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/constants.php");
-	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/burstmedia.php");
 
 
 function BurstMediaCode() {
