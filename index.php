@@ -1,5 +1,5 @@
 <?
-	# $Id: index.php,v 1.3 2002-06-24 14:20:14 dan Exp $
+	# $Id: index.php,v 1.4 2002-06-24 17:36:38 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -33,11 +33,18 @@ The <BIG>FreshSource</BIG> project allows you to track source code changes.  Fea
 <LI>optionally receive notification of the changes which occur to items on your watch list</LI>
 </UL>
 
+<H3>Example page</H3>
+
 We know you want it.... Here's <A HREF="/commits.php">the working copy</A> of what the home page might look like.
 That page is live and shows the most recent commits.  Compare that page with the 
 <A HREF="http://www.FreshPorts.org/">FreshPorts</A> look.  You'll even see some overlap in the commit messages (i.e.
 the port commits will appear on both pages).  Also note that both websites are using the same data from the same 
 database.
+</P>
+
+<H3>All the news you want</H3>
+<P>
+We also have <A HREF="/news.php">a news feed</A>.
 </P>
 
 <H2>How does <BIG>FreshSource</BIG> work?</H2>
