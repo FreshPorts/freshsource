@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.7 2002-07-26 19:04:37 dan Exp $
+	# $Id: commits.php,v 1.8 2002-07-26 20:31:22 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -12,7 +12,7 @@
 	freshports_Start($FreshPortsSlogan,
 					"$FreshSourceName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug=1;
+$Debug=0;
 
 if ($Debug) echo "UserID='$UserID'";
 
@@ -114,31 +114,29 @@ function GetPortNameFromFileName($file_name) {
 		}
 
 		if ($WatchListID) {
-			$sql = "select commit_log.id, commit_log.message_id, commit_log.message_date, commit_log.message_subject, 
-			               commit_log.date_added,
-	    	               to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
-    	                   to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
-			               commit_log.committer, commit_log.description, commit_log.system_id, commit_log.encoding_losses,
+			$sql = "select commits_latest.commit_log_id, commits_latest.message_id, 
+	    	               commits_latest.commit_date           AS commit_date,
+    	                   commits_latest.commit_time               AS commit_time,
+			               commits_latest.committer, commits_latest.commit_description as description,
+			               commits_latest.encoding_losses, commits_latest.message_subject,
+			               commits_latest.element_name,
 			               CASE when watch_list_element.element_id is null
 			                   then 0
 			                   else 1
 			               END as watch
-			          from commit_log, 
-			               commit_log_elements left outer join watch_list_element
-					                       ON commit_log_elements.element_id    = watch_list_element.element_id
+			          from commits_latest left outer join watch_list_element
+					                       ON commits_latest.element_id    = watch_list_element.element_id
 					                      AND watch_list_element.watch_list_id = $WatchListID
-			         WHERE commit_log_elements.commit_log_id = commit_log.id
-			           AND EXISTS (select * from commit_log_elements order by id desc limit 100)
-			      order by commit_log.commit_date desc
-			         limit $MaxNumberOfPorts";
+			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
+			               commits_latest.element_name";
 		} else {
-			$sql = "select id, message_id, message_date, message_subject, date_added,
-	    		           to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
-    	    		       to_char(commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
-	            		   committer, description, system_id, encoding_losses
-			          from commit_log
-			      order by commit_log.commit_date desc
-			         limit $MaxNumberOfPorts";
+			$sql = "select commits_latest.id, commits_latest.message_id, commits_latest.message_date, commits_latest.message_subject,
+	    		           to_char(commits_latest.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
+    	    		       to_char(commits_latest.commit_date - SystemTimeAdjust(), 'HH24:MI')               AS commit_time,
+	            		   commits_latest.committer, commits_latest.description, commits_latest.system_id
+			          from commits_latest
+			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
+			               commits_latest.element_name";
 		}
 
 		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
@@ -146,7 +144,7 @@ function GetPortNameFromFileName($file_name) {
 		$result = pg_exec($database, $sql);
 		if ($result) {
 			$numrows = pg_numrows($result);
-#			echo $numrows . " rows to fetch\n";
+			if ($Debug) echo $numrows . " rows to fetch\n";
 			if ($numrows) { 
 
 				$i=0;
@@ -168,7 +166,7 @@ function GetPortNameFromFileName($file_name) {
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits (errr.. actually, it's elements, not commits)", 3); ?>
+		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits (errr.. actually, it's elements, not commits...)", 3); ?>
         <? //echo ($StartAt + 1) . " - " . ($StartAt + $MaxNumberOfPorts) ?>
 </TR>
 <TR><TD>
@@ -180,10 +178,12 @@ source.
 </TD></TR>
 
 <?
-#				print "NumRows = $NumRows\n<BR>";
-				$HTML = "";
+				if ($Debug) print "NumRows = $NumRows\n<BR>";
 				for ($i = 0; $i < $NumRows; $i++) {
+					$HTML = "";
+					$NumberOfElementsInThisCommit++;
 					$myrow = $rows[$i];
+					$ThisCommitLogID = $myrow["commit_log_id"];
 
 					if ($LastDate <> $myrow["commit_date"]) {
 						$LastDate = $myrow["commit_date"];
@@ -199,40 +199,66 @@ source.
 
 					GLOBAL $freshports_mail_archive;
 
-					$HTML .= '<SMALL>';
-					$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]) . ' ]';
-					$HTML .= '</SMALL>';
-					$HTML .= '&nbsp;';
-					$HTML .= freshports_Email_Link($myrow["message_id"]);
+					$NumberOfElementsInThisCommit = 0;
+	                $MaxNumberElementssToShow     = 10;
+					$j = $i;
+					$HTML .= "\n\n<BLOCKQUOTE>";
+					while ($j < $NumRows && $rows[$j]["commit_log_id"] == $ThisCommitLogID) {
+						$NumberOfElementsInThisCommit++;
+						$myrow = $rows[$j];
 
-					$HTML .= "&nbsp;";
+						if ($NumberOfElementsInThisCommit == 1) {
 
-#					$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
+							$HTML .= '<SMALL>';
+							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]) . ' ]';
+							$HTML .= '</SMALL>';
+							$HTML .= '&nbsp;';
+							$HTML .= freshports_Email_Link($myrow["message_id"]);
+
+							$HTML .= "&nbsp;";
+
+#							$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
 
 
-					if ($myrow["encoding_losses"] == 't') {
-						$HTML .= '&nbsp;' . freshports_Encoding_Errors();
-					}
+							if ($myrow["encoding_losses"] == 't') {
+								$HTML .= '&nbsp;' . freshports_Encoding_Errors();
+							}
 
-					$HTML .= "\n\n<BR>\n\n<BLOCKQUOTE>";
-
-					$HTML .= str_replace("cvs commit: ", "", $myrow["message_subject"]);
-
-					if ($WatchListID) {
-						if ($myrow["watch"]) {
-							$HTML .= ' '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
-						} else {
-							$HTML .= ' '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
+							$HTML .= '&nbsp;&nbsp;' . str_replace("cvs commit: ", "", $myrow["message_subject"]);
+							$HTML .= "<BR><BR>\n\n";
 						}
+
+						if ($NumberOfElementsInThisCommit <= $MaxNumberElementssToShow) {
+							$HTML .= $myrow["element_name"] . " ";
+
+							if ($WatchListID) {
+								if ($myrow["watch"]) {
+									$HTML .= ' '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
+								} else {
+									$HTML .= ' '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
+								}
+								$HTML .= "<BR>\n";
+							}
+						}
+						$j++;
 					}
 
+                    $HTML .= "\n</BLOCKQUOTE>\n";
 
+
+					if ($NumberOfElementsInThisCommit > $MaxNumberElementssToShow) {
+						$HTML .= '<BR>' . freshports_MorePortsToShow($myrow["message_id"], $NumberOfElementsInThisCommit, $MaxNumberElementssToShow);
+					}
+
+					$i = $j - 1;
+
+					$HTML .= "\n\n<BLOCKQUOTE>";
 					$HTML .= freshports_PortDescriptionPrint($myrow["description"], $myrow["encoding_losses"], $freshports_CommitMsgMaxNumOfLinesToShow, freshports_MoreCommitMsgToShow($myrow["message_id"], $freshports_CommitMsgMaxNumOfLinesToShow));
+                    $HTML .= "\n</BLOCKQUOTE>\n";
 
-					$HTML .= "\n</BLOCKQUOTE>\n</TD></TR>\n\n\n";
+					$HTML .= "\n</TD></TR>\n\n\n";
+					echo $HTML;
 				}
-
-				echo $HTML;
 
 	            echo "</TABLE>\n";
 			} else {
