@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.21 2003-04-14 00:07:04 dan Exp $
+	# $Id: commits.php,v 1.22 2003-04-14 00:39:44 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -130,7 +130,7 @@ FROM (
 SELECT LCCLLC.*,
        element.name    AS name,
        element.status  AS status,
-       element_pathname(element.id) as element_pathname
+       element_pathname(element.id, FALSE) as element_pathname
 
 
 FROM (
