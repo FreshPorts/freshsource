@@ -1,5 +1,5 @@
 <?
-	# $Id: constants.php,v 1.1 2002-06-24 18:17:22 dan Exp $
+	# $Id: constants.php,v 1.2 2002-07-30 15:01:26 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -19,7 +19,7 @@ $TableWidth             = "100%";
 $DateFormatDefault      = "j M Y";
 $TimeFormatDefault		= "H:i:s";
 
-$FreshPortsTitle		= "FreshPorts";
+$FreshPortsTitle		= "FreshSource";
 
 $WatchNoticeFrequencyDaily			= "D";
 $WatchNoticeFrequencyWeekly			= "W";
@@ -31,7 +31,7 @@ $UserStatusActive	   = "A";
 $UserStatusDisabled    = "D";
 $UserStatusUnconfirmed = "U";
 
-$ProblemSolverEmailAddress	= "webmaster@freshports.org";
+$ProblemSolverEmailAddress	= "webmaster@freshsource.org";
 
 #
 # These values are used when specifying add/remove on a port
@@ -74,5 +74,7 @@ $freshports_mail_archive = "http://www.freebsd.org/cgi/mid.cgi?db=mid&id=";
 # max number of lines to show in a commit
 #
 $freshports_CommitMsgMaxNumOfLinesToShow = 15;
+
+$freshports_FirstRevisionNumber			 = "1.1";
 
 ?>
