@@ -8,14 +8,14 @@
 
 // Global Settings
   $PHORUM['started']=1;
-  $PHORUM['DefaultDisplay']='90';
-  $PHORUM['DefaultEmail']='webmaster@FreshSource.org';
-  $PHORUM['ReplyLocation']='';
+  $PHORUM['DefaultDisplay']='30';
+  $PHORUM['DefaultEmail']='';
+  $PHORUM['ReplyLocation']='0';
   $PHORUM['PhorumMailCode']='';
   $PHORUM['UseCookies']='1';
   $PHORUM['ConfirmRegister']='';
   $PHORUM['SortForums']='1';
-  $PHORUM['ActiveForums']='0';
+  $PHORUM['ActiveForums']='1';
   $PHORUM['TimezoneOffset']='0';
 
   $PHORUM['forum_url']='http://beta.freshsource.org/phorum';
@@ -42,18 +42,18 @@
   $PHORUM['default_body_link_color']='#0000FF';
   $PHORUM['default_body_vlink_color']='#330000';
   $PHORUM['default_body_alink_color']='#FF0000';
-  $PHORUM['default_table_width']='98%';
-  $PHORUM['default_table_header_color']='#FFCC33';
-  $PHORUM['default_table_header_font_color']='#000000';
-  $PHORUM['default_table_body_color_1']='#FFFFFF';
+  $PHORUM['default_table_width']='100%';
+  $PHORUM['default_table_header_color']='#003366';
+  $PHORUM['default_table_header_font_color']='#FFFFFF';
+  $PHORUM['default_table_body_color_1']='#FFFFCC';
   $PHORUM['default_table_body_font_color_1']='#000000';
-  $PHORUM['default_table_body_color_2']='#FFFFFF';
+  $PHORUM['default_table_body_color_2']='#CCCC99';
   $PHORUM['default_table_body_font_color_2']='#000000';
-  $PHORUM['default_nav_color']='#FFCC33';
+  $PHORUM['default_nav_color']='#FFFFFF';
   $PHORUM['default_nav_font_color']='#000000';
   $PHORUM['ModEditProps']='';
-  $PHORUM['VisCreateAcc']='';
-  $PHORUM['UserModifyProf']='';
+  $PHORUM['VisCreateAcc']='1';
+  $PHORUM['UserModifyProf']='1';
 
   // expand all the above into vars for legacy code.
   while(list($key, $value)=each($PHORUM)){
@@ -63,7 +63,7 @@
   // database variables
   $PHORUM['DatabaseServer']='';
   $PHORUM['DatabaseName']='fsphorum';
-  $PHORUM['DatabaseUser']='fall0ut93';
+  $PHORUM['DatabaseUser']='dan';
   $PHORUM['DatabasePassword']='';
 
 
