@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.16 2002-07-30 14:16:12 dan Exp $
+	# $Id: commits.php,v 1.17 2002-08-01 12:04:36 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -129,7 +129,7 @@ function GetPortNameFromFileName($file_name) {
 			          from commits_latest left outer join watch_list_element
 					                       ON commits_latest.element_id    = watch_list_element.element_id
 					                      AND watch_list_element.watch_list_id = $WatchListID
-			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
+			      order by commits_latest.commit_date_raw desc, commits_latest.commit_log_id,
 			               commits_latest.element_pathname";
 		} else {
 			$sql = "select commits_latest.element_id, commits_latest.commit_log_id, commits_latest.message_id, 
@@ -142,7 +142,7 @@ function GetPortNameFromFileName($file_name) {
 			          from commits_latest left outer join watch_list_element
 					                       ON commits_latest.element_id    = watch_list_element.element_id
 					                      AND watch_list_element.watch_list_id = $WatchListID
-			      order by commits_latest.commit_date desc, commits_latest.commit_time desc, commits_latest.commit_log_id,
+			      order by commits_latest.commit_date_raw desc, commits_latest.commit_log_id,
 			               commits_latest.element_pathname";
 		}
 
