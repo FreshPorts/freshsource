@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.5 2002-07-27 23:22:24 dan Exp $
+	# $Id: freshports.php,v 1.6 2002-07-30 15:01:59 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -1101,6 +1101,7 @@ function freshports_UserSendToken($UserID, $dbh) {
 
 	GLOBAL $FreshPortsName;
 	GLOBAL $FreshPortsSlogan;
+	GLOBAL $FreshPortsTitle;
 
 	$sql = "select email, token 
 	          from users, user_confirmations
@@ -1120,12 +1121,12 @@ function freshports_UserSendToken($UserID, $dbh) {
 	}
 
 	if (IsSet($token)) {
-		OpenLog("FreshPorts", LOG_PID, LOG_SYSLOG);
+		OpenLog("FreshSource", LOG_PID, LOG_SYSLOG);
 		SysLog(LOG_NOTICE, "User Creation: UID=$UserID, email=$email");
 		CloseLog();
 
 		$message =  "Someone, perhaps you, supplied your email address as their\n".
-					"FreshPorts login. If that wasn't you, and this message becomes\n".
+					$FreshPortsTitle . " login. If that wasn't you, and this message becomes\n".
 				    "a nuisance, please forward this message to webmaster@" . $_SERVER["HTTP_HOST"] . "\n".
 					"and we will take care of it for you.\n".
                     " \n".
@@ -1139,7 +1140,7 @@ function freshports_UserSendToken($UserID, $dbh) {
 					"-- \n".
 					$FreshPortsName . " - http://" . $_SERVER["HTTP_HOST"] . "/ - " . $FreshPortsSlogan;
 
-		$result = mail($email, "FreshPorts - user registration", $message,
+		$result = mail($email, $FreshPortsTitle . " - user registration", $message,
 					"From: webmaster@" . $_SERVER["HTTP_HOST"] . "\nReply-To: webmaster@" . $_SERVER["HTTP_HOST"] . "\nX-Mailer: PHP/" . phpversion());
 	} else {
 		$result = 0;
