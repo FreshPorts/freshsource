@@ -1,5 +1,5 @@
 <?
-	# $Id: watch.php,v 1.3 2002-07-30 17:51:45 dan Exp $
+	# $Id: watch.php,v 1.4 2002-07-30 17:58:30 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -115,7 +115,7 @@ SELECT element_pathname(element.id) as element_pathname,
   from element, commit_log, commit_log_elements, watch_list_element INNER JOIN element_latest_commits
             ON (element_latest_commits.element_id = watch_list_element.element_id) 
  where commit_log_elements.commit_log_id  = commit_log.id 
-   and watch_list_element.watch_list_id   = 2 
+   and watch_list_element.watch_list_id   = $WatchID
    and commit_log_elements.element_id     = watch_list_element.element_id 
    and element_latest_commits.commit_date = commit_log.commit_date 
    and element.id                         = watch_list_element.element_id 
