@@ -1,5 +1,5 @@
 <?
-	# $Id: side-bars.php,v 1.9 2002-07-30 17:51:46 dan Exp $
+	# $Id: side-bars.php,v 1.10 2002-08-02 00:13:20 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -98,7 +98,7 @@
    function addNetscapePanel() {
       if ((typeof window.sidebar == "object") && (typeof window.sidebar.addPanel == "function"))
       {
-         window.sidebar.addPanel ("FreshPorts",
+         window.sidebar.addPanel ("FreshSource",
          "http://www.FreshSource.org/sidebar.php","");
       }
       else
