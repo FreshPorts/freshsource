@@ -1,6 +1,6 @@
 <?
 
-	# $Id: freshports.php,v 1.6 2002-07-30 15:01:59 dan Exp $
+	# $Id: freshports.php,v 1.7 2002-09-26 16:23:02 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -808,33 +808,8 @@ function FormatTime($Time, $Adjustment, $Format) {
 	return date($Format, strtotime($Time) + $Adjustment);
 }
 
-
-
-
 #
-# The following code was obtained from http://www.zend.com/codex.php?id=199&single=1
-# 
-#
-
-function convertURLS($text) {
-	$text = eregi_replace("((ht|f)tp://www\.|www\.)([a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})((/|\?)[a-z0-9~#%&\\/'_\+=:\?\.-]*)*)", "http://www.\\3", $text);
-	$text = eregi_replace("((ht|f)tp://)((([a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3}))|(([0-9]{1,3}\.){3}([0-9]{1,3})))((/|\?)[a-z0-9~#%&'_\+=:\?\.-]*)*)", "<A HREF=\"\\0\">\\0</A>", $text);
-	return $text;
-}
-
-function convertMail($text) {
-	$text = eregi_replace("([_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3}))", "<A HREF='mailto:\\0'>\\0</A>", $text);
-	return $text;
-}
-
-function convertAllLinks($text) {
-	$text = convertURLS($text);
-	$text = convertMail($text);
-	return $text;
-}
-
-#
-# The code above was donated by Steve Kacsmark <stevek@guide.chi.il.us>.
+# The code below was donated by Steve Kacsmark <stevek@guide.chi.il.us>.
 # With modifications by Marcin Gryszkalis <mgryszkalis@cerint.pl>.
 #
 
@@ -1183,17 +1158,21 @@ function freshportsNextRevisionNumber($RevisionNumber) {
 	# very basic and not very widely tested function
 	# for 3.45 return 3.44, for 1.809, return 1.808
 
+#	print "starting with '$RevisionNumber'<BR>\n";
+
 	if (gettype($RevisionNumber) != "string") {
 		exit("freshportsNextRevisionNumber needs to have a string");
 	}
 
-	$RevisionFraction = substr($RevisionNumber, strpos($RevisionNumber, ".") + 1);
+	$LastPosition = strrpos($RevisionNumber, ".");
+#	print "\$LastPosition= '$LastPosition'<BR>\n";
+
+	$RevisionFraction = substr($RevisionNumber, $LastPosition + 1);
 #	print $RevisionFraction . "<BR>\n";
 
 	$PreviousRevision = $RevisionFraction - 1;
 
-	return floor($RevisionNumber) . "." . $PreviousRevision;
+	return  substr($RevisionNumber, 0, $LastPosition) . '.' . $PreviousRevision;
 }
-
 
 ?>
