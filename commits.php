@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.26 2003-04-24 14:38:26 dan Exp $
+	# $Id: commits.php,v 1.27 2003-04-29 16:22:57 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -54,6 +54,7 @@ function GetPortNameFromFileName($file_name) {
 
       $database=$db;
       if ($database) {
+			$sql = '';
 
 		if ($Debug) {
 			echo "\$WatchListID = '$WatchListID'\n";
@@ -233,6 +234,8 @@ runs off the same database and displays only the port commits.
 							$HTML .= '&nbsp;&nbsp;'. $myrow["revision_name"] . ' ';
 							$HTML .= '</td>';
 
+							$HTML .= '<td>';
+
 							if ($WatchListID) {
 								if ($myrow["watch"]) {
 									$HTML .= '&nbsp; '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
@@ -241,7 +244,6 @@ runs off the same database and displays only the port commits.
 								}
 							}
 
-							$HTML .= '<td>';
 							if ($myrow["revision_name"] !== "1.1") {
 								# add a link to the diffs
 								$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . ".diff?r1=";
