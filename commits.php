@@ -1,5 +1,5 @@
 <?
-	# $Id: commits.php,v 1.10 2002-07-26 21:05:10 dan Exp $
+	# $Id: commits.php,v 1.11 2002-07-26 21:08:24 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -246,8 +246,8 @@ source.
 								} else {
 									$HTML .= '&nbsp; '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
 								}
-								$HTML .= "<BR>\n";
 							}
+							$HTML .= "<BR>\n";
 						}
 						$j++;
 					}
