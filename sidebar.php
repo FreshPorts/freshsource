@@ -1,5 +1,5 @@
 <?
-	# $Id: sidebar.php,v 1.2 2002-06-24 19:58:09 dan Exp $
+	# $Id: sidebar.php,v 1.3 2002-08-04 19:48:17 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -25,7 +25,7 @@
 	ul { padding-left: 20px;}
 	</STYLE>
 
-	<META HTTP-EQUIV="Refresh" CONTENT="1200; URL=http://st.FreshPorts.org/sidebar.php">
+	<META HTTP-EQUIV="Refresh" CONTENT="1200; URL=http://www.FreshSource.org/sidebar.php">
 	<META http-equiv="Pragma"              content="no-cache">
 	<META NAME="MSSmartTagsPreventParsing" content="TRUE">
 
