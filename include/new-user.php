@@ -1,5 +1,5 @@
 <?
-	# $Id: new-user.php,v 1.2 2002-09-13 14:36:57 dan Exp $
+	# $Id: new-user.php,v 1.3 2005-09-06 00:14:12 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -17,16 +17,16 @@
 <? if (!$Customize) { ?>
               <INPUT TYPE="hidden" NAME="ADD" VALUE="1">
               User ID:<br>
-              <INPUT SIZE="15" NAME="UserLogin" VALUE="<? echo $UserLogin ?>"><br><br>
+              <INPUT SIZE="15" NAME="UserLogin" VALUE="<? echo htmlentities($UserLogin) ?>"><br><br>
 <? } ?>
                Password:<br>
-               <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?echo $Password1 ?>" size="20"><br><br>
+               <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?echo htmlentities($Password1) ?>" size="20"><br><br>
                Confirm Password:<br>
-               <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?echo $Password2 ?>" size="20">
+               <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?echo htmlentities($Password2) ?>" size="20">
             </TD>
             <TD VALIGN="top">
                email address (required):<br>
-               <INPUT SIZE="35" NAME="email" VALUE="<?echo $email ?>">
+               <INPUT SIZE="35" NAME="email" VALUE="<?echo htmlentities($email) ?>">
 
 Number of Days to show in side-bar: 
 
