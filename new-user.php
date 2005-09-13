@@ -1,5 +1,5 @@
 <?
-	# $Id: new-user.php,v 1.3 2005-09-06 00:14:12 dan Exp $
+	# $Id: new-user.php,v 1.4 2005-09-13 14:11:35 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -25,15 +25,25 @@ if ($submit) {
 
 	$errors = "";
 
-	$UserLogin				= $_POST["UserLogin"];
-	$email					= $_POST["email"];
-	$Password1				= $_POST["Password1"];
-	$Password2				= $_POST["Password2"];
-	$numberofdays			= $_POST["numberofdays"];
+	$UserLogin				= $_REQUEST["UserLogin"];
+	$email					= $_REQUEST["email"];
+	$Password1				= $_REQUEST["Password1"];
+	$Password2				= $_REQUEST["Password2"];
+	$numberofdays			= $_REQUEST["numberofdays"];
 
 	if ($UserLogin == '') {
 		$errors .= "Please enter a user id.<BR>";
 		$OK = 0;
+	}
+
+	if ($UserLogin != trim($UserLogin, "\t\n\r\x0B")) {
+		syslog(LOG_ERR, 'FreshSource new user (odd UserLogin): '. $UserLogin);
+		$errors .= "Please, just use plain text for your user id.  This event has been logged.<br>";
+	}
+
+	if ($email != trim($email, "\t\n\r\x0B")) {
+		syslog(LOG_ERR, 'FreshSource new user (odd email): '. $email);
+		$errors .= "Please, just use plain text for your email.  This event has been logged.<br>";
 	}
 
 	if (!freshports_IsEmailValid($email)) {
@@ -49,6 +59,14 @@ if ($submit) {
 			$errors .= 'A password must be supplied<BR>';
 			$OK = 0;
 		}
+	}
+
+	if (is_numeric($numberofdays)) {
+		if ($numberofdays < 0 || $numberofdays > 9) {
+			$numberofdays = 0;
+		}
+	} else {
+		$numberofdays = 0;
 	}
 
 	$UserCreated = 0;
@@ -82,6 +100,7 @@ if ($submit) {
 						AddSlashes($email) . "', '1', 'N', 'U', '" . $_SERVER["REMOTE_ADDR"] . "', " .
 						AddSlashes($numberofdays) . ')';
 
+				syslog(LOG_ERR, 'FreshSource new user: '. $sql);
 				$errors .= "<BR>sql=" . $sql;
 
 				$result = pg_exec($db, $sql);
