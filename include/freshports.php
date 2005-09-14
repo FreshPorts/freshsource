@@ -1,14 +1,16 @@
-<?
+<?php
 
-	# $Id: freshports.php,v 1.11 2004-01-01 14:02:27 dan Exp $
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# $Id: freshports.php,v 1.12 2005-09-14 19:55:32 dan Exp $
+	#
+	# Copyright (c) 1998-2005 DVL Software Limited
+	#
 
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/constants.php");
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/burstmedia.php");
 
 
-DEFINE('COPYRIGHTYEARS', '2000-2004');
+DEFINE('COPYRIGHTYEARS', '2000-2005');
 
 if ($Debug) echo "'" . $_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php'<BR>";
 
@@ -313,7 +315,7 @@ if ($Phorum) {
 	<meta name="PhorumVersion" content="<?php echo $phorumver; ?>">
 	<meta name="PhorumDB" content="<?php echo $DB->type; ?>">
 	<meta name="PHPVersion" content="<?php echo phpversion(); ?>">
-<?
+<?php
 }
 
 	echo "</HEAD>\n";
@@ -325,7 +327,7 @@ function freshports_style($Phorum=0) {
 	if ($Phorum) {
 		?>
 		<LINK REL="STYLESHEET" TYPE="text/css" HREF="<?php echo phorum_get_file_name("css"); ?>">
-		<?
+		<?php
 	}
 	echo "\n        <STYLE TYPE=\"text/css\">\n";
 
@@ -336,7 +338,7 @@ BODY, TD, TR, P, UL, OL, LI, INPUT, SELECT, DL, DD, DT, FONT
     font-family: Helvetica, Verdana, Arial, Clean, sans-serif;
     font-size: 12px;
 }
-<?
+<?php
 }
 	echo "
                 CODE.code { color: #461b7e}
