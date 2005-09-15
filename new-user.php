@@ -1,5 +1,5 @@
 <?
-	# $Id: new-user.php,v 1.4 2005-09-13 14:11:35 dan Exp $
+	# $Id: new-user.php,v 1.5 2005-09-15 00:03:54 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -39,11 +39,13 @@ if ($submit) {
 	if ($UserLogin != trim($UserLogin, "\t\n\r\x0B")) {
 		syslog(LOG_ERR, 'FreshSource new user (odd UserLogin): '. $UserLogin);
 		$errors .= "Please, just use plain text for your user id.  This event has been logged.<br>";
+		$OK = 0;
 	}
 
 	if ($email != trim($email, "\t\n\r\x0B")) {
 		syslog(LOG_ERR, 'FreshSource new user (odd email): '. $email);
 		$errors .= "Please, just use plain text for your email.  This event has been logged.<br>";
+		$OK = 0;
 	}
 
 	if (!freshports_IsEmailValid($email)) {
