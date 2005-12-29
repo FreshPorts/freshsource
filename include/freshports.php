@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.12 2005-09-14 19:55:32 dan Exp $
+	# $Id: freshports.php,v 1.13 2005-12-29 19:48:33 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -868,9 +868,9 @@ function htmlify($String) {
 	$del_t = array("&quot;","&#34;","&gt;","&#62;","\/\.\s","\)","'","\s","$");
 	$delimiters = "(".join("|",$del_t).")";
 
-	$String = preg_replace_callback("/((http|ftp|https):\/\/.*?)($delimiters)/i",           url2link,  $String);
-	$String = preg_replace_callback("/([\w+=\-.!]+@[\w\-]+(\.[\w\-]+)+)/",                  mail2link, $String);
-	$String = preg_replace_callback("/(\bPR[:\#]?)\s*(((\w+\/)?\d+)(,\s*((\w+\/)?\d+))*)/", pr2link,   $String);
+	$String = preg_replace_callback("/((http|ftp|https):\/\/.*?)($delimiters)/i",           'url2link',  $String);
+	$String = preg_replace_callback("/([\w+=\-.!]+@[\w\-]+(\.[\w\-]+)+)/",                  'mail2link', $String);
+	$String = preg_replace_callback("/(\bPR[:\#]?)\s*(((\w+\/)?\d+)(,\s*((\w+\/)?\d+))*)/", 'pr2link',   $String);
  
 	return $String;
 }
