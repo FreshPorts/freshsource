@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.13 2005-12-29 19:48:33 dan Exp $
+	# $Id: freshports.php,v 1.14 2005-12-29 19:49:38 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -109,9 +109,9 @@ function freshports_Email_Link($message_id) {
 	# a valid message id which can be found in the mailing list archive.
 	#
 	if (strpos($message_id, "@freshports.org")) {
-		$HTML .= '';
+		$HTML  = '';
 	} else {
-		$HTML .= '<A HREF="' . htmlentities($freshports_mail_archive . $message_id) . '">';
+		$HTML  = '<A HREF="' . htmlentities($freshports_mail_archive . $message_id) . '">';
 		$HTML .= freshports_Mail_Icon();
 		$HTML .= '</A>';
 	}
@@ -1010,7 +1010,7 @@ function freshports_Head($string, $n) {
 
 function freshports_PortDescriptionPrint($description, $encoding_losses, $maxnumlines=0, $URL='') {
 	$shortened = freshports_Head($description, $maxnumlines);
-	$HTML .= '<PRE CLASS="code">';
+	$HTML = '<PRE CLASS="code">';
 
 	$HTML .= htmlify(htmlspecialchars(freshports_wrap($shortened)));
 
