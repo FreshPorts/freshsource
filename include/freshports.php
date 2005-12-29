@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.14 2005-12-29 19:49:38 dan Exp $
+	# $Id: freshports.php,v 1.15 2005-12-29 19:59:27 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -124,7 +124,7 @@ function freshports_Commit_Link($message_id, $LinkText = '') {
 	# produce a link to the commit.  by default, we provide the graphic link.
 	#
 
-	$HTML .= '<A HREF="/commit.php?message_id=' . $message_id . '">';
+	$HTML = '<A HREF="/commit.php?message_id=' . $message_id . '">';
 	if ($LinkText == '') {
 		$HTML .= freshports_Commit_Icon();
 	} else {
@@ -136,7 +136,7 @@ function freshports_Commit_Link($message_id, $LinkText = '') {
 }
 
 function freshports_MorePortsToShow($message_id, $NumberOfPortsInThisCommit, $MaxNumberPortsToShow) {
-	$HTML .= "(Only the first $MaxNumberPortsToShow of $NumberOfPortsInThisCommit files are shown above ";
+	$HTML  = "(Only the first $MaxNumberPortsToShow of $NumberOfPortsInThisCommit files are shown above ";
 	$HTML .= freshports_Commit_Link($message_id, '<IMG SRC="/images/play.gif" ALT="View all files for this commit" BORDER="0" WIDTH="13" HEIGHT="13">');
 	$HTML .= ")";
 
@@ -144,7 +144,7 @@ function freshports_MorePortsToShow($message_id, $NumberOfPortsInThisCommit, $Ma
 }
 
 function freshports_MoreCommitMsgToShow($message_id, $NumberOfLinesShown) {
-	$HTML .= "(Only the first $NumberOfLinesShown lines of the commit message are shown above ";
+	$HTML  = "(Only the first $NumberOfLinesShown lines of the commit message are shown above ";
 	$HTML .= freshports_Commit_Link($message_id, '<IMG SRC="/images/play.gif" ALT="View all of the message for this commit" BORDER="0" WIDTH="13" HEIGHT="13">');
 	$HTML .= ")";
 
