@@ -1,7 +1,9 @@
-<?
-	# $Id: commit.php,v 1.3 2002-07-30 14:14:45 dan Exp $
+<?php
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# $Id: commit.php,v 1.4 2005-12-29 19:47:40 dan Exp $
+	#
+	# Copyright (c) 1998-2005 DVL Software Limited
+	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
@@ -9,8 +11,9 @@
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
 
-	$message_id = AddSlashes($_GET["message_id"]);
-	$commit_id  = AddSlashes($_GET["commit_id"]);
+	if (IsSet($_GET["message_id"])) $message_id = AddSlashes($_GET["message_id"]);
+	if (IsSet($_GET["commit_id"]))  $commit_id  = AddSlashes($_GET["commit_id"]);
+
 	$Title = "Commit found by ";
 	if ($message_id) {
 		$Title .= "message id";
@@ -25,27 +28,6 @@ $Debug=0;
 if ($Debug) echo "UserID='$UserID'";
 
 $Debug = 0;
-
-if (!$StartAt) {
-   if ($Debug) {
-      echo "setting StartAt to zero<br>\n";
-      echo "UserID = $UserID<br>\n";
-   }
-   $StartAt = 0;
-} else {
-   $NewStart = floor($StartAt / $MaxNumberOfPorts) * $MaxNumberOfPorts;
-   if ($NewStart != $StartAt) {
-      $URL = basename($_SERVER["PHP_SELF"]);
-      if ($NewStart > 0) {
-         $URL .= "?StartAt=$NewStart";
-      } else {
-         $URL = "/";
-      }
-      header("Location: " . $URL );
-      // Make sure that code below does not get executed when we redirect.
-      exit;
-   }
-}
 
 if ($Debug) {
    echo "StartAt = $StartAt<br>\n";
@@ -184,10 +166,6 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
 				$NumRows = $numrows;
 				$LastDate = '';
-				if ($NumRows > 1) {
-					$LastChangeLogID = $rows[$i]["change_log_id"];
-					$LastChangeLogID = -1;
-				}
 
 ?>
 
@@ -197,7 +175,6 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 		<? 
 		freshports_PageBannerText($Title, 3);
 		?>
-        <? //echo ($StartAt + 1) . " - " . ($StartAt + $MaxNumberOfPorts) ?>
 </TR>
 
 <?
@@ -249,7 +226,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
 							$HTML .= '<BIG><B>';
 							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
-							$HTML .= $myrow["element_pathname"] . " ";
+							$HTML .= $myrow["element_pathname"];
 							$HTML .= "</A></B></BIG>\n";
 
 							if ($WatchListID) {
@@ -275,11 +252,6 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 						// indicate if this port has been removed from cvs
 						if ($myrow["status"] == "D") {
 							$HTML .= " " . freshports_Deleted_Icon() . "\n";
-						}
-
-						if ($myrow["date_added"] > Time() - 3600 * 24 * $DaysMarkedAsNew) {
-							$MarkedAsNew = "Y";
-							$HTML .= freshports_New_Icon() . "\n";
 						}
 
 						$j++;
