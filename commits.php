@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.28 2005-12-29 19:40:56 dan Exp $
+	# $Id: commits.php,v 1.29 2005-12-29 19:59:59 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -12,7 +12,7 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
 
 	freshports_Start($FreshPortsSlogan,
-					"$FreshSourceName - new ports, applications",
+					"$FreshPortsName - new ports, applications",
 					"FreeBSD, index, applications, ports");
 $Debug = 0;
 
@@ -59,6 +59,8 @@ function GetPortNameFromFileName($file_name) {
 		if ($Debug) {
 			echo "\$WatchListID = '$WatchListID'\n";
 		}
+
+GLOBAL $User;
 
 if ($User->id) {
 	$sql = "
@@ -145,10 +147,6 @@ $sql .= "order by commit_date_raw desc, element_pathname";
 
 				$NumRows = $numrows;
 				$LastDate = '';
-				if ($NumRows > 1) {
-					$LastChangeLogID = $rows[$i]["change_log_id"];
-					$LastChangeLogID = -1;
-				}
 
 ?>
 
@@ -171,6 +169,7 @@ runs off the same database and displays only the port commits.
 
 <?
 				if ($Debug) print "NumRows = $NumRows\n<BR>";
+				$NumberOfElementsInThisCommit = 0;
 				for ($i = 0; $i < $NumRows; $i++) {
 					$HTML = "";
 					$NumberOfElementsInThisCommit++;
