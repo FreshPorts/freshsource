@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.27 2003-04-29 16:22:57 dan Exp $
+	# $Id: commits.php,v 1.28 2005-12-29 19:40:56 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -209,6 +209,8 @@ runs off the same database and displays only the port commits.
 							$HTML .= "&nbsp;";
 
 #							$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
+
+							$HTML .= ' <a href="commit.php?message_id=' . $myrow["message_id"] . '"><img src="images/copy.gif" width="16" height="16"></a>';
 
 
 							if ($myrow["encoding_losses"] == 't') {
