@@ -1,6 +1,6 @@
 <?php
 
-	# $Id: getvalues.php,v 1.1 2002-06-24 18:17:22 dan Exp $
+	# $Id: getvalues.php,v 1.2 2005-12-29 19:51:59 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -73,7 +73,7 @@ $UserID			= "";
 // This is used to determine whether or not the cach can be used.
 $DefaultMaxArticles = $MaxArticles;
 
-$visitor = $_COOKIE["visitor"];
+if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
 if (!empty($visitor)) {
 	$sql = "select users.*, watch_list.id as watch_list_id
 			  from users left outer join watch_list 

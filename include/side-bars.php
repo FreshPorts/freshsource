@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: side-bars.php,v 1.14 2003-05-15 18:41:38 dan Exp $
+	# $Id: side-bars.php,v 1.15 2005-12-29 19:51:59 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -34,7 +34,7 @@
 			break;
 	}
 
-	$visitor = $_COOKIE["visitor"];
+	if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
 	if ($Debug) echo "OriginLocal = '$OriginLocal'<BR>\n";
 	if ($visitor) {
 		echo '<FONT SIZE="-1">Logged in as ', $UserName, "</FONT><BR>";
