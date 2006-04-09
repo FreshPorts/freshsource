@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.15 2005-12-29 19:59:27 dan Exp $
+	# $Id: freshports.php,v 1.16 2006-04-09 17:11:17 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -427,10 +427,9 @@ function freshports_Category_Name($CategoryID, $db) {
 
 function freshports_MainWatchID($UserID, $db) {
 
-	$sql = "select watch_list.id ".
-	       "  from watch_list ".
-	       " where watch_list.user_id = $UserID ".
-	       "   and watch_list.name    = 'main'";
+	$sql = "select users.last_watch_list_chosen as id ".
+	       "  from users ".
+	       " where id = $UserID";
 
 	$result = pg_exec ($db, $sql);
 
