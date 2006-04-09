@@ -1,8 +1,9 @@
 <?php
-
-	# $Id: getvalues.php,v 1.2 2005-12-29 19:51:59 dan Exp $
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# $Id: getvalues.php,v 1.3 2006-04-09 16:43:03 dan Exp $
+	#
+	# Copyright (c) 1998-2006 DVL Software Limited
+	#
 
 $Debug = 0;
 
@@ -75,10 +76,8 @@ $DefaultMaxArticles = $MaxArticles;
 
 if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
 if (!empty($visitor)) {
-	$sql = "select users.*, watch_list.id as watch_list_id
-			  from users left outer join watch_list 
-				    on users.id        = watch_list.user_id 
-				   and watch_list.name = 'main'
+	$sql = "select users.*, users.last_watch_list_chosen as watch_list_id
+			  from users
 			 where cookie = '$visitor'";
 
 	if ($Debug) {
