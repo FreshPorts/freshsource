@@ -1,7 +1,9 @@
 <?
-	# $Id: watch-list.php,v 1.1 2002-07-26 20:52:25 dan Exp $
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# $Id: watch-list.php,v 1.2 2006-04-09 17:12:13 dan Exp $
+	#
+	# Copyright (c) 1998-2006 DVL Software Limited
+	#
 
     require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
     require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
@@ -9,7 +11,7 @@
 
     require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
 
-	$Debug = 0;
+	$Debug  = 0;
 	$origin = $_GET["origin"];
 
 	$Origin = $HTTP_SERVER_VARS["HTTP_REFERER"];
@@ -29,6 +31,7 @@
 			     where watch_list_id = $WatchListID
 				   and element_id    = $remove";
 
+		if ($Debug) echo "<pre>$sql</pre>\n";
 		$result = pg_exec($db, $sql);
 		if (!$result) {
 			echo pg_errormessage();
@@ -41,6 +44,7 @@
 		if ($Debug) echo "I'm adding $add\n<BR>";
 		$sql = "insert into watch_list_element (watch_list_id, element_id) values
 								($WatchListID, $add)";
+		if ($Debug) echo "<pre>$sql</pre>\n";
 		$result = pg_exec($db, $sql);
 		if (!$result) {
 			echo pg_errormessage();
