@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.29 2005-12-29 19:59:59 dan Exp $
+	# $Id: commits.php,v 1.30 2006-04-09 17:12:48 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -62,7 +62,7 @@ function GetPortNameFromFileName($file_name) {
 
 GLOBAL $User;
 
-if ($User->id) {
+if ($UserID) {
 	$sql = "
 SELECT SECURITY.*,
        W.*
@@ -115,13 +115,14 @@ on LCCLLC.element_id = element.id
 ON COMMITELEMENT.commit_log_id = security_notice.commit_log_id
 ";
 
-if ($User->id) {
+if ($UserID) {
    $sql .= "
 ) AS SECURITY LEFT OUTER JOIN
 (SELECT element_id as wle_element_id, COUNT(watch_list_id) as watch
   FROM watch_list JOIN watch_list_element
     ON watch_list.id      = watch_list_element.watch_list_id
-       AND watch_list.user_id = 1
+       AND watch_list.user_id = " . $UserID . "
+       AND watch_list.in_service
 GROUP BY element_id) AS W
 ON        W.wle_element_id = SECURITY.element_id
 ";
