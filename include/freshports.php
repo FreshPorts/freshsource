@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.16 2006-04-09 17:11:17 dan Exp $
+	# $Id: freshports.php,v 1.17 2006-10-16 00:14:05 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -10,7 +10,7 @@
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/burstmedia.php");
 
 
-DEFINE('COPYRIGHTYEARS', '2000-2005');
+DEFINE('COPYRIGHTYEARS', '2000-2006');
 
 if ($Debug) echo "'" . $_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php'<BR>";
 
