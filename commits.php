@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.30 2006-04-09 17:12:48 dan Exp $
+	# $Id: commits.php,v 1.31 2007-03-18 23:27:35 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -61,6 +61,7 @@ function GetPortNameFromFileName($file_name) {
 		}
 
 GLOBAL $User;
+GLOBAL $UserID;
 
 if ($UserID) {
 	$sql = "
@@ -118,7 +119,7 @@ ON COMMITELEMENT.commit_log_id = security_notice.commit_log_id
 if ($UserID) {
    $sql .= "
 ) AS SECURITY LEFT OUTER JOIN
-(SELECT element_id as wle_element_id, COUNT(watch_list_id) as watch
+(SELECT element_id as wle_element_id, COUNT(watch_list_id) as onwatchlist
   FROM watch_list JOIN watch_list_element
     ON watch_list.id      = watch_list_element.watch_list_id
        AND watch_list.user_id = " . $UserID . "
@@ -227,6 +228,16 @@ runs off the same database and displays only the port commits.
 
 						if ($NumberOfElementsInThisCommit <= $MaxNumberElementssToShow) {
 							$HTML .= '<tr><td>';
+							
+							if ($WatchListID) {
+								if ($myrow["onwatchlist"]) {
+									$HTML .= freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
+								} else {
+									$HTML .= freshports_Watch_Link_Add   ($myrow["element_id"]) . ' ';
+								}
+							}
+
+
 							$HTML .= '<BIG><B>';
 							$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . '">';
 							$HTML .= $myrow["element_pathname"] . " ";
@@ -238,20 +249,15 @@ runs off the same database and displays only the port commits.
 
 							$HTML .= '<td>';
 
-							if ($WatchListID) {
-								if ($myrow["watch"]) {
-									$HTML .= '&nbsp; '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
-								} else {
-									$HTML .= '&nbsp; '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
-								}
-							}
 
-							if ($myrow["revision_name"] !== "1.1") {
-								# add a link to the diffs
-								$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . ".diff?r1=";
-								$HTML .= $myrow["revision_name"] . '&amp;r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
-								$HTML .= 'diff</A>';
+                            // FIX FIX FIX FIX FIX FIX FIX FIX FIX 
+                            if ($myrow["revision_name"] != '1.1') {
+    							# add a link to the diffs
+    							$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . ".diff?r1=";
+	    						$HTML .= $myrow["revision_name"] . '&amp;r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
+		    					$HTML .= 'diff</A>';
 							}
+							
 							$HTML .= '</td></tr>' . "\n";
 						}
 						$j++;
