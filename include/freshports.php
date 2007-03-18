@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.17 2006-10-16 00:14:05 dan Exp $
+	# $Id: freshports.php,v 1.18 2007-03-18 23:25:04 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -73,11 +73,11 @@ function freshports_Commit_Icon() {
 }
 
 function freshports_Watch_Icon() {
-	return '<IMG SRC="/images/watch.gif" ALT="Item is on your watch list" BORDER="0" WIDTH="23" HEIGHT="22">';
+	return '<IMG SRC="/images/watch.gif" ALT="Item is on your watch list" BORDER="0" WIDTH="16" HEIGHT="16">';
 }
 
 function freshports_Watch_Icon_Add() {
-	return '<IMG SRC="/images/watch-add.gif" ALT="Add item to your watch list" BORDER="0" WIDTH="13" HEIGHT="13">';
+	return '<IMG SRC="/images/watch-add.gif" ALT="Add item to your watch list" BORDER="0" WIDTH="16" HEIGHT="16">';
 }
 
 function freshports_Encoding_Errors() {
@@ -450,6 +450,7 @@ function freshports_echo_HTML_flush() {
    echo $HTML_Temp;
 }
 
+
 function freshports_in_array($value, $array) {
   $Count = count($array);
   for ($i = 0; $i < $Count; $i++) {
@@ -459,6 +460,109 @@ function freshports_in_array($value, $array) {
   }
 
   return 0;
+}
+
+function BreadcrumbArrayToLinks($prefix = '', $breadcrumbs) {
+	$HTML = '';
+	
+	$Path = '';
+
+	while (list(, $dir) = each($breadcrumbs)) {
+		$HTML .= ' ';
+		if (empty($dir)) {
+			$Path .= '';
+			$HTML .= '<a href="' . $prefix . '/">/</a>'. ' ';
+#			'/ ' . $Path;
+		} else {
+			$Path .= '/' . $dir;
+			$HTML .= '<a href="' . $prefix . $Path . '">' . $dir . '</a>'. ' / ';
+		}
+	}
+
+	// remove trailing /
+	$HTML = substr($HTML, 0, strlen($HTML) - 3);
+
+	return $HTML;
+}
+
+function Breadcrumbs($db, $prefix = '', $element_id) {
+
+	if (empty($element_id)) {
+		$element_id = 0;
+		$Breadcrumbs = '/';
+	} else {
+
+		$element_pathname = ElementPathname($db, $element_id);
+	
+		syslog(LOG_NOTICE, $element_pathname);
+
+		$DirectoryNames = explode('/', $element_pathname);
+	
+		$Breadcrumbs = BreadcrumbArrayToLinks($prefix, $DirectoryNames);
+	}
+	
+	return $Breadcrumbs;
+}
+	
+function ElementPathname($db, $element_id) {
+	$ElementPathname = '';
+
+    if (empty($element_id)) {
+		$ElementPathname = '/';
+	} else {
+		$sql = "select element_pathname($element_id) as elementpathname";
+
+		$result = pg_exec($db, $sql);
+		if ($result) {
+			if (pg_numrows($result)) {
+				$myrow = pg_fetch_array($result, 0);
+				$ElementPathname = $myrow["elementpathname"];
+			}
+		} else {
+			syslog(LOG_ERR, pg_errormessage() . ':' . $sql);
+		}
+	}
+
+	return $ElementPathname;
+}
+
+function Pathname_ID($db, $Pathname) {
+	$ElementID = 0;
+
+	$sql = "select Pathname_ID('" . pg_escape_string($Pathname) . "') as element_id";
+
+	$result = pg_exec($db, $sql);
+	if ($result) {
+		if (pg_numrows($result)) {
+			$myrow = pg_fetch_array($result, 0);
+			$ElementID = $myrow["element_id"];
+		}
+	} else {
+		syslog(LOG_ERR, pg_errormessage() . ':' . $sql);
+	}
+
+	return $ElementID;
+}
+
+function GetParent($db, $element_id) {
+	$ElementID = 0;
+	if (empty($element_id)) {
+		return 0;
+	}
+
+	$sql = "select GetParentID(" . pg_escape_string($element_id) . ") as parent_id";
+
+	$result = pg_exec($db, $sql);
+	if ($result) {
+		if (pg_numrows($result)) {
+			$myrow = pg_fetch_array($result, 0);
+			$ElementID = $myrow["parent_id"];
+		}
+	} else {
+		syslog(LOG_ERR, pg_errormessage() . ':' . $sql);
+	}
+
+	return $ElementID;
 }
 
 function freshports_PortIDFromPortCategory($category, $port, $db) {
