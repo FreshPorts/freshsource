@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commit.php,v 1.4 2005-12-29 19:47:40 dan Exp $
+	# $Id: commit.php,v 1.5 2007-03-18 23:25:40 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -233,7 +233,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 								if ($myrow["watch"]) {
 									$HTML .= '&nbsp; '. freshports_Watch_Link_Remove($myrow["element_id"]) . ' ';
 								} else {
-									$HTML .= '&nbsp; '. freshports_Watch_Link_Add($myrow["element_id"]) . ' ';
+									$HTML .= '&nbsp; '. freshports_Watch_Link_Add   ($myrow["element_id"]) . ' ';
 								}
 							}
 
