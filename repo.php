@@ -1,7 +1,9 @@
-<?
-	# $Id: repo.php,v 1.5 2002-07-26 13:57:01 dan Exp $
+.<?php
+    #
+	# $Id: repo.php,v 1.6 2007-03-18 23:28:42 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
+	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
@@ -12,11 +14,37 @@
 	freshports_Start($FreshPortsSlogan,
 					"$FreshSourceName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug=0;
+$Debug = 0;
 
 #phpinfo();
+    $parent_id = 0;
+    $path      = '/';
 
-	$parent_id = $_GET["parent_id"];
+    if (IsSet($_GET["parent_id"])) {
+      $parent_id = (int) $_GET["parent_id"];
+    }
+
+    if (IsSet($_GET["path"])) {
+      $path = htmlentities($_GET["path"]);
+      syslog(LOG_NOTICE, 'path = ' . $path);
+      $parent_id = Pathname_ID($db, $path);
+      if ($parent_id === NULL) {
+        $path = '/';
+      } else {
+        # do not trust what they gave us.
+        $ElementPathname = ElementPathname($db, $parent_id);
+        $path = htmlentities($ElementPathname);
+      }
+    }
+
+    $Breadcrumbs = Breadcrumbs($db, '?path=', $parent_id);
+
+    $PathToParent = ElementPathname($db, GetParent($db, $parent_id));
+    if ($PathToParent == '' || $PathToParent == '/') {
+      $ParentGraphic = '<img src="images/parent_dir.png"></a>';
+    } else {
+      $ParentGraphic = '<a href="' .  $_SERVER["SCRIPT_NAME"] . '?path=' . htmlentities($PathToParent) . '"><img src="images/parent_dir.png"></a>';
+    }
 
 ?>
 
@@ -34,8 +62,24 @@ $Debug=0;
 #
 #$numrows=400;
 
-		$sql = "SELECT id, name, parent_id, directory_file_flag, status
-				FROM element";
+		$sql = "SELECT id, name, parent_id, directory_file_flag, status";
+		if ($WatchListID) {
+		  $sql .= ",
+	       CASE when watch_list_element.element_id is null
+    	      then 0
+        	  else 1
+	       END as watch ";
+	}
+
+
+		$sql .= " FROM element ";
+				
+    	if ($WatchListID) {
+	    	$sql .="
+	            left outer join watch_list_element
+				on (watch_list_element.element_id    = element.id
+			   and  watch_list_element.watch_list_id = $WatchListID) ";
+        }
 
 		if ($parent_id) {
 			$sql .= " WHERE parent_id = $parent_id";
@@ -89,11 +133,29 @@ will be provided from each page to various areas of the website.
 <?
 #				print "NumRows = $NumRows\n<BR>";
 				echo "<TR><TD>\n";
+                echo '<p>' . $ParentGraphic . ' ' . $Breadcrumbs . '<p>';
 				$HTML = "";
+				if (empty($path)) {
+				  $PathPrefix = '/';
+                } else {
+                  $PathPrefix = $path;
+                }
+                if (substr($PathPrefix, strlen($PathPrefix) - 1) != '/') {
+                  $PathPrefix .= '/';
+                }
+
 				for ($i = 0; $i < $NumRows; $i++) {
 					$myrow = $rows[$i];
+					if ($WatchListID) {
+						if ($myrow["watch"]) {
+							$HTML .= '&nbsp; '. freshports_Watch_Link_Remove($myrow["id"]) . ' ';
+						} else {
+							$HTML .= '&nbsp; '. freshports_Watch_Link_Add   ($myrow["id"]) . ' ';
+						}
+					}
+
 					if ($myrow["directory_file_flag"] == 'D') {
-						$HTML .= freshsource_Directory_Icon() . ' <A HREF="' . $_SERVER["SCRIPT_NAME"] . '?parent_id=' . $myrow["id"] . '">' . $myrow["name"] . '</A><BR>' . "\n";
+						$HTML .= freshsource_Directory_Icon() . ' <A HREF="' . $_SERVER["SCRIPT_NAME"] . '?path=' . $PathPrefix . $myrow["name"] . '">' . $myrow["name"] . '</A><BR>' . "\n";
 					} else {
 						$HTML .= freshsource_File_Icon() . ' ' . $myrow["name"] . "<BR>\n";
 					}
