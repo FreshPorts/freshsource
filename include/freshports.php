@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.18 2007-03-18 23:25:04 dan Exp $
+	# $Id: freshports.php,v 1.19 2007-10-08 23:08:55 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -87,7 +87,7 @@ function freshports_Encoding_Errors() {
 function freshports_Watch_Link_Add($element_id) {
 	GLOBAL	$FreshPortsWatchedPortNotPrefix;
 	GLOBAL	$FreshPortsWatchedPortNotSuffix;
-
+	
 	return $FreshPortsWatchedPortNotPrefix    . $element_id . $FreshPortsWatchedPortNotSuffix;
 }
 
@@ -430,12 +430,23 @@ function freshports_MainWatchID($UserID, $db) {
 	$sql = "select users.last_watch_list_chosen as id ".
 	       "  from users ".
 	       " where id = $UserID";
+	       
+#	echo "<pre>$sql</pre>";
 
 	$result = pg_exec ($db, $sql);
 
 	if(pg_numrows($result)) {
 		$myrow = pg_fetch_array ($result, 0);
 		$WatchID = $myrow["id"];
+	}
+
+	# if nothing supplied in the above
+	if (!$WatchID) {
+		require_once($_SERVER['DOCUMENT_ROOT'] . '/../classes/watch_lists.php');
+
+		$WatchLists = new WatchLists($db);
+		$WatchID = $WatchLists->GetDefaultWatchListID($UserID);
+#		echo "WatchID found is '$WatchID'<br>\n";
 	}
 
 	return $WatchID;
@@ -638,10 +649,6 @@ function freshports_PortDetails($port, $db, $ShowDeletedDate, $DaysMarkedAsNew, 
 	GLOBAL $freshports_CVS_URL;
 	GLOBAL $freshports_FTP_URL;
 	GLOBAL $ShowDepends;
-	GLOBAL $FreshPortsWatchedPortPrefix;
-	GLOBAL $FreshPortsWatchedPortSuffix;
-	GLOBAL $FreshPortsWatchedPortNotPrefix;
-	GLOBAL $FreshPortsWatchedPortNotSuffix;
 	GLOBAL $WatchListID;
 
 	$MarkedAsNew = "N";
