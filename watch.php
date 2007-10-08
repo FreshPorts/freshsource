@@ -1,5 +1,5 @@
 <?
-	# $Id: watch.php,v 1.4 2002-07-30 17:58:30 dan Exp $
+	# $Id: watch.php,v 1.5 2007-10-08 23:07:40 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
@@ -155,6 +155,14 @@ $HTML .= '<DL>';
 for ($i = 0; $i < $numrows; $i++) {
 	$myrow = pg_fetch_array ($result, $i);
 	$HTML .= "<DT>";
+	if ($WatchID) {
+		if ($myrow['onwatchlist']) {
+			$HTML .= ' '. freshports_Watch_Link_Remove($myrow['element_id']);
+		} else {
+			$HTML .= ' '. freshports_Watch_Link_Add($myrow['element_id']);
+		}
+	}
+
 							$HTML .= '<BIG><B>';
 							$HTML .= '<A HREF="' . $freshports_CVS_URL . $myrow["element_pathname"] . '">';
 							$HTML .= $myrow["element_pathname"] . " ";
