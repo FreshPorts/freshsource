@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: getvalues.php,v 1.3 2006-04-09 16:43:03 dan Exp $
+	# $Id: getvalues.php,v 1.4 2007-10-08 23:08:14 dan Exp $
 	#
 	# Copyright (c) 1998-2006 DVL Software Limited
 	#
@@ -168,6 +168,14 @@ if (!empty($visitor)) {
 				$sql = "update users set lastlogin = current_timestamp where id = $UserID";
 //				echo $sql, "<br>";
 				$result = pg_exec($db, $sql);
+				
+				if (!$WatchListID) {
+					require_once($_SERVER['DOCUMENT_ROOT'] . '/../classes/watch_lists.php');
+
+					$WatchLists = new WatchLists($db);
+					$WatchListID = $WatchLists->GetDefaultWatchListID($UserID);
+				}
+				                                
 
 				if (!$WatchListID) {
 					echo "OUCH, sorry, I don't know what your watch list ID is.\n";
