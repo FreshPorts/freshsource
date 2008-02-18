@@ -20,4 +20,8 @@
 function custom_BannerForum($ForumName, $article_id) {
 	return '';
 }
+
+# init syslog()
+openlog('FreshSource', LOG_PID, LOG_SYSLOG);
+
 ?>
