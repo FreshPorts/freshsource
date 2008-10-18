@@ -1,5 +1,5 @@
 <?
-	# $Id: login.php,v 1.3 2005-09-06 00:14:12 dan Exp $
+	# $Id: login.php,v 1.4 2008-10-18 23:35:20 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -35,7 +35,7 @@ if ($_POST["LOGIN"] && $_POST["UserID"]) {
    // test for existance of user id
 
    $sql = "select * from users where lower(name) = lower('" . AddSlashes($UserID) . "')".
-	  " and password = '" . AddSlashes($Password) . "' ";
+	  " and password_hash = crypt('" . AddSlashes($Password) . "', password_hash) ";
 
    if ($Debug) {
       echo "$sql<BR>\n";

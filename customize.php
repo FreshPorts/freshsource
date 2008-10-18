@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: customize.php,v 1.2 2003-12-10 13:51:24 dan Exp $
+	# $Id: customize.php,v 1.3 2008-10-18 23:35:20 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -28,7 +28,7 @@ if ($submit) {
 // process form
 
    $email					= AddSlashes($_POST["email"]);
-   $Password1				= AddSlashes($_POST["$Password1"]);
+   $Password1				= AddSlashes($_POST["Password1"]);
    $Password2				= AddSlashes($_POST["Password2"]);
    $emailsitenotices_yn		= AddSlashes($_POST["emailsitenotices_yn"]);
    $numberofdays			= AddSlashes($_POST["numberofdays"]);
@@ -52,7 +52,7 @@ if ($submit) {
 		$errors .= "That email address doesn't look right to me<BR>";
 		$OK = 0;
 	}
-
+	
    if ($Password1 != $Password2) {
       $errors .= "The password was not confirmed.  It must be entered twice.<BR>";
       $OK = 0;
@@ -83,7 +83,7 @@ if ($submit) {
          }
 
          if ($Password1 != '') {
-            $sql .= ", password = '$Password1'";
+            $sql .= ", password_hash = crypt('"  . AddSlashes($Password1) . "', gen_salt('md5'))";
          }
 
          $sql .= " where cookie = '$visitor'";

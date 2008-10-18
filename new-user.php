@@ -1,5 +1,5 @@
 <?
-	# $Id: new-user.php,v 1.6 2005-09-22 22:41:25 dan Exp $
+	# $Id: new-user.php,v 1.7 2008-10-18 23:35:20 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
@@ -95,10 +95,10 @@ if ($submit) {
 
 			$UserID = freshports_GetNextValue($Sequence_User_ID, $db);
 			if (IsSet($UserID)) {			
-				$sql = "insert into users (id, name, password, cookie, email, " . 
+				$sql = "insert into users (id, name, password_hash, cookie, email, " . 
 						"watch_notice_id, emailsitenotices_yn, type, ip_address, number_of_days) values (";
-				$sql .= AddSlashes($UserID) . ", '" . AddSlashes($UserLogin) . "', '" .
-                        AddSlashes($Password1) . "', '" . AddSlashes($Cookie) . "', '" . 
+				$sql .= AddSlashes($UserID) . ", '" . AddSlashes($UserLogin) . "', 
+                        crypt('" . AddSlashes($Password1) . "' , gen_salt('md5')), '" . AddSlashes($Cookie) . "', '" . 
 						AddSlashes($email) . "', '1', 'N', 'U', '" . $_SERVER["REMOTE_ADDR"] . "', " .
 						AddSlashes($numberofdays) . ')';
 
