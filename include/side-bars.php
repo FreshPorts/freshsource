@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: side-bars.php,v 1.15 2005-12-29 19:51:59 dan Exp $
+	# $Id: side-bars.php,v 1.16 2012-03-14 18:18:18 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -95,28 +95,6 @@
 	</TR>
 </TABLE>
 
-
-<BR>
-
-<SCRIPT TYPE="text/javascript">
-
-
-   function addNetscapePanel() {
-      if ((typeof window.sidebar == "object") && (typeof window.sidebar.addPanel == "function"))
-      {
-         window.sidebar.addPanel ("FreshSource",
-         "http://www.FreshSource.org/sidebar.php","");
-      }
-      else
-      {
-         var rv = window.confirm ("This page is enhanced for use with Netscape 6.  " + "Would you like to upgrade now?");
-         if (rv)
-            document.location.href = "http://home.netscape.com/download/index.html";
-      }
-   }
-//-->
-
-</SCRIPT>
 
 <?php
 	GLOBAL $BannerAd;
