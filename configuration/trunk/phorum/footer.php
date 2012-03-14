@@ -7,7 +7,7 @@
 </TD>
 
 
-  <TD VALIGN="top" WIDTH="*" ALIGN="center">
+  <TD VALIGN="top" WIDTH="<? echo $ColumnWidth ?>" ALIGN="center">
    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 
