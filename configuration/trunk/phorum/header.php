@@ -1,7 +1,7 @@
 <?php if ( !defined( "_COMMON_PHP" ) ) return; ?>
 <?php
 	#
-	# $Id: header.php,v 1.5 2012-03-14 18:16:52 dan Exp $
+	# $Id: header.php,v 1.6 2012-03-14 18:23:25 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -45,4 +45,4 @@ openlog('FreshSource', LOG_PID, LOG_SYSLOG);
 ?>
 
 <TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
-<TR><TD>
+<TR><TD align="top">
