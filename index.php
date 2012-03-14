@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: index.php,v 1.15 2003-04-24 12:23:33 dan Exp $
+	# $Id: index.php,v 1.16 2012-03-14 18:16:45 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -131,11 +131,6 @@ what needs to go into these things, we just need someone to write them)</LI>
 <LI>searching (all commits done by jmallett)</LI>
 <LI>commits to specific branches</LI>
 </UL>
-
-<H2>Who provides hosting services for <BIG>FreshSource</BIG>?</H2>
-
-<A HREF="http://www.bchosting.com/">BChosting</A> provides the box on which <BIG>FreshSource</BIG> and 
-<A HREF="http://www.FreshPorts.org/"><BIG>FreshPorts</BIG></A> runs.
 
 </TD>
 

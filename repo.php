@@ -1,6 +1,6 @@
 .<?php
     #
-	# $Id: repo.php,v 1.6 2007-03-18 23:28:42 dan Exp $
+	# $Id: repo.php,v 1.7 2012-03-14 18:16:45 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 	#
@@ -41,7 +41,7 @@ $Debug = 0;
 
     $PathToParent = ElementPathname($db, GetParent($db, $parent_id));
     if ($PathToParent == '' || $PathToParent == '/') {
-      $ParentGraphic = '<img src="images/parent_dir.png"></a>';
+      $ParentGraphic = '<img src="images/parent_dir.png">';
     } else {
       $ParentGraphic = '<a href="' .  $_SERVER["SCRIPT_NAME"] . '?path=' . htmlentities($PathToParent) . '"><img src="images/parent_dir.png"></a>';
     }
