@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: index.php,v 1.16 2012-03-14 18:16:45 dan Exp $
+	# $Id: index.php,v 1.17 2012-03-14 18:25:17 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -45,9 +45,7 @@ database.
 
 <H3>All the news you want</H3>
 <P>
-We also have <A HREF="/news.php">an RSS news feed</A> and <A HREF="sidebar.php">a sidebar</A> (click on the "Add Tab to
-Netscape 6" link
-at the bottom of the right hand column of any page).
+We also have <A HREF="/news.php">an RSS news feed</A> and <A HREF="sidebar.php">a sidebar</A>.
 </P>
 
 <H2>How does <BIG>FreshSource</BIG> work?</H2>

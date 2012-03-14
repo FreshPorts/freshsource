@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: side-bars.php,v 1.17 2012-03-14 18:22:20 dan Exp $
+	# $Id: side-bars.php,v 1.18 2012-03-14 18:25:17 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -113,9 +113,3 @@
 
 
 <BR>
-
-
-<CENTER>
-<A NAME="button_image"></A><A HREF="javascript:addNetscapePanel();"><IMG SRC="/images/sidebar-add-button.gif" BORDER="0" HEIGHT="45" WIDTH="100" ALT="Add tab to Netscape 6"></A>
-</CENTER>
-
