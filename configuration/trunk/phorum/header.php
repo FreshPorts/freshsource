@@ -1,5 +1,23 @@
 <?php if ( !defined( "_COMMON_PHP" ) ) return; ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "XHTML1-t.dtd">
+<?php
+	#
+	# $Id: header.php,v 1.5 2012-03-14 18:16:52 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+	#
+
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
+
+	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+
+	freshports_Start($FreshPortsSlogan,
+					"$FreshPortsName - new ports, applications",
+					"FreeBSD, index, applications, ports");
+$Debug = 0;
+
+?>
 <html>
 <head>
 <meta name="PhorumVersion" content="<?php echo $phorumver; ?>" />
@@ -25,3 +43,6 @@ function custom_BannerForum($ForumName, $article_id) {
 openlog('FreshSource', LOG_PID, LOG_SYSLOG);
 
 ?>
+
+<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TR><TD>
