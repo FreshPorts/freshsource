@@ -1,6 +1,6 @@
 <?php
 	#
-	# $Id: commits.php,v 1.31 2007-03-18 23:27:35 dan Exp $
+	# $Id: commits.php,v 1.32 2012-11-05 02:24:23 dan Exp $
 	#
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
@@ -36,6 +36,49 @@ if (file_exists("announcement.txt") && filesize("announcement.txt") > 4) {
 
 <?php
 
+function freshports_cvsweb_Revision_Link($pathname, $revision_name)
+{
+  $pathname = str_replace('/ports/head/', '/ports/', $pathname);
+  $HTML = '<A HREF="' . FRESHPORTS_FREEBSD_CVS_URL . $pathname . '#rev' . $revision_name . '">';
+
+  return $HTML;
+}
+
+function freshports_Diff_Icon() {
+	return '<img src="/images/diff.png" alt="View diff" title="view diff" border="0" width="15" height="11" align="top">';
+}
+
+function freshports_Revision_Icon() {
+	return '<img src="/images/revision.jpg" alt="View revision" title="view revision" border="0" width="11" height="15" align="top">';
+}
+
+
+
+	function GetPreviousRevision( $revision ) {
+	    // if we find a dot, decrement the bit after the last dot
+	    // hence, a cvs revision
+	    // if no dot, treat it as an svn revision
+
+    	$dotPos = strrpos( $revision, '.' );
+
+    	if ( $dotPos === false ) {
+    	    $prev = intval ( $revision ) - 1;
+	    } else {
+	        $beforeLastDot = substr( $revision, 0, $dotPos + 1 );
+
+	        $afterDot = substr( $revision, $dotPos + 1 );
+	        if ( $afterDot === false ) {
+	            syslog( LOG_ERR, 'decimal not found in ' . $revision);
+	            $prev = $revision;
+            } else {
+                // previous revision is before dot || (after dot - 1)
+	            $prev = $beforeLastDot . ( intval( $afterDot ) - 1 );
+            }
+        }
+
+
+        return $prev;
+	}
 function StripQuotes($string) {
 	$string = str_replace('"', '', $string);
 
@@ -84,18 +127,24 @@ SELECT LCCLLC.*,
 FROM (
  SELECT LCCL.*, 
         commit_log_elements.element_id,
-        commit_log_elements.revision_name
+        commit_log_elements.revision_name,
+        commit_log_elements.change_type
    FROM 
    (SELECT commit_log.id     AS commit_log_id, 
            commit_date       AS commit_date_raw,
            message_subject,
            message_id,
            committer,
-           description       AS commit_description,
+           commit_log.description       AS commit_description,
            to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')  AS commit_date,
            to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI')      AS commit_time,
-           encoding_losses
-     FROM commit_log JOIN
+           encoding_losses,
+           repo_id,
+           svn_revision,
+           repo.svn_hostname as svn_hostname
+     FROM commit_log LEFT OUTER JOIN repo on commit_log.repo_id = repo.id
+     
+     JOIN 
 
 
                (SELECT latest_commits.commit_log_id
@@ -194,6 +243,26 @@ runs off the same database and displays only the port commits.
 
 					$NumberOfElementsInThisCommit = 0;
 					$MaxNumberElementssToShow     = 10;
+					
+					$WhichRepo = freshports_MessageIdToRepoName($myrow["message_id"]);
+					switch ($myrow["change_type"]) {
+					  case "M":
+					    $Change_Type = "modify";
+					    break;
+
+                    case "A":
+					    $Change_Type = "import"; 
+					    break;
+
+                    case "R":
+					    $Change_Type = "remove"; 
+					    break;
+
+				    default:
+					    $Change_Type = $myrow["change_type"] ; 
+			        }
+
+
 					$j = $i;
 					while ($j < $NumRows && $rows[$j]["commit_log_id"] == $ThisCommitLogID) {
 						$NumberOfElementsInThisCommit++;
@@ -239,25 +308,60 @@ runs off the same database and displays only the port commits.
 
 
 							$HTML .= '<BIG><B>';
-							$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . '">';
-							$HTML .= $myrow["element_pathname"] . " ";
-							$HTML .= "</A></B></BIG>\n";
+            switch($WhichRepo)
+            {
+                case FREEBSD_REPO_CVS:
+                    $HTML .= freshports_cvsweb_Revision_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
+                    break;
 
-							$HTML .= '</td><td>';
-							$HTML .= '&nbsp;&nbsp;'. $myrow["revision_name"] . ' ';
+                case FREEBSD_REPO_SVN:
+                    # we want something like
+                    # http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
+        			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
+        			         $myrow["element_pathname"] . '</a>';
+                    break;
+            }
+
+							$HTML .= "</B></BIG>\n";
+
 							$HTML .= '</td>';
 
 							$HTML .= '<td>';
 
+            if ( $Change_Type == "modify" ) {
+                switch($WhichRepo)
+                {
+                    case FREEBSD_REPO_CVS:
+                        $HTML .= ' ';
+                        $previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+                        $HTML .= freshports_cvsweb_Diff_Link($myrow["element_pathname"] , $previousRevision, $myrow["revision_name"]);
+        		    	break;
 
-                            // FIX FIX FIX FIX FIX FIX FIX FIX FIX 
-                            if ($myrow["revision_name"] != '1.1') {
-    							# add a link to the diffs
-    							$HTML .= '<A HREF="' . $freshports_CVS_URL . '/' . $myrow["element_pathname"] . ".diff?r1=";
-	    						$HTML .= $myrow["revision_name"] . '&amp;r2=' . freshportsNextRevisionNumber($myrow["revision_name"]). '">';
-		    					$HTML .= 'diff</A>';
-							}
-							
+                    case FREEBSD_REPO_SVN:
+                        $HTML .= ' ';
+    	        		$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+                        # we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
+            			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
+            			    $myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
+        		    	$HTML .= freshports_Diff_Icon() . '</a> ';
+                        break;
+                }
+            }
+
+            switch($WhichRepo)
+            {
+                case FREEBSD_REPO_CVS:
+                    $HTML .= freshports_cvsweb_Annotate_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
+                    break;
+
+                case FREEBSD_REPO_SVN:
+                    # we want something like
+                    # http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
+        			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
+		        	$HTML .= freshports_Revision_Icon() . '</a> ';
+                    break;
+            }
+
 							$HTML .= '</td></tr>' . "\n";
 						}
 						$j++;

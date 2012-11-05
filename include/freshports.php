@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.20 2012-03-14 18:52:42 dan Exp $
+	# $Id: freshports.php,v 1.21 2012-11-05 02:24:23 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -1289,4 +1289,21 @@ function freshportsNextRevisionNumber($RevisionNumber) {
 	return  substr($RevisionNumber, 0, $LastPosition) . '.' . $PreviousRevision;
 }
 
-?>
+function freshports_MessageIdToRepoName($message_id)
+{
+  $repo = array(
+            '/\@svn.freebsd.org$/i'     => FREEBSD_REPO_SVN,
+            '/\@repoman.freebsd.org$/i' => FREEBSD_REPO_CVS);
+
+  # given a message id, figure out what repo it came from
+  $RepoName = '';
+  foreach($repo as $message_id_format => $reponame)
+  {
+    if (preg_match($message_id_format, $message_id))
+    {
+      $RepoName = $reponame;
+    }
+  }
+
+  return $RepoName;
+}
