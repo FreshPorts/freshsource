@@ -1,7 +1,7 @@
 <?php
 
 	#
-	# $Id: freshports.php,v 1.21 2012-11-05 02:24:23 dan Exp $
+	# $Id: freshports.php,v 1.22 2012-11-06 00:53:35 dan Exp $
 	#
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
@@ -31,6 +31,14 @@ echo "
 # special HTMLified mailto to foil spam harvesters
 #
 $mailto = '&#109;&#97;&#105;&#108;&#116;&#111;';
+
+function freshports_Diff_Icon() {
+	return '<img src="/images/diff.png" alt="View diff" title="view diff" border="0" width="15" height="11" align="top">';
+}
+
+function freshports_Revision_Icon() {
+	return '<img src="/images/revision.jpg" alt="View revision" title="view revision" border="0" width="11" height="15" align="top">';
+}
 
 function freshsource_Directory_Icon() {
 	return '<IMG SRC="/images/dir.gif" ALT="[DIR]" BORDER="0" WIDTH="20" HEIGHT="22">';
@@ -1307,3 +1315,29 @@ function freshports_MessageIdToRepoName($message_id)
 
   return $RepoName;
 }
+
+	function GetPreviousRevision( $revision ) {
+	    // if we find a dot, decrement the bit after the last dot
+	    // hence, a cvs revision
+	    // if no dot, treat it as an svn revision
+
+    	$dotPos = strrpos( $revision, '.' );
+
+    	if ( $dotPos === false ) {
+    	    $prev = intval ( $revision ) - 1;
+	    } else {
+	        $beforeLastDot = substr( $revision, 0, $dotPos + 1 );
+
+	        $afterDot = substr( $revision, $dotPos + 1 );
+	        if ( $afterDot === false ) {
+	            syslog( LOG_ERR, 'decimal not found in ' . $revision);
+	            $prev = $revision;
+            } else {
+                // previous revision is before dot || (after dot - 1)
+	            $prev = $beforeLastDot . ( intval( $afterDot ) - 1 );
+            }
+        }
+
+
+        return $prev;
+	}
