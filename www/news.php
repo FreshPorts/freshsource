@@ -73,4 +73,3 @@
    
 	echo '<?xml version="1.0"?>', "\n";
 	echo $HTML;
-?>
