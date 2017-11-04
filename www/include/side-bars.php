@@ -7,8 +7,6 @@
 
 	$ColumnWidth = 155;
 
-	require_once($_SERVER['DOCUMENT_ROOT'] . "/include/burstmedia.php");
-
 	$Debug=0;
 ?>
 
