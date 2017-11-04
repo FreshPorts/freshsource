@@ -221,15 +221,6 @@ function freshports_Start($ArticleTitle, $Description, $Keywords, $Phorum=0) {
 
    freshports_body();
 
-   if ($ShowAds) {
-      BurstMediaCode();
-      if ($BannerAd) {
-		echo "\n<CENTER>\n";
-		BurstMediaAd();
-		echo "</CENTER>\n\n";
-      }
-   }
-
    freshports_Logo();
    freshports_navigation_bar_top();
 }

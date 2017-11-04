@@ -89,25 +89,4 @@
 	</TR>
 </TABLE>
 
-
-<?php
-	GLOBAL $BannerAd;
-	GLOBAL $ShowAds;
-
-	if ($ShowAds) {
-
-		BurstMediaCode();
-		echo '<TABLE BORDER="0" CELLPADDING="5">
-			  <TR><TD ALIGN="center">
-			 ';
-
-		BurstSkyscraperAd();
-		echo '</TD></TR>
-			  </TABLE>
-			 ';
-	}
-
-?>
-
-
 <BR>
