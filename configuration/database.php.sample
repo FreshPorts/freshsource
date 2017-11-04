@@ -3,7 +3,7 @@
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
-	$db = pg_connect("dbname=fp2migration user=www password=ccDG19t2u7");
+	$db = pg_connect("dbname=freshports user=www password=secret");
 	if ($db) {
 #		echo 'database connected';
 	} else {
@@ -20,5 +20,3 @@ function UserToCookie($User) {
 
 	return $EncodedUserID;
 }
-
-?>
