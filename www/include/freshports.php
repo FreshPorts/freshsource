@@ -7,10 +7,9 @@
 	#
 
 	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/constants.php");
-	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/burstmedia.php");
 
+DEFINE('COPYRIGHTYEARS', '2000-' . date('Y'));
 
-DEFINE('COPYRIGHTYEARS', '2000-2012');
 
 if ($Debug) echo "'" . $_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php'<BR>";
 
