@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 #
 # $Id: process_cvs_mail.pl,v 1.1.1.1 2002-06-19 18:18:16 dan Exp $
 #
