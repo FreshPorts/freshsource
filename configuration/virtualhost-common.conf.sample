@@ -1,0 +1,15 @@
+  server_name   www.freshsource.org;
+  root          /usr/local/www/freshsource/www/;
+  index         index.php index.html;
+
+  error_log	/var/log/nginx/freshsource.org-error.log;
+  access_log	/var/log/nginx/freshsource.org-access.log combined;
+
+  location ~ \.php$ {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass unix:/var/run/php-fpm.sock;
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $request_filename;
+    include fastcgi_params;
+  }
+
