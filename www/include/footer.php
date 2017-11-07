@@ -73,10 +73,3 @@ src="/images/valid-rss-dylan4.gif" alt="[Valid RSS]" title="Validate my RSS feed
 </table>
 </TD></TR>
 </TABLE>
-
-<?
-	GLOBAL $ShowAds;
-	if ($ShowAds) {
-		Burst_468x60_Below();
-	}
-?>
