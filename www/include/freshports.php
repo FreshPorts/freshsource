@@ -16,7 +16,7 @@ if ($Debug) echo "'" . $_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php'
 require_once($_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php");
 
 
-function freshports_BannerSpace() {
+function XXXfreshports_BannerSpace() {
 
 echo "
   <TR>
@@ -47,11 +47,11 @@ function freshsource_File_Icon() {
 	return '<IMG SRC="/images/text.gif" ALT="[TXT]" BORDER="0" WIDTH="20" HEIGHT="22">';
 }
 
-function freshports_Files_Icon() {
+function XXXfreshports_Files_Icon() {
 	return '<IMG SRC="/images/logs.gif" ALT="files touched by this commit" BORDER="0" WIDTH="17" HEIGHT="20">';
 }
 
-function freshports_Refresh_Icon() {
+function XXXfreshports_Refresh_Icon() {
 	return '<IMG SRC="/images/refresh.gif" ALT="Refresh" BORDER="0" WIDTH="15" HEIGHT="18">';
 }
 
@@ -1291,7 +1291,8 @@ function freshports_MessageIdToRepoName($message_id)
 {
   $repo = array(
             '/\@svn.freebsd.org$/i'     => FREEBSD_REPO_SVN,
-            '/\@repoman.freebsd.org$/i' => FREEBSD_REPO_CVS);
+            '/\@repoman.freebsd.org$/i' => FREEBSD_REPO_CVS,
+            '/\@repo.freebsd.org$/i'    => FREEBSD_REPO_SVN);
 
   # given a message id, figure out what repo it came from
   $RepoName = '';
@@ -1302,9 +1303,14 @@ function freshports_MessageIdToRepoName($message_id)
       $RepoName = $reponame;
     }
   }
+  
+  if (Empty($RepoName)) {
+    $RepoName = FREEBSD_REPO_SVN;
+  }
 
   return $RepoName;
 }
+
 
 	function GetPreviousRevision( $revision ) {
 	    // if we find a dot, decrement the bit after the last dot
