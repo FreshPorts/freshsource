@@ -37,16 +37,6 @@ if (file_exists("announcement.txt") && filesize("announcement.txt") > 4) {
 
 <?php
 
-function XXXX_freshports_cvsweb_Revision_Link($pathname, $revision_name)
-{
-  $pathname = str_replace('/ports/head/', '/ports/', $pathname);
-  $HTML = '<A HREF="' . FRESHPORTS_FREEBSD_CVS_URL . $pathname . '#rev' . $revision_name . '">';
-
-  return $HTML;
-}
-
-
-
 function StripQuotes($string) {
 	$string = str_replace('"', '', $string);
 
