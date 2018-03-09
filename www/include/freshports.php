@@ -16,16 +16,6 @@ if ($Debug) echo "'" . $_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php'
 require_once($_SERVER["DOCUMENT_ROOT"] . "/../classes/watchnotice.php");
 
 
-function XXXfreshports_BannerSpace() {
-
-echo "
-  <TR>
-    <TD height=\"10\"></TD>
-  </TR>
-";
-
-}
-
 #
 # special HTMLified mailto to foil spam harvesters
 #
@@ -45,14 +35,6 @@ function freshsource_Directory_Icon() {
 
 function freshsource_File_Icon() {
 	return '<IMG SRC="/images/text.gif" ALT="[TXT]" BORDER="0" WIDTH="20" HEIGHT="22">';
-}
-
-function XXXfreshports_Files_Icon() {
-	return '<IMG SRC="/images/logs.gif" ALT="files touched by this commit" BORDER="0" WIDTH="17" HEIGHT="20">';
-}
-
-function XXXfreshports_Refresh_Icon() {
-	return '<IMG SRC="/images/refresh.gif" ALT="Refresh" BORDER="0" WIDTH="15" HEIGHT="18">';
 }
 
 function freshports_Deleted_Icon() {
