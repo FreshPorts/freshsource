@@ -10,6 +10,7 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+#	require($_SERVER['DOCUMENT_ROOT'] . "/../classes/files-display.php");
 
 	freshports_Start($FreshPortsSlogan,
 					"$FreshPortsName - new ports, applications",
@@ -36,7 +37,7 @@ if (file_exists("announcement.txt") && filesize("announcement.txt") > 4) {
 
 <?php
 
-function freshports_cvsweb_Revision_Link($pathname, $revision_name)
+function XXXX_freshports_cvsweb_Revision_Link($pathname, $revision_name)
 {
   $pathname = str_replace('/ports/head/', '/ports/', $pathname);
   $HTML = '<A HREF="' . FRESHPORTS_FREEBSD_CVS_URL . $pathname . '#rev' . $revision_name . '">';
@@ -217,17 +218,17 @@ runs off the same database and displays only the port commits.
 					    $Change_Type = "modify";
 					    break;
 
-                    case "A":
+					  case "A":
 					    $Change_Type = "import"; 
 					    break;
 
-                    case "R":
+					  case "R":
 					    $Change_Type = "remove"; 
 					    break;
 
-				    default:
+					  default:
 					    $Change_Type = $myrow["change_type"] ; 
-			        }
+					}
 
 
 					$j = $i;
@@ -275,19 +276,19 @@ runs off the same database and displays only the port commits.
 
 
 							$HTML .= '<BIG><B>';
-            switch($WhichRepo)
-            {
-                case FREEBSD_REPO_CVS:
-                    $HTML .= freshports_cvsweb_Revision_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
-                    break;
+							switch($WhichRepo)
+							{
+								case FREEBSD_REPO_CVS:
+									$HTML .= freshports_cvsweb_Revision_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
+									break;
 
-                case FREEBSD_REPO_SVN:
-                    # we want something like
-                    # http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
-        			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
-        			         $myrow["element_pathname"] . '</a>';
-                    break;
-            }
+								case FREEBSD_REPO_SVN:
+									# we want something like
+									# http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
+									$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
+									$myrow["element_pathname"] . '</a>';
+									break;
+							}
 
 							$HTML .= "</B></BIG>\n";
 
@@ -295,73 +296,73 @@ runs off the same database and displays only the port commits.
 
 							$HTML .= '<td>';
 
-            if ( $Change_Type == "modify" ) {
-                switch($WhichRepo)
-                {
-                    case FREEBSD_REPO_CVS:
-                        $HTML .= ' ';
-                        $previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
-                        $HTML .= freshports_cvsweb_Diff_Link($myrow["element_pathname"] , $previousRevision, $myrow["revision_name"]);
-        		    	break;
+							if ( $Change_Type == "modify" ) {
+							switch($WhichRepo)
+							{
+								case FREEBSD_REPO_CVS:
+									$HTML .= ' ';
+									$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+									$HTML .= freshports_cvsweb_Diff_Link($myrow["element_pathname"] , $previousRevision, $myrow["revision_name"]);
+									break;
 
-                    case FREEBSD_REPO_SVN:
-                        $HTML .= ' ';
-    	        		$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
-                        # we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
-            			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
-            			    $myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
-        		    	$HTML .= freshports_Diff_Icon() . '</a> ';
-                        break;
-                }
-            }
-
-            switch($WhichRepo)
-            {
-                case FREEBSD_REPO_CVS:
-                    $HTML .= freshports_cvsweb_Annotate_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
-                    break;
-
-                case FREEBSD_REPO_SVN:
-                    # we want something like
-                    # http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
-        			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
-		        	$HTML .= freshports_Revision_Icon() . '</a> ';
-                    break;
-            }
-
-							$HTML .= '</td></tr>' . "\n";
+								case FREEBSD_REPO_SVN:
+									$HTML .= ' ';
+									$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+									# we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
+									$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
+										$myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
+									$HTML .= freshports_Diff_Icon() . '</a> ';
+									break;
+							}
 						}
-						$j++;
+
+						switch($WhichRepo)
+						{
+							case FREEBSD_REPO_CVS:
+							$HTML .= freshports_cvsweb_Annotate_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
+							break;
+
+							case FREEBSD_REPO_SVN:
+								# we want something like
+								# http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
+								$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
+								$HTML .= freshports_Revision_Icon() . '</a> ';
+								break;
+						}
+
+						$HTML .= '</td></tr>' . "\n";
 					}
-
-					$HTML .= '</table>' . "\n";
-					$HTML .= "\n</BLOCKQUOTE>\n";
-
-
-					if ($NumberOfElementsInThisCommit > $MaxNumberElementssToShow) {
-						$HTML .= '<BR>' . freshports_MorePortsToShow($myrow["message_id"], $NumberOfElementsInThisCommit, $MaxNumberElementssToShow);
-					}
-
-					$i = $j - 1;
-
-					$HTML .= "\n\n<BLOCKQUOTE>";
-					$HTML .= freshports_PortDescriptionPrint($myrow["commit_description"], $myrow["encoding_losses"], $freshports_CommitMsgMaxNumOfLinesToShow, freshports_MoreCommitMsgToShow($myrow["message_id"], $freshports_CommitMsgMaxNumOfLinesToShow));
-					$HTML .= "\n</BLOCKQUOTE>\n";
-
-					$HTML .= "\n</TD></TR>\n\n\n";
-					echo $HTML;
-				}
-
-	            echo "</TABLE>\n";
-			} else {
-				echo "<P>Sorry, nothing found in the database....</P>\n";
+				$j++;
 			}
-         } else {
-            echo "read from test failed";
-         }
-      } else {
-         echo "no connection";
-      }
+
+			$HTML .= '</table>' . "\n";
+			$HTML .= "\n</BLOCKQUOTE>\n";
+
+
+			if ($NumberOfElementsInThisCommit > $MaxNumberElementssToShow) {
+				$HTML .= '<BR>' . freshports_MorePortsToShow($myrow["message_id"], $NumberOfElementsInThisCommit, $MaxNumberElementssToShow);
+			}
+
+			$i = $j - 1;
+
+			$HTML .= "\n\n<BLOCKQUOTE>";
+			$HTML .= freshports_PortDescriptionPrint($myrow["commit_description"], $myrow["encoding_losses"], $freshports_CommitMsgMaxNumOfLinesToShow, freshports_MoreCommitMsgToShow($myrow["message_id"], $freshports_CommitMsgMaxNumOfLinesToShow));
+			$HTML .= "\n</BLOCKQUOTE>\n";
+
+			$HTML .= "\n</TD></TR>\n\n\n";
+			echo $HTML;
+		}
+
+		echo "</TABLE>\n";
+	} else {
+		echo "<P>Sorry, nothing found in the database....</P>\n";
+	}
+} else {
+	echo "read from test failed";
+}
+} else {
+echo "no connection";
+}
 
 ?>
 </TD>
