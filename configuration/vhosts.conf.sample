@@ -62,4 +62,3 @@
 
     SSLCACertificateFile    /usr/local/etc/ssl/ca.pem
 </VirtualHost>
-
