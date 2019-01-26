@@ -21,17 +21,17 @@ if ($Debug) echo "UserID='$UserID'";
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 
-<?
+<?php
 if (file_exists("announcement.txt") && filesize("announcement.txt") > 4) {
 ?>
   <TR>
     <TD colspan="2">
-       <? include ("announcement.txt"); ?>
+       <?php include ("announcement.txt"); ?>
     </TD>
   </TR>
-<?
+<?php
 }
 ?>
 
@@ -162,7 +162,7 @@ $sql .= "order by commit_date_raw desc, element_pathname";
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits", 3); ?>
+		<?php freshports_PageBannerText("$MaxNumberOfPorts most recent commits", 3); ?>
 </TR>
 <TR><TD>
 <P>
@@ -176,7 +176,7 @@ runs off the same database and displays only the port commits.
 
 </TD></TR>
 
-<?
+<?php
 				if ($Debug) print "NumRows = $NumRows\n<BR>";
 				$NumberOfElementsInThisCommit = 0;
 				for ($i = 0; $i < $NumRows; $i++) {
@@ -357,16 +357,16 @@ echo "no connection";
 ?>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
 
 <BR>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

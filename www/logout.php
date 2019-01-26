@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: logout.php,v 1.1 2002-07-27 20:11:20 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited

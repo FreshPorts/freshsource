@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: welcome.php,v 1.1 2002-07-30 14:51:16 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -15,11 +15,11 @@
 	$origin = $_GET["origin"];
 
 ?>
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top">
 <TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="5">
   <TR>
-	<? freshports_PageBannerText("Account created"); ?>
+	<?php freshports_PageBannerText("Account created"); ?>
   </TR>
 	<TR>
 	<TD>
@@ -33,17 +33,17 @@
 	</P>
 
 	<P>
-	Click <a href="<? echo $origin?>">here</a> to return to your previous page.
+	Click <a href="<?php echo $origin?>">here</a> to return to your previous page.
 	</P>
 
 </TD></TR>
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </BODY>
 </HTML>

@@ -127,7 +127,7 @@ if ($submit) {
     <TD>
 <TABLE WIDTH="100%" BORDER="0">
 <TR><TD VALIGN="top" WIDTH="100%">
-<?
+<?php
 
 if ($error) {
       echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" WIDTH="100%">
@@ -205,7 +205,7 @@ if ($error) {
 <TABLE WIDTH="100%" BORDER="0" CELLPADDING="5" BGCOLOR="#AD0040">
 
 <TR BGCOLOR="#AD0040"><TD BGCOLOR="#AD0040"><FONT COLOR="#ffffff" SIZE="+2">
-<?
+<?php
 if ($MailSent) {
    echo "Mail sent to your address";
 } else {
@@ -215,15 +215,15 @@ if ($MailSent) {
 </FONT></TD></TR>
 
 <TR><TD BGCOLOR="#ffffff">
-<?
+<?php
 if ($MailSent) {
 ?>
 <p>
 Your password has been sent to the address we have on file.  If you still can't get logged in
-please contact <A HREF="<? echo MAILTO; ?>:webmaster&#64;freshports.org?subject=I forgot my password">the webmaster</A>
+please contact <A HREF="<?php echo MAILTO; ?>:webmaster&#64;freshports.org?subject=I forgot my password">the webmaster</A>
 and we'll see what we can do.
 </p>
-<? } else {  ?>
+<?php } else {  ?>
 
 
 <p>If you've forgotten your password, don't worry.  We've got that covered.</p>
@@ -236,12 +236,12 @@ we're only dealing with your FreshPorts login, not a financial transaction....</
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST">
       <input type="hidden" name="custom_settings" value="1"><input type="hidden" name="LOGIN" value="1">
       <p>User ID:<br>
-      <input SIZE="15" NAME="UserID" value="<? echo $UserID ?>"></p>
+      <input SIZE="15" NAME="UserID" value="<?php echo $UserID ?>"></p>
       <p>email address:<br>
-      <input NAME="eMail" VALUE = "<? echo $eMail ?>" SIZE="20"></p>
+      <input NAME="eMail" VALUE = "<?php echo $eMail ?>" SIZE="20"></p>
       <p><input TYPE="submit" VALUE="eMail Me!" name=submit> &nbsp;&nbsp;&nbsp;&nbsp; <input TYPE="reset" VALUE="reset form">
 </form>
-<? } ?>
+<?php } ?>
 </TD>
 
 </TR>
@@ -252,7 +252,7 @@ we're only dealing with your FreshPorts login, not a financial transaction....</
 </TD>
 
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-	<?
+	<?php
 	freshports_SideBar();
 	?>
   </td>
@@ -262,7 +262,7 @@ we're only dealing with your FreshPorts login, not a financial transaction....</
 </TD></TR>
 </TABLE>
 
-<?
+<?php
 freshports_ShowFooter();
 ?>
 

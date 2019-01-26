@@ -35,21 +35,18 @@ if ($Debug) {
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth ?>" BORDER="0" ALIGN="center">
 
-<?
+<?php
 if (file_exists("announcement.txt") && filesize("announcement.txt") > 4) {
 ?>
   <TR>
     <TD colspan="2">
-       <? include ("announcement.txt"); ?>
+       <?php include ("announcement.txt"); ?>
     </TD>
   </TR>
-<?
+<?php
 }
-?>
-
-<script language="php">
 
 function StripQuotes($string) {
 	$string = str_replace('"', '', $string);
@@ -176,12 +173,12 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-		<? 
+		<?php 
 		freshports_PageBannerText($Title, 3);
 		?>
 </TR>
 
-<?
+<?php
 #				print "NumRows = $NumRows\n<BR>";
 				$HTML = "";
 				unset($ThisChangeLogID);
@@ -329,10 +326,10 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-<? freshports_PageBannerText($Title, 3); ?>
+<?php freshports_PageBannerText($Title, 3); ?>
 </TR>
 <TR>
-<?
+<?php
 				echo "<TD><P>Sorry, nothing found in the database....</P>\n";
 				echo "</TD></TR></TABLE>";
 			}
@@ -346,21 +343,21 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
          echo "no connection";
       }
 
-</script>
+?>
 
 <P>Eventually, this page will contain a complete list of all files changed with links to the CVS repository.
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
 
 <BR>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

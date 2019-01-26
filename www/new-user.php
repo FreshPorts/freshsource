@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: new-user.php,v 1.7 2008-10-18 23:35:20 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -150,9 +150,9 @@ function setfocus() { document.f.UserLogin.focus(); }
 // -->
 </SCRIPT>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top" WIDTH="100%">
-<script language="php">
+<?php
 if ($errors) {
 echo '<TABLE CELLPADDING=1 CELLSPACING=0 BORDER=0 BGCOLOR="#AD0040" WIDTH=100%>
 <TR>
@@ -193,11 +193,11 @@ if (!$submit && !$errors) {
   require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
 }
 
-</script>
+?>
 
 <TABLE CELLSPACING="0" BORDER="0" WIDTH="100%" CELLPADDING="5">
       <TR>
-		<? freshports_PageBannerText("New User Details"); ?>
+		<?php freshports_PageBannerText("New User Details"); ?>
       </TR>
       <TR>
         <TD>
@@ -208,17 +208,17 @@ mail from <CODE CLASS="code">unixathome.org</CODE> and <CODE CLASS="code">freshp
 <P>Your browser must allow cookies for the login to work.</P>
 <P>&nbsp;</P>
 
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/new-user.php"); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/new-user.php"); ?>
 
     </TD>
   </TR>
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
-<? include("./include/footer.php") ?>
+<?php include("./include/footer.php") ?>
 </BODY>
 </HTML>

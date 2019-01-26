@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: confirmation.php,v 1.1 2002-07-30 15:03:54 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
@@ -32,16 +32,16 @@
 ?>
 
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <tr><td VALIGN=TOP>
 <TABLE WIDTH="100%">
 <TR>
-	<? freshports_PageBannerText("Account confirmation"); ?>
+	<?php freshports_PageBannerText("Account confirmation"); ?>
 </TR>
 
 <TR><TD>
 <P>
-<?
+<?php
 	if ($Debug) echo $ResultConfirm;
 	switch ($ResultConfirm) {
 		case 0:
@@ -75,16 +75,16 @@
 </table>
 </td>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <?
+    <?php
        include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php");
     ?>
  </td>
 </tr>
 </table>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

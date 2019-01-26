@@ -1,4 +1,4 @@
-.<?php
+<?php
     #
 	# $Id: repo.php,v 1.7 2012-03-14 18:16:45 dan Exp $
 	#
@@ -48,7 +48,7 @@ $Debug = 0;
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 
 <?php
 
@@ -115,8 +115,8 @@ $Debug = 0;
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" border="1" CELLSPACING="0" CELLPADDING="8">
 <TR>
-		<? freshports_PageBannerText("$MaxNumberOfPorts most recent commits", 3); ?>
-        <? //echo ($StartAt + 1) . " - " . ($StartAt + $MaxNumberOfPorts) ?>
+		<?php freshports_PageBannerText("$MaxNumberOfPorts most recent commits", 3); ?>
+        <?php //echo ($StartAt + 1) . " - " . ($StartAt + $MaxNumberOfPorts) ?>
 </TR>
 <TR><TD>
 <P>
@@ -130,7 +130,7 @@ will be provided from each page to various areas of the website.
 
 </TD></TR>
 
-<?
+<?php
 #				print "NumRows = $NumRows\n<BR>";
 				echo "<TR><TD>\n";
                 echo '<p>' . $ParentGraphic . ' ' . $Breadcrumbs . '<p>';
@@ -178,16 +178,16 @@ will be provided from each page to various areas of the website.
 ?>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
 
 <BR>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

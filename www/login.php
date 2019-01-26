@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: login.php,v 1.4 2008-10-18 23:35:20 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -123,17 +123,17 @@ if ($_GET["resend"]) {
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
  <TR>
     <TD VALIGN="top" WIDTH="100%">
-<?
+<?php
 if ($LoginFailed) {
 ?>
 <TABLE WIDTH="100%" BORDER="1" ALIGN="center" CELLPADDING=1 CELLSPACING=0 BORDER="1">
 <TR><TD VALIGN=TOP>
 <TABLE WIDTH="100%">
 <TR>
-	<? freshports_PageBannerText("Login Failed!") ?>
+	<?php freshports_PageBannerText("Login Failed!") ?>
 </TR>
 <TR BGCOLOR="#ffffff">
 <TD>
@@ -158,7 +158,7 @@ if ($LoginFailed) {
 </TR>
 </TABLE>
 <BR>
-<?
+<?php
 }
 
 if ($error) {
@@ -167,7 +167,7 @@ if ($error) {
 <TR><TD VALIGN=TOP>
 <TABLE WIDTH="100%">
 <TR>
-    <? freshports_PageBannerText("NOTICE"); ?>
+    <?php freshports_PageBannerText("NOTICE"); ?>
 </TR>
 
 <TR BGCOLOR="#ffffff">
@@ -176,7 +176,7 @@ if ($error) {
   <TR valign=top>
    <TD><img src="/images/warning.gif"></TD>
    <TD WIDTH="100%">
-<? echo $error ?>
+<?php echo $error ?>
  </TD>
  </TR>
  </TABLE>
@@ -187,7 +187,7 @@ if ($error) {
 </TR>
 </TABLE>
 <BR>
-<?
+<?php
 }
 
 
@@ -216,14 +216,14 @@ echo '<BR><A HREF="forgotten-password.php">Forgotten your password?</a>';
 ?>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE> 
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

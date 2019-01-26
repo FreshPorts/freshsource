@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: privacy.php,v 1.1 2002-06-24 19:14:04 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -13,12 +13,12 @@
 					"FreeBSD, index, applications, ports");
 
 ?>
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top" WIDTH="100%">
 <TABLE WIDTH="100%" BORDER="0">
 
 <TR>
-	<? freshports_PageBannerText("Privacy statement"); ?>
+	<?php freshports_PageBannerText("Privacy statement"); ?>
 </TR>
 <TR><TD>
 <P>All the information we
@@ -36,10 +36,10 @@
 </TABLE>
 </TD>
 <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
 </TD>
 </TR>
 </TABLE>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </body>
 </html>

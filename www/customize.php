@@ -9,9 +9,6 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
 
-?>
-<script language="php">
-
 $origin		= $_GET["origin"];
 $submit 	= $_POST["submit"];
 $visitor	= $_COOKIE["visitor"];
@@ -117,13 +114,13 @@ if ($submit) {
    freshports_Start("Customize User Account",
                "freshports - new ports, applications",
                "FreeBSD, index, applications, ports");
-</script>
+?>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top" width="100%">
 <TABLE width="100%" border="0">
   <TR>
-    <TD height="20"><script language="php">
+    <TD height="20"><?php
 
 if (!$submit) {
 	include( $_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
@@ -193,18 +190,18 @@ echo "</TD>
 </TABLE>";
 }
 
-</script></TD>
+?></TD>
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

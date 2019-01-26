@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: watch.php,v 1.5 2007-10-08 23:07:40 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
@@ -24,12 +24,12 @@ if (!$visitor) {
 					"FreeBSD, index, applications, ports");
 ?>
 
-<table width="<? echo $TableWidth ?>" border="0" ALIGN="center">
+<table width="<?php echo $TableWidth ?>" border="0" ALIGN="center">
 
 <tr><td valign="top" width="100%">
 <table width="100%" border="0">
 <tr>
-	<? freshports_PageBannerText($PageTitle); ?>
+	<?php freshports_PageBannerText($PageTitle); ?>
 </tr>
 <tr><td>
 <UL>
@@ -38,7 +38,7 @@ if (!$visitor) {
 it will show everything on your watch list.
 </UL>
 </td></tr>
-<script language="php">
+<?php
 
 $DESC_URL = "ftp://ftp.freebsd.org/pub/FreeBSD/branches/-current/ports";
 
@@ -201,18 +201,18 @@ echo $HTML;
 } // end if no WatchID
 }
 
-</script>
+?>
 </table>
 </td>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
 </td>
 </tr>
 </table>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

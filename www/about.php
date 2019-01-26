@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: about.php,v 1.1 2002-06-24 19:14:04 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -13,12 +13,12 @@
 					"FreeBSD, index, applications, ports");
 
 ?>
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><td VALIGN=TOP>
 <TABLE>
 
 <TR>
-	<?
+	<?php
 	freshports_PageBannerText("OK, whose bright idea was this?");
 	?>
 </TR>
@@ -35,16 +35,16 @@ About the Authors</A> for details of who else helped.</P>
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <?
+    <?php
        $ShowPoweredBy = 1;
        include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php");
     ?>
  </TD>
 </TABLE>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

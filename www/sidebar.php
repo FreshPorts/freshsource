@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: sidebar.php,v 1.3 2002-08-04 19:48:17 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -14,7 +14,7 @@
 ?>
 
 <HEAD>
-	<TITLE><? echo $FreshPortsTitle; ?></TITLE>
+	<TITLE><?php echo $FreshPortsTitle; ?></TITLE>
 
 	<STYLE TYPE="text/css">
 	BODY, TD, TR, P, UL, OL, LI, INPUT, SELECT, DL, DD, DT, FONT
@@ -31,13 +31,13 @@
 
 </HEAD>
 
-<?
+<?php
 	freshports_body();
 	$ServerName = str_replace("freshports", "FreshPorts", $_SERVER["SERVER_NAME"]);
 ?>
 
 	<CENTER>
-	<A HREF="http://<? echo $ServerName; ?>/" TARGET="_content"><IMG SRC="/images/freshsource-mini.gif" ALT="<? echo $FreshPortsName . ' - ' . $FreshPortsSlogan; ?>" WIDTH="128" HEIGHT="28" BORDER="0"></A>
+	<A HREF="http://<?php echo $ServerName; ?>/" TARGET="_content"><IMG SRC="/images/freshsource-mini.gif" ALT="<?php echo $FreshPortsName . ' - ' . $FreshPortsSlogan; ?>" WIDTH="128" HEIGHT="28" BORDER="0"></A>
 
 	<BR>
 
@@ -49,7 +49,7 @@
 	</SMALL>
 	</CENTER>
 
-<?
+<?php
 
 	$sql = "select id, message_id, message_date, message_subject, date_added,
 	               to_char(commit_date - SystemTimeAdjust(), 'DD Mon YYYY')           AS commit_date,
@@ -71,7 +71,7 @@
 ?>
 
 	<UL>
-<?
+<?php
 	$numrows = pg_numrows($result);
 	for ($i = 0; $i < $numrows; $i++) {
 		$myrow = pg_fetch_array ($result, $i);
@@ -84,7 +84,7 @@
 	</UL>
 
 <P ALIGN="right">
-<? echo freshports_copyright(); ?>
+<?php echo freshports_copyright(); ?>
 </P>
 
 </body>

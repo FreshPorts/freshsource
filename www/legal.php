@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: legal.php,v 1.2 2004-01-01 14:02:41 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -14,7 +14,7 @@
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top">
 <TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="5">
   <TR>
@@ -82,10 +82,10 @@
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </body>
 </html>

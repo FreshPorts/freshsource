@@ -1,4 +1,4 @@
-<?
+<?php
 	#
 	# $Id: watch-list.php,v 1.2 2006-04-09 17:12:13 dan Exp $
 	#

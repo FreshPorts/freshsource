@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: authors.php,v 1.1 2002-06-24 19:14:04 dan Exp $
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
@@ -13,11 +13,11 @@
 					"FreeBSD, index, applications, ports");
 
 ?>
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <tr><td valign="top">
 <table width="100%" border="0">
   <tr>
-	<? freshports_PageBannerText("About the authors"); ?>
+	<?php freshports_PageBannerText("About the authors"); ?>
   </tr>
 <TR><TD>
 <p>Dan Langille thought up the idea, found the data sources, bugged people to 
@@ -34,14 +34,14 @@ FreshSource is merely a generalized application of the specific technology used 
 </TABLE>
 </td>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
  </td>
 </tr>
 </table>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
-<TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<R><TD>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

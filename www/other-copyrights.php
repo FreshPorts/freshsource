@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: other-copyrights.php,v 1.1 2002-06-24 14:25:06 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
@@ -15,7 +15,7 @@
 
 ?>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" ALIGN="center" BORDER="0">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" ALIGN="center" BORDER="0">
   <TR>
 	<TD VALIGN="top" WIDTH="100%">
 	<P>
@@ -40,15 +40,15 @@
 	</TD>
 
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <? include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
   </TD>
   </TR>
 
 </TABLE>
 
-<TABLE WIDTH="<? echo $TableWidth; ?>" BORDER="0" ALIGN="center">
+<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<? include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
 </TD></TR>
 </TABLE>
 
