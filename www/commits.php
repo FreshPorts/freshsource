@@ -99,7 +99,7 @@ FROM (
            encoding_losses,
            repo_id,
            svn_revision,
-           repo.svn_hostname as svn_hostname
+           repo.repo_hostname as repo_hostname
      FROM commit_log LEFT OUTER JOIN repo on commit_log.repo_id = repo.id
      
      JOIN 
@@ -275,7 +275,7 @@ runs off the same database and displays only the port commits.
 								case FREEBSD_REPO_SVN:
 									# we want something like
 									# http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
-									$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
+									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
 									$myrow["element_pathname"] . '</a>';
 									break;
 							}
@@ -299,7 +299,7 @@ runs off the same database and displays only the port commits.
 									$HTML .= ' ';
 									$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
 									# we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
-									$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
+									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
 										$myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
 									$HTML .= freshports_Diff_Icon() . '</a> ';
 									break;
@@ -315,7 +315,7 @@ runs off the same database and displays only the port commits.
 							case FREEBSD_REPO_SVN:
 								# we want something like
 								# http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
-								$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
+								$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
 								$HTML .= freshports_Revision_Icon() . '</a> ';
 								break;
 						}

@@ -97,7 +97,7 @@ function GetPortNameFromFileName($file_name) {
 			element.id as element_id,
             repo_id,
             svn_revision,
-            repo.svn_hostname as svn_hostname
+            repo.repo_hostname as repo_hostname
 			 ";
 
 	if ($WatchListID) {
@@ -204,17 +204,17 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 					    $Change_Type = "modify";
 					    break;
 
-                    case "A":
+					  case "A":
 					    $Change_Type = "import"; 
 					    break;
 
-                    case "R":
+					  case "R":
 					    $Change_Type = "remove"; 
 					    break;
 
-				    default:
+					  default:
 					    $Change_Type = $myrow["change_type"] ; 
-			        }
+					}
 
 					// OK, while we have the log change log, let's put the port details here.
 					$MultipleFilesThisCommit = 0;
@@ -253,7 +253,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
                 case FREEBSD_REPO_SVN:
                     # we want something like
                     # http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
-        			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname']  . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
+        			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname']  . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
         			         $myrow["element_pathname"] . '</a>';
                     break;
             }
@@ -280,7 +280,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
                         $HTML .= ' ';
     	        		$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
                         # we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
-            			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
+            			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
             			    $myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
         		    	$HTML .= freshports_Diff_Icon() . '</a> ';
                         break;
@@ -296,7 +296,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
                 case FREEBSD_REPO_SVN:
                     # we want something like
                     # http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
-        			$HTML .= ' <A HREF="http://' . $myrow['svn_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
+        			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
 		        	$HTML .= freshports_Revision_Icon() . '</a> ';
                     break;
             }
