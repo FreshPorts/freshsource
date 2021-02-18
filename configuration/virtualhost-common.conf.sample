@@ -1,4 +1,5 @@
-  server_name   www.freshsource.org;
+  server_name   devgit.freshsource.org;
+
   root          /usr/local/www/freshsource/www/;
   index         index.php index.html;
 
@@ -12,4 +13,3 @@
     fastcgi_param SCRIPT_FILENAME $request_filename;
     include fastcgi_params;
   }
-
