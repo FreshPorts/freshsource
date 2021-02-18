@@ -204,17 +204,17 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 					    $Change_Type = "modify";
 					    break;
 
-					  case "A":
+                    case "A":
 					    $Change_Type = "import"; 
 					    break;
 
-					  case "R":
+                    case "R":
 					    $Change_Type = "remove"; 
 					    break;
 
-					  default:
+				    default:
 					    $Change_Type = $myrow["change_type"] ; 
-					}
+			        }
 
 					// OK, while we have the log change log, let's put the port details here.
 					$MultipleFilesThisCommit = 0;
