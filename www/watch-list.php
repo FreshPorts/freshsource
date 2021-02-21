@@ -5,11 +5,11 @@
 	# Copyright (c) 1998-2006 DVL Software Limited
 	#
 
-    require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-    require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-    require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
+    require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+    require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+    require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-    require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+    require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	$Debug  = 0;
 	$origin = $_GET["origin"];

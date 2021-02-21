@@ -5,9 +5,9 @@
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
 $origin		= $_GET["origin"];
 $submit 	= $_POST["submit"];
@@ -123,7 +123,7 @@ if ($submit) {
     <TD height="20"><?php
 
 if (!$submit) {
-	include( $_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+	include( $_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
     $numberofdays = $NumberOfDays;
 }
 
@@ -163,7 +163,7 @@ if ($AccountModified) {
 //  $daystoshow = 20;
 //  $maxarticles = 40;
 //  $daysnew = 20;
-//   require($_SERVER['DOCUMENT_ROOT'] . "/include/commonphp3.inc");
+//   require($_SERVER['DOCUMENT_ROOT'] . "/../include/commonphp3.inc");
 //	echo $DaysToShow,  '= days to show';
 
 echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" WIDTH="100%">
@@ -177,10 +177,10 @@ echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" WIDTH="100%">
 <TD>';
 
 echo 'If you wish to change your password, supply your new password twice.  Otherwise, leave it blank.<br>';
-include($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 $Customize=1;
-include($_SERVER['DOCUMENT_ROOT'] . "/include/new-user.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/../include/new-user.php");
 
 echo "</TD>
 </TR>
@@ -194,14 +194,14 @@ echo "</TD>
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
 
 <TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

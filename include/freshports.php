@@ -6,7 +6,7 @@
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
 
-	require_once($_SERVER["DOCUMENT_ROOT"] . "/include/constants.php");
+	require_once($_SERVER["DOCUMENT_ROOT"] . "/../include/constants.php");
 
 DEFINE('COPYRIGHTYEARS', '2000-' . date('Y'));
 
@@ -1225,7 +1225,7 @@ echo '<TABLE WIDTH="' . $TableWidth . '" BORDER="0" ALIGN="center">
 <TR><TD>
 ';
 
-include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php");
 
 echo '
 </TD></TR>
@@ -1241,7 +1241,7 @@ echo '
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
 ';
 
-include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php");
 
 echo '
 </TD>
@@ -1287,7 +1287,11 @@ function freshports_MessageIdToRepoName($message_id)
   }
   
   if (Empty($RepoName)) {
-    $RepoName = FREEBSD_REPO_SVN;
+    if (strpos($message_id, '@') === false) {
+      $RepoName = FREEBSD_REPO_GIT;
+    } else {
+      $RepoName = FREEBSD_REPO_SVN;
+    }
   }
 
   return $RepoName;
@@ -1319,3 +1323,38 @@ function freshports_MessageIdToRepoName($message_id)
 
         return $prev;
 	}
+
+function freshports_Convert_Subversion_Path_To_Git($pathname, $repo, $db_root_prefix, $branch_name)
+{
+  # the pathnames in the FreshPorts database reflect the physical pathname on disk
+  # yeah, repo changes means different paths. Hopefully, we can do that all
+  # external to the database instead of in the database.
+  switch ($repo) {
+    case 'src':
+      $pathname = str_replace("$db_root_prefix/$branch_name/", '', $pathname);
+      break;
+
+    case 'ports':
+      if ($branch_name == 'head') {
+        $pathname = str_replace("$db_root_prefix/$branch_name/", '', $pathname);
+      } else {
+        $pathname = str_replace("$db_root_prefix/branches/$branch_name/", '', $pathname);
+      }
+      break;
+
+    case 'doc':
+      break;
+  }
+
+  return $pathname;
+}
+
+function freshports_Annotate_Icon() {
+	return '<img src="/images/annotate.png" alt="Annotate / Blame" title="Annotate / Blame" border="0" width="20" height="20" align="middle">';
+}
+
+function freshports_git_commit_Link_diff($revision, $repo_name, $hostname, $path) {
+  # we want https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+  return '<a href="http://' . htmlentities($hostname) . "/$repo_name" . '/diff/' . $path . '?id=' .  htmlentities($revision) .  '">' . freshports_Diff_Icon() . '</a>';
+}
+

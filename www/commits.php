@@ -5,17 +5,17 @@
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
-#	require($_SERVER['DOCUMENT_ROOT'] . "/../classes/files-display.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../classes/files-display.php");
 
 	freshports_Start($FreshPortsSlogan,
 					"$FreshPortsName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug = 0;
+$Debug = 1;
 
 if ($Debug) echo "UserID='$UserID'";
 
@@ -79,7 +79,8 @@ FROM (
 SELECT LCCLLC.*,
        element.name    AS name,
        element.status  AS status,
-       element_pathname(element.id, FALSE) as element_pathname
+       element_pathname(element.id, FALSE) as element_pathname,
+       element_pathname(element.id) as pathname
 
 
 FROM (
@@ -99,8 +100,14 @@ FROM (
            encoding_losses,
            repo_id,
            svn_revision,
-           repo.repo_hostname as repo_hostname
-     FROM commit_log LEFT OUTER JOIN repo on commit_log.repo_id = repo.id
+           repo.repo_hostname  as repo_hostname,
+           repo.repository     as respository,
+           repo.name           as repo_name,
+           repo.path_to_repo   as path_to_repo,
+           repo.db_root_prefix as db_root_prefix,
+           system_branch.branch_name as branch_name
+     FROM commit_log LEFT OUTER JOIN repo on commit_log.repo_id = repo.id LEFT OUTER JOIN commit_log_branches on commit_log.id = commit_log_branches.commit_log_id 
+                     LEFT OUTER JOIN system_branch on commit_log_branches.branch_id = system_branch.id
      
      JOIN 
 
@@ -136,7 +143,7 @@ ON        W.wle_element_id = SECURITY.element_id
 ";
 }
 
-$sql .= "order by commit_date_raw desc, element_pathname";
+$sql .= "order by commit_date_raw desc, revision_name, element_pathname";
 
 
 		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
@@ -266,6 +273,7 @@ runs off the same database and displays only the port commits.
 
 
 							$HTML .= '<BIG><B>';
+							# print the file name
 							switch($WhichRepo)
 							{
 								case FREEBSD_REPO_CVS:
@@ -275,8 +283,30 @@ runs off the same database and displays only the port commits.
 								case FREEBSD_REPO_SVN:
 									# we want something like
 									# http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
-									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
-									$myrow["element_pathname"] . '</a>';
+									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . $myrow["element_pathname"] . '</a>';
+									break;
+
+								case FREEBSD_REPO_GIT:
+									# we want something like
+									# https://github.com/freebsd/freebsd-ports/blame/0957c7db9bf1fc4313cdefdcdc2608a0c965dda7/sysutils/goaccess/Makefile
+									# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=5ac839029d01c0f48e1b1ff1a599cb47cf5e98ee
+									# but we're getting
+									# http://cgit.freebsd.org/src/blame//base/main/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+#									$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+#									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . $myrow["path_to_repo"] . '/blame' . $url_text . '?id=' . $myrow["revision_name"] . '">';
+#									$HTML .= freshports_Annotate_Icon() . '</a> ';
+
+
+#									$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+#									$HTML .= ' <a href="http://' . $myrow['repo_hostname'] . $myrow["path_to_repo"] . '/commits/' . $myrow["revision_name"] . '/'. $url_text . '" title="Commit history">';
+#									$HTML .= '<CODE CLASS="code">' . $myrow["element_pathname"] . "</CODE></a>";
+
+									$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+									# we want https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+									# we want https://cgit.freebsd.org/src/tree/sys/netinet/sctp_timer.c
+									$HTML .= ' <a href="http://' . $myrow['repo_hostname'] . '/' . $myrow["repo_name"] . '/tree/' . $url_text . '" title="View file in repo">';
+									$HTML .= '<CODE CLASS="code">' . $myrow["element_pathname"] . "</CODE></a>";
+
 									break;
 							}
 
@@ -286,37 +316,55 @@ runs off the same database and displays only the port commits.
 
 							$HTML .= '<td>';
 
+							# provide link to diff
 							if ( $Change_Type == "modify" ) {
-							switch($WhichRepo)
-							{
-								case FREEBSD_REPO_CVS:
-									$HTML .= ' ';
-									$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
-									$HTML .= freshports_cvsweb_Diff_Link($myrow["element_pathname"] , $previousRevision, $myrow["revision_name"]);
-									break;
+								switch($WhichRepo)
+								{
+									case FREEBSD_REPO_CVS:
+										$HTML .= ' ';
+										$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+										$HTML .= freshports_cvsweb_Diff_Link($myrow["element_pathname"] , $previousRevision, $myrow["revision_name"]);
+										break;
 
-								case FREEBSD_REPO_SVN:
-									$HTML .= ' ';
-									$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
-									# we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
-									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
-										$myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
-									$HTML .= freshports_Diff_Icon() . '</a> ';
-									break;
+									case FREEBSD_REPO_SVN:
+										$HTML .= ' ';
+										$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+										# we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
+										$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
+											$myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
+										$HTML .= freshports_Diff_Icon() . '</a> ';
+										break;
+
+									case FREEBSD_REPO_GIT:
+										# we want: https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+										$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+										$HTML .= freshports_git_commit_Link_diff($myrow['message_id'], $myrow['repo_name'], $myrow['repo_hostname'], $url_text);
+										
+										break;
 							}
 						}
-
+						
+						# provide annotated / blame link
 						switch($WhichRepo)
 						{
 							case FREEBSD_REPO_CVS:
-							$HTML .= freshports_cvsweb_Annotate_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
-							break;
+								$HTML .= freshports_cvsweb_Annotate_Link($myrow["element_pathname"] , $myrow["revision_name"]); 
+								break;
 
 							case FREEBSD_REPO_SVN:
 								# we want something like
 								# http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
 								$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
 								$HTML .= freshports_Revision_Icon() . '</a> ';
+								break;
+
+							case FREEBSD_REPO_GIT:
+								# something like
+								# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+								$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+								$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . $myrow["path_to_repo"] . '/blame/' . $url_text . '?id=' . $myrow["revision_name"] . '">';
+								$HTML .= freshports_Annotate_Icon() . '</a> ';
+								# we want something like
 								break;
 						}
 
@@ -357,7 +405,7 @@ echo "no connection";
 ?>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
@@ -366,7 +414,7 @@ echo "no connection";
 
 <TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

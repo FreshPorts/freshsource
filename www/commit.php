@@ -5,11 +5,11 @@
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	if (IsSet($_GET["message_id"])) $message_id = AddSlashes($_GET["message_id"]);
 	if (IsSet($_GET["commit_id"]))  $commit_id  = AddSlashes($_GET["commit_id"]);
@@ -348,7 +348,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 <P>Eventually, this page will contain a complete list of all files changed with links to the CVS repository.
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
@@ -357,7 +357,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
 <TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

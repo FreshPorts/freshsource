@@ -3,10 +3,10 @@
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	freshports_Start("Privacy Policy",
 					"freshports - new ports, applications",
@@ -36,10 +36,10 @@
 </TABLE>
 </TD>
 <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
 </TD>
 </TR>
 </TABLE>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php") ?>
 </body>
 </html>

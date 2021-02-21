@@ -3,10 +3,10 @@
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	freshports_Start("The Authors",
 					"freshports - new ports, applications",
@@ -34,14 +34,14 @@ FreshSource is merely a generalized application of the specific technology used 
 </TABLE>
 </td>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-    <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+    <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
  </td>
 </tr>
 </table>
 
 <TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <R><TD>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/footer.php") ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php") ?>
 </TD></TR>
 </TABLE>
 

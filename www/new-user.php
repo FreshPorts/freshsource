@@ -3,9 +3,9 @@
 	#
 	# Copyright (c) 1998-2001 DVL Software Limited
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/databaselogin.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
 	$origin = $_GET["origin"];
 	$submit = $_POST["submit"];
@@ -135,7 +135,7 @@ if ($submit) {
 	// not submit
 
 	// we can't do this if we are submitting because it overwrites the incoming values
-	require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 	$emailsitenotices_yn = "ON";
 }
 
@@ -190,7 +190,7 @@ echo '<p>If you need help, please post a message on the forum. </p>
 
 if (!$submit && !$errors) {
   // provide default values for an empy form.
-  require($_SERVER['DOCUMENT_ROOT'] . "/include/getvalues.php");
+  require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 }
 
 ?>
@@ -208,17 +208,17 @@ mail from <CODE CLASS="code">unixathome.org</CODE> and <CODE CLASS="code">freshp
 <P>Your browser must allow cookies for the login to work.</P>
 <P>&nbsp;</P>
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/include/new-user.php"); ?>
+<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/new-user.php"); ?>
 
     </TD>
   </TR>
 </TABLE>
 </TD>
   <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <?php include($_SERVER['DOCUMENT_ROOT'] . "/include/side-bars.php") ?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
  </TD>
 </TR>
 </TABLE>
-<?php include("./include/footer.php") ?>
+<?php include("./../include/footer.php") ?>
 </BODY>
 </HTML>

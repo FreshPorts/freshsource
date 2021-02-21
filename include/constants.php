@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: constants.php,v 1.3 2012-11-05 02:24:23 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
@@ -80,4 +80,5 @@ $freshports_FirstRevisionNumber			 = "1.1";
 // which repo do we want?
 define('FREEBSD_REPO_SVN', 'svn');
 define('FREEBSD_REPO_CVS', 'cvs');
+define('FREEBSD_REPO_GIT', 'git');
 
