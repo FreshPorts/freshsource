@@ -27,8 +27,6 @@ $Debug=0;
 
 if ($Debug) echo "UserID='$UserID'";
 
-$Debug = 0;
-
 if ($Debug) {
    echo "StartAt = $StartAt<br>\n";
 }
@@ -82,7 +80,7 @@ function GetPortNameFromFileName($file_name) {
 	
 
 	$sql = "
-	select	element_pathname(element.id) as element_pathname, 
+	select	element_pathname(element.id, false) as element_pathname, 
 			commit_log_elements.commit_log_id, 
 			to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')  as commit_date,
 			to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI:SS')   as commit_time,
@@ -204,17 +202,17 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 					    $Change_Type = "modify";
 					    break;
 
-                    case "A":
+					  case "A":
 					    $Change_Type = "import"; 
 					    break;
 
-                    case "R":
+					  case "R":
 					    $Change_Type = "remove"; 
 					    break;
 
-				    default:
+					  default:
 					    $Change_Type = $myrow["change_type"] ; 
-			        }
+					}
 
 					// OK, while we have the log change log, let's put the port details here.
 					$MultipleFilesThisCommit = 0;
@@ -253,9 +251,22 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
                 case FREEBSD_REPO_SVN:
                     # we want something like
                     # http://svnweb.freebsd.org/ports/head/textproc/bsddiff/Makefile?view=log#rev300953
-        			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname']  . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . 
-        			         $myrow["element_pathname"] . '</a>';
+                    $HTML .= ' <A HREF="http://' . $myrow['repo_hostname']  . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' .  $myrow["element_pathname"] . '</a>';
                     break;
+
+		case FREEBSD_REPO_GIT:
+			# we want something like
+			# https://github.com/freebsd/freebsd-ports/blame/0957c7db9bf1fc4313cdefdcdc2608a0c965dda7/sysutils/goaccess/Makefile
+			# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=5ac839029d01c0f48e1b1ff1a599cb47cf5e98ee
+			# but we're getting
+			# http://cgit.freebsd.org/src/blame//base/main/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+
+			$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+			# we want https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+			# we want https://cgit.freebsd.org/src/tree/sys/netinet/sctp_timer.c
+			$HTML .= ' <a href="http://' . $myrow['repo_hostname'] . '/' . $myrow["repo_name"] . '/tree/' . $url_text . '" title="View file in repo">';
+			$HTML .= '<CODE CLASS="code">' . $myrow["element_pathname"] . "</CODE></a>";
+			break;
             }
 							$HTML .= "</B></BIG>\n";
 
@@ -274,16 +285,21 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
                         $HTML .= ' ';
                         $previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
                         $HTML .= freshports_cvsweb_Diff_Link($myrow["element_pathname"] , $previousRevision, $myrow["revision_name"]);
-        		    	break;
+			break;
 
                     case FREEBSD_REPO_SVN:
                         $HTML .= ' ';
-    	        		$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
+    	        	$previousRevision =  GetPreviousRevision( $myrow["revision_name"] );
                         # we want something like http://svnweb.freebsd.org/ports/head/www/p5-App-Nopaste/Makefile?r1=300951&r2=300950&pathrev=300951
-            			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . 
-            			    $myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
-        		    	$HTML .= freshports_Diff_Icon() . '</a> ';
+            		$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?r1=' . $myrow["revision_name"] . '&amp;r2=' . $previousRevision . '&amp;pathrev=' . $myrow["revision_name"] . '">';
+        		$HTML .= freshports_Diff_Icon() . '</a> ';
                         break;
+
+                    case FREEBSD_REPO_GIT:
+			# we want: https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+			$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+			$HTML .= freshports_git_commit_Link_diff($myrow['message_id'], $myrow['repo_name'], $myrow['repo_hostname'], $url_text);
+			break;
                 }
             }
 
@@ -296,9 +312,17 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
                 case FREEBSD_REPO_SVN:
                     # we want something like
                     # http://svn.freebsd.org/ports/head/x11-wm/awesome/Makefile
-        			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
-		        	$HTML .= freshports_Revision_Icon() . '</a> ';
+                    $HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' .$myrow["element_pathname"] . '?annotate=' . $myrow["revision_name"] . '">';
+                    $HTML .= freshports_Revision_Icon() . '</a> ';
                     break;
+
+                case FREEBSD_REPO_GIT:
+                	# something like
+			# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
+			$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
+			$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . $myrow["path_to_repo"] . '/blame/' . $url_text . '?id=' . $myrow["revision_name"] . '">';
+			$HTML .= freshports_Annotate_Icon() . '</a> ';
+			break;
             }
 
 

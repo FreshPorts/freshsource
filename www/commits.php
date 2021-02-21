@@ -15,7 +15,7 @@
 	freshports_Start($FreshPortsSlogan,
 					"$FreshPortsName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug = 1;
+$Debug = 0;
 
 if ($Debug) echo "UserID='$UserID'";
 
@@ -306,7 +306,6 @@ runs off the same database and displays only the port commits.
 									# we want https://cgit.freebsd.org/src/tree/sys/netinet/sctp_timer.c
 									$HTML .= ' <a href="http://' . $myrow['repo_hostname'] . '/' . $myrow["repo_name"] . '/tree/' . $url_text . '" title="View file in repo">';
 									$HTML .= '<CODE CLASS="code">' . $myrow["element_pathname"] . "</CODE></a>";
-
 									break;
 							}
 
@@ -364,8 +363,7 @@ runs off the same database and displays only the port commits.
 								$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
 								$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . $myrow["path_to_repo"] . '/blame/' . $url_text . '?id=' . $myrow["revision_name"] . '">';
 								$HTML .= freshports_Annotate_Icon() . '</a> ';
-								# we want something like
-								break;
+	                								break;
 						}
 
 						$HTML .= '</td></tr>' . "\n";
