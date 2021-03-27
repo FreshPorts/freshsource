@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: constants.php,v 1.3 2012-11-05 02:24:23 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited

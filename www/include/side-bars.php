@@ -10,7 +10,7 @@
 	$Debug=0;
 ?>
 
-<TABLE WIDTH="<? echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
+<TABLE WIDTH="<?php echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
 	<TR>
 		<TD BGCOLOR="#AD0040" height="30"><FONT COLOR="#FFFFFF"><BIG><B>Login</B></BIG></FONT></TD>
 	</TR>
@@ -71,13 +71,13 @@
 
 <P>
 
-<TABLE WIDTH="<? echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
+<TABLE WIDTH="<?php echo $ColumnWidth ?>" BORDER="1" CELLSPACING="0" CELLPADDING="5">
 	<TR>
 		<TD BGCOLOR="#AD0040" height="30"><FONT COLOR="#FFFFFF"><BIG><B>This site</B></BIG></FONT></TD>
 	</TR>
 	<TR>
 	<TD VALIGN="top">
-<?
+<?php
 	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/about.php",            "What is FreshSource?") . '</FONT><BR>';
 	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/phorum/",              "Forums")               . '</FONT><BR>';
 	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/authors.php",          "About the Authors")    . '</FONT><BR>';
