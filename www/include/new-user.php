@@ -1,4 +1,4 @@
-<?
+<?php
 	# $Id: new-user.php,v 1.3 2005-09-06 00:14:12 dan Exp $
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
@@ -14,36 +14,36 @@
 <TABLE width="*" border="0" cellpadding="1">
           <TR>
             <TD VALIGN="top">
-<? if (!$Customize) { ?>
+<?php if (!$Customize) { ?>
               <INPUT TYPE="hidden" NAME="ADD" VALUE="1">
               User ID:<br>
-              <INPUT SIZE="15" NAME="UserLogin" VALUE="<? echo htmlentities($UserLogin) ?>"><br><br>
-<? } ?>
+              <INPUT SIZE="15" NAME="UserLogin" VALUE="<?php echo htmlentities($UserLogin) ?>"><br><br>
+<?php } ?>
                Password:<br>
-               <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?echo htmlentities($Password1) ?>" size="20"><br><br>
+               <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?php echo htmlentities($Password1) ?>" size="20"><br><br>
                Confirm Password:<br>
-               <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?echo htmlentities($Password2) ?>" size="20">
+               <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?php echo htmlentities($Password2) ?>" size="20">
             </TD>
             <TD VALIGN="top">
                email address (required):<br>
-               <INPUT SIZE="35" NAME="email" VALUE="<?echo htmlentities($email) ?>">
+               <INPUT SIZE="35" NAME="email" VALUE="<?php echo htmlentities($email) ?>">
 
 Number of Days to show in side-bar: 
 
 <SELECT NAME="numberofdays" size="1">
-    <OPTION <? if ($numberofdays == "0") echo "selected " ?> VALUE="0">0</OPTION>
-    <OPTION <? if ($numberofdays == "1") echo "selected " ?> VALUE="1">1</OPTION>
-    <OPTION <? if ($numberofdays == "2") echo "selected " ?> VALUE="2">2</OPTION>
-    <OPTION <? if ($numberofdays == "3") echo "selected " ?> VALUE="3">3</OPTION>
-    <OPTION <? if ($numberofdays == "4") echo "selected " ?> VALUE="4">4</OPTION>
-    <OPTION <? if ($numberofdays == "5") echo "selected " ?> VALUE="5">5</OPTION>
-    <OPTION <? if ($numberofdays == "6") echo "selected " ?> VALUE="6">6</OPTION>
-    <OPTION <? if ($numberofdays == "7") echo "selected " ?> VALUE="7">7</OPTION>
-    <OPTION <? if ($numberofdays == "8") echo "selected " ?> VALUE="8">8</OPTION>
-    <OPTION <? if ($numberofdays == "9") echo "selected " ?> VALUE="9">9</OPTION>
+    <OPTION <?php if ($numberofdays == "0") echo "selected " ?> VALUE="0">0</OPTION>
+    <OPTION <?php if ($numberofdays == "1") echo "selected " ?> VALUE="1">1</OPTION>
+    <OPTION <?php if ($numberofdays == "2") echo "selected " ?> VALUE="2">2</OPTION>
+    <OPTION <?php if ($numberofdays == "3") echo "selected " ?> VALUE="3">3</OPTION>
+    <OPTION <?php if ($numberofdays == "4") echo "selected " ?> VALUE="4">4</OPTION>
+    <OPTION <?php if ($numberofdays == "5") echo "selected " ?> VALUE="5">5</OPTION>
+    <OPTION <?php if ($numberofdays == "6") echo "selected " ?> VALUE="6">6</OPTION>
+    <OPTION <?php if ($numberofdays == "7") echo "selected " ?> VALUE="7">7</OPTION>
+    <OPTION <?php if ($numberofdays == "8") echo "selected " ?> VALUE="8">8</OPTION>
+    <OPTION <?php if ($numberofdays == "9") echo "selected " ?> VALUE="9">9</OPTION>
 </SELECT>
 <br><br><BR>
-            <INPUT TYPE="submit" VALUE="<? if ($Customize) { echo "update";} else { echo "create";} ?> account" NAME="submit">
+            <INPUT TYPE="submit" VALUE="<?php if ($Customize) { echo "update";} else { echo "create";} ?> account" NAME="submit">
             <INPUT TYPE="reset"  VALUE="reset form">
             </TD>
           </TR>
