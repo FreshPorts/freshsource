@@ -1343,6 +1343,7 @@ function freshports_Convert_Subversion_Path_To_Git($pathname, $repo, $db_root_pr
       break;
 
     case 'doc':
+      $pathname = str_replace("$db_root_prefix/$branch_name/", '', $pathname);
       break;
   }
 

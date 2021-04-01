@@ -94,6 +94,10 @@ FROM (
            message_subject,
            message_id,
            committer,
+           committer_name,
+           committer_email,
+           author_name,
+           author_email,
            commit_log.description       AS commit_description,
            to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')  AS commit_date,
            to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI')      AS commit_time,
@@ -106,7 +110,8 @@ FROM (
            repo.path_to_repo   as path_to_repo,
            repo.db_root_prefix as db_root_prefix,
            system_branch.branch_name as branch_name
-     FROM commit_log LEFT OUTER JOIN repo on commit_log.repo_id = repo.id LEFT OUTER JOIN commit_log_branches on commit_log.id = commit_log_branches.commit_log_id 
+     FROM commit_log LEFT OUTER JOIN repo on commit_log.repo_id = repo.id
+                     LEFT OUTER JOIN commit_log_branches on commit_log.id = commit_log_branches.commit_log_id 
                      LEFT OUTER JOIN system_branch on commit_log_branches.branch_id = system_branch.id
      
      JOIN 
@@ -236,12 +241,18 @@ runs off the same database and displays only the port commits.
 						if ($NumberOfElementsInThisCommit == 1) {
 
 							$HTML .= '<SMALL>';
-							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]) . ' ]';
+							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]);
+							if (!empty($mycommit->committer_name)) {
+								$HTML .= '(' . $mycommit->committer_name . ')';
+										}
+							$HTML .= ' ]';
 							$HTML .= '</SMALL>';
 							$HTML .= '&nbsp;';
-							$HTML .= freshports_Email_Link($myrow["message_id"]);
+							if ($WhichRepo != FREEBSD_REPO_GIT) {
+								$HTML .= freshports_Email_Link($myrow["message_id"]);
 
-							$HTML .= "&nbsp;";
+								$HTML .= "&nbsp;";
+							}
 
 #							$HTML .= freshports_CommitFilesLinkIDOnly($myrow["id"]);
 
@@ -363,7 +374,7 @@ runs off the same database and displays only the port commits.
 								$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
 								$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . $myrow["path_to_repo"] . '/blame/' . $url_text . '?id=' . $myrow["revision_name"] . '">';
 								$HTML .= freshports_Annotate_Icon() . '</a> ';
-	                								break;
+								break;
 						}
 
 						$HTML .= '</td></tr>' . "\n";

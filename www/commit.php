@@ -80,7 +80,8 @@ function GetPortNameFromFileName($file_name) {
 	
 
 	$sql = "
-	select	element_pathname(element.id, false) as element_pathname, 
+	select	element_pathname(element.id, false) as element_pathname,
+			element_pathname(element.id) as pathname, 
 			commit_log_elements.commit_log_id, 
 			to_char(commit_log.commit_date - SystemTimeAdjust(), 'DD Mon YYYY')  as commit_date,
 			to_char(commit_log.commit_date - SystemTimeAdjust(), 'HH24:MI:SS')   as commit_time,
@@ -93,9 +94,14 @@ function GetPortNameFromFileName($file_name) {
 			commit_log_elements.revision_name as revision_name,
 			element.status,
 			element.id as element_id,
-            repo_id,
-            svn_revision,
-            repo.repo_hostname as repo_hostname
+			repo_id,
+			svn_revision,
+			repo.repo_hostname  as repo_hostname,
+			repo.repository     as respository,
+			repo.name           as repo_name,
+			repo.path_to_repo   as path_to_repo,
+			repo.db_root_prefix as db_root_prefix,
+			system_branch.branch_name as branch_name
 			 ";
 
 	if ($WatchListID) {
@@ -108,7 +114,9 @@ function GetPortNameFromFileName($file_name) {
 
 
 	$sql .="
-		   from commit_log LEFT OUTER JOIN repo on (commit_log.repo_id = repo.id), element, commit_log_elements ";
+		   from commit_log LEFT OUTER JOIN repo                ON (commit_log.repo_id = repo.id)
+		                   LEFT OUTER JOIN commit_log_branches ON commit_log.id = commit_log_branches.commit_log_id
+		                   LEFT OUTER JOIN system_branch       ON commit_log_branches.branch_id = system_branch.id, element, commit_log_elements ";
 
 	#
 	# if the watch list id is provided (i.e. they are logged in and have a watch list id...)
@@ -135,8 +143,6 @@ function GetPortNameFromFileName($file_name) {
 #	          from commit_log
 #			  WHERE	commit_log.message_id = '$message_id'";
 
-
-if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
 #exit;
 
@@ -230,7 +236,9 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]) . ' ]';
 							$HTML .= '</SMALL>';
 							$HTML .= '&nbsp;';
-							$HTML .= freshports_Email_Link($myrow["message_id"]);
+							if ($WhichRepo != FREEBSD_REPO_GIT) {
+								$HTML .= freshports_Email_Link($myrow["message_id"]);
+							}
 
 							if ($myrow["encoding_losses"] == 't') {
 								$HTML .= '&nbsp;' . freshports_Encoding_Errors();
@@ -264,6 +272,7 @@ if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 			$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
 			# we want https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
 			# we want https://cgit.freebsd.org/src/tree/sys/netinet/sctp_timer.c
+
 			$HTML .= ' <a href="http://' . $myrow['repo_hostname'] . '/' . $myrow["repo_name"] . '/tree/' . $url_text . '" title="View file in repo">';
 			$HTML .= '<CODE CLASS="code">' . $myrow["element_pathname"] . "</CODE></a>";
 			break;
