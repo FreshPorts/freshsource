@@ -7,24 +7,12 @@
    require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
    require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-#$Debug=1;
+$Debug=0;
 
-$origin = $_GET["origin"];
-
-if ($Debug) echo "origin = '" . rawurlencode($origin) . "'<BR>\n";
 if ($Debug) phpinfo();
-
-$origin=rawurlencode($origin);
 
 if ($_POST["LOGIN"] && $_POST["UserID"]) {
    // process form
-
-   if ($Debug) {
-      while (list($name, $value) = each($HTTP_POST_VARS)) {
-         echo "$name = $value<BR>\n";
-      }
-   }
-
 
    $OK = 1;
 
@@ -60,15 +48,12 @@ if ($_POST["LOGIN"] && $_POST["UserID"]) {
 
 		if ($status == $UserStatusActive) {
 			if ($Debug) {
-				echo "well, debug was on, so I would have taken you to '$origin'<BR>\n";
+				echo "well, debug was on, so I would have taken you to '/'<BR>\n";
 				echo "Cookie = $Cookie<BR>\n";
 			} else {
 				SetCookie("visitor", $Cookie, time() + 60*60*24*120, '/');
 				// Redirect browser to PHP web site
-				if ($origin == "/index.php" || origin == "") {
-					$origin = "/";
-				}
-				header("Location: " . rawurldecode($origin));
+				header("Location: /");
 				// Make sure that code below does not get executed when we redirect.
 				exit;
 			}
@@ -79,7 +64,7 @@ if ($_POST["LOGIN"] && $_POST["UserID"]) {
 				if ($status == $UserStatusUnconfirmed) {
 					$error .= 'Your account needs to be enabled by following the directions in the email we have sent to you.' . "<BR>\n";
 					$error .= 'To have your activation details resent to the email address you supplied, click on the resend button.' . "<BR>\n";
-					$error .= '<form action="' . $_SERVER["PHP_SELF"] . "?origin=$origin" . ' method="POST">' . "\n";
+					$error .= '<form action="' . $_SERVER["PHP_SELF"] . ' method="POST">' . "\n";
 					$error .= '<input type="hidden" name="user" value="' . htmlentities($UserID) . '">' . "\n";
 					$error .= '<input TYPE="submit" VALUE="Resend" name=resend>' . "\n";
 					$error .= '</form>' . "\n";

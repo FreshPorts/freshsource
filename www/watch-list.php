@@ -12,7 +12,6 @@
     require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	$Debug  = 0;
-	$origin = $_GET["origin"];
 
 	$Origin = $HTTP_SERVER_VARS["HTTP_REFERER"];
 	$Redirect = 1;
@@ -55,14 +54,9 @@
 
 #	echo "when done, I will return to " . $HTTP_SERVER_VARS["HTTP_REFERER"];
 	if ($Redirect) {
-		if ($origin) {
-			if ($Debug) echo "origin supplied is $origin\n<BR>";
-			$Origin = str_replace(" ", "&", $origin);
-		}
+		if ($Debug) echo "redirecting to /\n<BR>";
 
-		if ($Debug) echo "redirecting to $Origin\n<BR>";
-
-		header("Location: $Origin");  /* Redirect browser to PHP web site */
+		header("Location: /");  /* Redirect browser to PHP web site */
 		exit;  /* Make sure that code below does not get executed when we redirect. */
 	}
 

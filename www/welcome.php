@@ -12,8 +12,6 @@
 					"freshports - new ports, applications",
 					"FreeBSD, index, applications, ports");
 
-	$origin = $_GET["origin"];
-
 ?>
 <TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top">
@@ -33,7 +31,7 @@
 	</P>
 
 	<P>
-	Click <a href="<?php echo $origin?>">here</a> to return to your previous page.
+	Click <a href="/">here</a> to return to the home page.
 	</P>
 
 </TD></TR>

@@ -9,13 +9,12 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-$origin		= $_GET["origin"];
-$submit 	= $_POST["submit"];
-$visitor	= $_COOKIE["visitor"];
+$submit  = $_POST["submit"];
+$visitor = $_COOKIE["visitor"];
 
 // if we don't know who they are, we'll make sure they login first
 if (!$visitor) {
-	header("Location: login.php?origin=" . $_SERVER["PHP_SELF"]);  /* Redirect browser to PHP web site */
+	header("Location: login.php");  /* Redirect browser to PHP web site */
 	exit;  /* Make sure that code below does not get executed when we redirect. */
 }
 
@@ -24,11 +23,11 @@ if ($submit) {
 
 // process form
 
-   $email					= AddSlashes($_POST["email"]);
-   $Password1				= AddSlashes($_POST["Password1"]);
-   $Password2				= AddSlashes($_POST["Password2"]);
-   $emailsitenotices_yn		= AddSlashes($_POST["emailsitenotices_yn"]);
-   $numberofdays			= AddSlashes($_POST["numberofdays"]);
+   $email               = AddSlashes($_POST["email"]);
+   $Password1           = AddSlashes($_POST["Password1"]);
+   $Password2           = AddSlashes($_POST["Password2"]);
+   $emailsitenotices_yn	= AddSlashes($_POST["emailsitenotices_yn"]);
+   $numberofdays        = AddSlashes($_POST["numberofdays"]);
 
 
    if (!is_numeric($numberofdays) || $numberofdays < 0 || $numberofdays > 9) {
@@ -97,9 +96,9 @@ if ($submit) {
 
       if ($AccountModified == 1) {
          if ($Debug) {
-            echo "I would have taken you to '$origin' now, but debugging is on<br>\n";
+            echo "I would have taken you to '/' now, but debugging is on<br>\n";
          } else {
-            header("Location: $origin");
+            header("Location: /");
             exit;  /* Make sure that code below does not get executed when we redirect. */
          }
       } else {

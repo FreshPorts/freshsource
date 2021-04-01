@@ -39,29 +39,17 @@
 
 		if ($EmailBounceCount > 0) {
 			echo '<IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><BR>';
-			echo '<FONT SIZE="-1">your email is <A HREF="bouncing.php?origin=' . $OriginLocal. '">bouncing</A></FONT><BR>';
+			echo '<FONT SIZE="-1">your email is <A HREF="bouncing.php">bouncing</A></FONT><BR>';
 			echo '<IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><BR>';
 		}
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/customize.php',        "?origin=$OriginLocal", "Customize"              ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/customize.php',        '', "Customize"              ) . '</FONT><BR>';
 
 
-		# for a logout, where we go depends on where we are now
-		#
-		switch ($_SERVER["PHP_SELF"]) {
-			case "customize.php":
-			case "watch-categories.php":
-			case "watch.php":
-			$args = "?origin=$OriginLocal";
-			break;
-
-			default:
-				$args = '';
-		}
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/logout.php',           $args,                  "Logout"                 ) . '</FONT><BR>';
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/watch.php',            '',                     "your watched sources"   ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/logout.php',           '', "Logout"                 ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/watch.php',            '', "your watched sources"   ) . '</FONT><BR>';
 	} else {
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/login.php',            "?origin=$OriginLocal", "User Login"             ) . '</FONT><BR>';
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/new-user.php',         "?origin=$OriginLocal", "Create account"         ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/login.php',            '', "User Login"             ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/new-user.php',         '', "Create account"         ) . '</FONT><BR>';
 	}
 ?>
 

@@ -3,14 +3,12 @@
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
-	$origin = $_GET["origin"];
-
 ?>
 
 <BR>
 <B>WARNING</B>: this login is the same as your <A HREF="http://www.FreshPorts.org/">FreshPorts</A> login!
 
-<form action="<?php echo $_SERVER["PHP_SELF"] . "?origin=" . $origin ?>" method="POST" NAME=f>
+<form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST" NAME=f>
 <TABLE width="*" border="0" cellpadding="1">
           <TR>
             <TD VALIGN="top">

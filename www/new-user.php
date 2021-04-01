@@ -7,7 +7,6 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-	$origin = $_GET["origin"];
 	$submit = $_POST["submit"];
 
 if ($submit) {
@@ -25,11 +24,11 @@ if ($submit) {
 
 	$errors = "";
 
-	$UserLogin				= $_REQUEST["UserLogin"];
-	$email					= $_REQUEST["email"];
-	$Password1				= $_REQUEST["Password1"];
-	$Password2				= $_REQUEST["Password2"];
-	$numberofdays			= $_REQUEST["numberofdays"];
+	$UserLogin    = $_REQUEST["UserLogin"];
+	$email        = $_REQUEST["email"];
+	$Password1    = $_REQUEST["Password1"];
+	$Password2    = $_REQUEST["Password2"];
+	$numberofdays = $_REQUEST["numberofdays"];
 
 	if ($UserLogin == '') {
 		$errors .= "Please enter a user id.<BR>";
@@ -128,7 +127,7 @@ if ($submit) {
 	}
 
 	if ($UserCreated) {
-		header("Location: welcome.php?origin=" . $origin);  /* Redirect browser to PHP web site */
+		header("Location: welcome.php");  /* Redirect browser to PHP web site */
 		exit;  /* Make sure that code below does not get executed when we redirect. */
 	}
 } else {

@@ -9,13 +9,7 @@
 
 	freshports_CookieClear();
 
-	$origin = $_GET["origin"];
-
-	if ($origin == "/index.php") {                   
-		$origin = "/";                                 
-	}
-
-	header("Location: http://" . $_SERVER["HTTP_HOST"] . "/$origin");  /* Redirect browser to PHP web site */
+	header("Location: http://" . $_SERVER["HTTP_HOST"] . "/");  /* Redirect browser to PHP web site */
 	exit;  /* Make sure that code below does not get executed when we redirect. */
 ?>
 
