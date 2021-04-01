@@ -27,8 +27,10 @@
 		$OutputFromCach = 0;
 	}
 
-	$HTML .= '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' . "\n";
-	$HTML .= '        "http://my.netscape.com/publish/formats/rss-0.91.dtd">' . "\n";
+	# From https://www.carronmedia.com/create-an-rss-feed-with-php/
+	header("Content-Type: application/rss+xml; charset=UTF-8");
+#	$HTML .= '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"' . "\n";
+#	$HTML .= '        "http://www.rssboard.org/rss-0.91.dtd.">' . "\n";
 	$HTML .= '<rss version="0.91">' . "\n";
 
 	$HTML .= "\n";

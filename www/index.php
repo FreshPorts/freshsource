@@ -77,9 +77,12 @@ We won't be ready to include other source trees until after we officially launch
 But when we are ready, all we'll need is your source tree log changes in XML format according to the
 DTD (see below).  The DTD will be an evolving document.  It may need to change as new requirements
 come to our attention.  It was designed with the 
-<A HREF="http://docs.freebsd.org/mail/current/cvs-all.html">FreeBSD cvs-all mailing list</A> in mind 
+<A HREF="https://lists.freebsd.org/pipermail/cvs-all/">FreeBSD cvs-all mailing list</A> (<a href="https://lists.freebsd.org/mailman/listinfo/cvs-all">now osolete</a>) in mind 
 but with future expansion a key consideration.
 </P>
+
+<p>In 2012, FreshPorts <a href="https://news.freshports.org/2012/07/16/freebsd-on-svn-whats-new/">moved to processing subversion commits</a>, following FreeBSD's lead. In 2021, 
+FreeBSD moved to git, and again FreshPorts moved along with it.
 
 <OL>
 <LI><A HREF="http://docs.freebsd.org/cgi/getmsg.cgi?fetch=29447+0+archive/2002/cvs-all/20020106.cvs-all">archived 
