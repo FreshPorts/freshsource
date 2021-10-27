@@ -142,6 +142,8 @@ function freshports_MoreCommitMsgToShow($message_id, $NumberOfLinesShown) {
 
 function freshports_CookieClear() {
 #	echo " clearing the cookie";
+	syslog(LOG_ERR, 'clearing freshsource cookie');
+#	SetCookie("visitor", '', 0, '/', 'freshsource.org', true);
 	SetCookie("visitor", '', 0, '/');
 }
 
@@ -485,7 +487,7 @@ function Breadcrumbs($db, $prefix = '', $element_id) {
 
 		$element_pathname = ElementPathname($db, $element_id);
 	
-		syslog(LOG_NOTICE, $element_pathname);
+		# syslog(LOG_NOTICE, $element_pathname);
 
 		$DirectoryNames = explode('/', $element_pathname);
 	
@@ -1155,13 +1157,13 @@ function freshports_PageBannerText($Text, $ColSpan=1) {
 }
 
 function freshports_IsEmailValid($email) {
-	if (eregi("^[a-z0-9\._-]+@[a-z0-9\._-]+$", $email)) {
+	# see also convertMail
+	if (preg_match("/^[a-z0-9\._+-]+@[a-z0-9\._-]+$/i", $email)) {
 		return TRUE;
 	} else {
 		return FALSE;
 	}
 }
-
 
 function freshports_UserSendToken($UserID, $dbh) {
 	#
@@ -1357,5 +1359,25 @@ function freshports_Annotate_Icon() {
 function freshports_git_commit_Link_diff($revision, $repo_name, $hostname, $path) {
   # we want https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
   return '<a href="http://' . htmlentities($hostname) . "/$repo_name" . '/diff/' . $path . '?id=' .  htmlentities($revision) .  '">' . freshports_Diff_Icon() . '</a>';
+}
+
+function getLoginDetails($db, $statementName, $UserID, $Password) {
+
+  $sql = 'select *, password_hash not like \'$2_$' . PW_HASH_COST . '$%\' as insecure_hash ' .
+    'from users where lower(name) = lower($1) and password_hash = crypt($2, password_hash)';
+  if ($Debug || 0) {
+    echo '<pre>' . htmlentities($sql) . '<pre> and UserId is ' . $UserId;
+  }
+
+  $result = pg_prepare($db, $statementName, $sql) or die('query failed ' . pg_errormessage());
+  if ($result) {
+    $result = pg_execute($db, $statementName, array($UserID, $Password))  or die('query failed ' . pg_errormessage());
+  }
+
+  return $result;
+}
+
+function freshports_Files_Icon() {
+	return '<img class="icon" src="/images/logs.gif" alt="files touched by this commit" title="files touched by this commit" width="17" height="20">';
 }
 

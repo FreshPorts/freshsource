@@ -12,14 +12,17 @@
 <TABLE width="*" border="0" cellpadding="1">
           <TR>
             <TD VALIGN="top">
-<? if (!$Customize) { ?>
+<?php if (IsSet($Customize)) { ?>
+              <label>Current password:<br>
+              <INPUT TYPE="PASSWORD" NAME="Password" VALUE="<?php if (IsSet($Password)) echo htmlentities($Password) ?>" size="20"></label><br><br>
+<? } else { ?>
               <INPUT TYPE="hidden" NAME="ADD" VALUE="1">
               User ID:<br>
               <INPUT SIZE="15" NAME="UserLogin" VALUE="<? echo htmlentities($UserLogin) ?>"><br><br>
 <? } ?>
-               Password:<br>
+               New password:<br>
                <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?echo htmlentities($Password1) ?>" size="20"><br><br>
-               Confirm Password:<br>
+               New password again:<br>
                <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?echo htmlentities($Password2) ?>" size="20">
             </TD>
             <TD VALIGN="top">
@@ -48,4 +51,3 @@ Number of Days to show in side-bar:
 </TABLE>
 </FORM>
 
-For your reporting needs, please visit <A HREF="/report-subscriptions.php">Report Subscriptions</A>.

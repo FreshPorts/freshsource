@@ -8,9 +8,12 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
 
-$submit  = $_POST["submit"];
-$visitor = $_COOKIE["visitor"];
+	GLOBAL $User;
+
+if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
+$visitor = pg_escape_string($_COOKIE[USER_COOKIE_NAME]);
 
 // if we don't know who they are, we'll make sure they login first
 if (!$visitor) {
@@ -19,23 +22,26 @@ if (!$visitor) {
 }
 
 if ($submit) {
-   $Debug = 0;
 
-// process form
+	$Debug = 0;
 
-   $email               = AddSlashes($_POST["email"]);
-   $Password1           = AddSlashes($_POST["Password1"]);
-   $Password2           = AddSlashes($_POST["Password2"]);
-   $emailsitenotices_yn	= AddSlashes($_POST["emailsitenotices_yn"]);
-   $numberofdays        = AddSlashes($_POST["numberofdays"]);
+	// process form
+
+	$email         = pg_escape_string($_POST['email']);
+	$Password      = $_POST['Password'];
+	$Password1     = $_POST['Password1'];
+	$Password2     = $_POST['Password2'];
+	$numberofdays  = pg_escape_string($_POST['numberofdays']);
+	$page_size     = pg_escape_string($_POST['page_size']);
 
 
-   if (!is_numeric($numberofdays) || $numberofdays < 0 || $numberofdays > 9) {
-      $numberofdays = 9;
-   }
+	if (!is_numeric($numberofdays) || $numberofdays < 0 || $numberofdays > 9) {
+		$numberofdays = 9;
+	}
+
 
    if ($Debug) {
-      while (list($name, $value) = each($HTTP_POST_VARS)) {
+      while (list($name, $value) = each($_REQUEST)) {
          echo "$name = $value<br>\n";
       }
    }
@@ -44,7 +50,7 @@ if ($submit) {
 
    $errors = "";
 
-	if (!freshports_IsEmailValid($email)) {
+	if ($email && !freshports_IsEmailValid($email)) {
 		$errors .= "That email address doesn't look right to me<BR>";
 		$OK = 0;
 	}
@@ -62,6 +68,18 @@ if ($submit) {
           $emailsitenotices_yn_value = "f";
       }
 
+	# if no errors so far, and all three password fields are populated
+	if ($OK && $Password && $Password1 && $Password2) {
+		$result = getLoginDetails($db, LOGIN_QUERY, $User->name, $Password);
+		# there must be only 1 row in there.
+		if ($Debug) echo 'number of rows is ' . pg_numrows($result) . '<br>';
+		if (pg_numrows($result) != 1) {
+			$errors .= 'That is NOT your current password.<br>';
+			$OK = 0;
+		}
+	}
+
+	if ($OK) {
       // get the existing email in case we need to reset the bounce count
       $sql = "select email from users where cookie = '$visitor'";
       $result = pg_exec($db, $sql);
@@ -69,17 +87,20 @@ if ($submit) {
          $myrow = pg_fetch_array ($result, 0);
 
          $sql = "update users set ";
-         $sql .= "email			= '$email', ";
+         if (!empty($email)) {
+          $sql .= "email			= '$email', ";
+         }
          $sql .= "emailsitenotices_yn = '$emailsitenotices_yn_value',";
          $sql .= "number_of_days      = $numberofdays ";
 
          // if they are changing the email, reset the bouncecount.
-         if ($myrow["email"] != $email) {
+         if (!empty($email) && $myrow["email"] != $email) {
             $sql .= ", emailbouncecount = 0 ";
          }
 
          if ($Password1 != '') {
-            $sql .= ", password_hash = crypt('"  . AddSlashes($Password1) . "', gen_salt('md5'))";
+				$sql .= ", password_hash = crypt('" . pg_escape_string($Password1) . "'";
+				$sql .= ", gen_salt('" . PW_HASH_METHOD . "', " . PW_HASH_COST ."))";
          }
 
          $sql .= " where cookie = '$visitor'";
@@ -93,6 +114,8 @@ if ($submit) {
 			$AccountModified = 1;
          }
       }
+      
+      } # $OK
 
       if ($AccountModified == 1) {
          if ($Debug) {
@@ -143,7 +166,7 @@ echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" width="100%">
 
 echo $errors;
 
-echo '<p>If you need help, please post a message on the forum. </p>
+echo '<p>If you need help, please contact us via email. </p>
  </TD>
  </TR>
  </TABLE>

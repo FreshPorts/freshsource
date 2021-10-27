@@ -94,6 +94,7 @@ if ($submit) {
 
 			$UserID = freshports_GetNextValue($Sequence_User_ID, $db);
 			if (IsSet($UserID)) {			
+/*
 				$sql = "insert into users (id, name, password_hash, cookie, email, " . 
 						"watch_notice_id, emailsitenotices_yn, type, ip_address, number_of_days) values (";
 				$sql .= AddSlashes($UserID) . ", '" . AddSlashes($UserLogin) . "', 
@@ -105,6 +106,23 @@ if ($submit) {
 				$errors .= "<BR>sql=" . $sql;
 
 				$result = pg_exec($db, $sql);
+*/
+
+
+
+
+				$sql = "insert into " .
+					"users (id, name, cookie, email, watch_notice_id, emailsitenotices_yn, type, ip_address, number_of_days, password_hash) " .
+					"values ($1, $2, $3, $4, $5::integer, $6, $7, $8, $9::integer, crypt($10, gen_salt($11, $12::integer)))";
+
+				syslog(LOG_ERR, "FreshPorts new user: '$UserID', '$UserLogin', '$email', " . $_SERVER["REMOTE_ADDR"]);
+
+				$errors .= "<BR>sql=" . $sql;
+
+				$result = pg_query_params($db, $sql, array(
+					$UserID, $UserLogin, 'nocookie', $email, 1, 'N', 'U', $_SERVER["REMOTE_ADDR"],
+					$numberofdays, $Password1, PW_HASH_METHOD, PW_HASH_COST
+				));
 				if ($result) {
 					$UserCreated = 1;
 
@@ -174,7 +192,7 @@ echo '<TABLE CELLPADDING=1 CELLSPACING=0 BORDER=0 BGCOLOR="#AD0040" WIDTH=100%>
 */
 echo $errors;
 
-echo '<p>If you need help, please post a message on the forum. </p>
+echo '<p>If you need help, please contact us via email.. </p>
  </TD>
  </TR>
  </TABLE>

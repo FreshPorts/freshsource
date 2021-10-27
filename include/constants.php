@@ -33,6 +33,9 @@ $UserStatusUnconfirmed = "U";
 
 $ProblemSolverEmailAddress	= "webmaster@freshsource.org";
 
+if (!defined('USER_COOKIE_NAME')) define('USER_COOKIE_NAME', "visitor");
+
+
 #
 # These values are used when specifying add/remove on a port
 #
@@ -82,3 +85,14 @@ define('FREEBSD_REPO_SVN', 'svn');
 define('FREEBSD_REPO_CVS', 'cvs');
 define('FREEBSD_REPO_GIT', 'git');
 
+# passed to pgcrypto gen_salt when creating or updating user passwords in the database
+# used by
+# www/new-user.php
+# www/customize.php
+const HASH_UPDATE_QUERY         = 'HASH_UPDATE';
+const RESEND_CONFIRMATION_QUERY = 'RESEND_CONFIRMATION';
+
+const LOGIN_QUERY = 'LOGIN';
+
+if (!defined('PW_HASH_METHOD')) define('PW_HASH_METHOD', 'bf');
+if (!defined('PW_HASH_COST')) define('PW_HASH_COST', 14);

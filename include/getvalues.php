@@ -5,6 +5,12 @@
 	# Copyright (c) 1998-2006 DVL Software Limited
 	#
 
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../classes/user.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/constants.php');
+
+GLOBAL $User;
+$User = new User($db);
+
 $Debug = 0;
 
 $FormatDateDefault	= "%W, %b %e";
@@ -41,31 +47,31 @@ GLOBAL $db;
 GLOBAL $WatchListID;
 GLOBAL $NumberOfDays;
 
-$MaxNumberOfPorts		= 100;
+$MaxNumberOfPorts	= 100;
 $ShowShortDescription	= "Y";
-$ShowMaintainedBy		= "Y";
-$ShowLastChange			= "Y";
+$ShowMaintainedBy	= "Y";
+$ShowLastChange		= "Y";
 $ShowDescriptionLink	= "Y";
-$ShowChangesLink		= "Y";
+$ShowChangesLink	= "Y";
 $ShowDownloadPortLink	= "Y";
-$ShowPackageLink		= "Y";
-$ShowHomepageLink		= "Y";
-$FormatDate				= $FormatDateDefault;
-$FormatTime				= $FormatTimeDefault;
-$DaysMarkedAsNew		= $DaysMarkedAsNewDefault;
-$EmailBounceCount		= 0;
-$CVSTimeAdjustment		= -10800;	# this is number of seconds the web server is relative to the cvs server.
+$ShowPackageLink	= "Y";
+$ShowHomepageLink	= "Y";
+$FormatDate		= $FormatDateDefault;
+$FormatTime		= $FormatTimeDefault;
+$DaysMarkedAsNew	= $DaysMarkedAsNewDefault;
+$EmailBounceCount	= 0;
+$CVSTimeAdjustment	= -10800;	# this is number of seconds the web server is relative to the cvs server.
 									# a value of -10800 means the web server is three hours east of the cvs server.
 									# we can override that for a particular user.
 
 $LocalTimeAdjustment	= 0;		# This can be used to display the time the webpage was loaded.
-$WatchListID			= 0;
-$NumberOfDays			= 9;
+$WatchListID		= 0;
+$NumberOfDays		= 9;
 
 #
 # flags for showing various port parts.
 #
-$ShowEverything			= 0;
+$ShowEverything		= 0;
 $ShowPortCreationDate	= 0;
 
 $UserName		= "";
@@ -76,18 +82,7 @@ $DefaultMaxArticles = $MaxArticles;
 
 if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
 if (!empty($visitor)) {
-	$sql = "select users.*, users.last_watch_list_chosen as watch_list_id
-			  from users
-			 where cookie = '$visitor'";
-
-	if ($Debug) {
-		echo "sql=$sql<br>\n";
-	}
-
-
-	$result = pg_exec($db, $sql) or die("getvalues query failed " . pg_errormessage());
-
-	if ($result) {
+	if ($User->FetchByCookie($visitor) != 1) {
 		if ($Debug) echo "we found a result there...\n<br>";
 		$numrows = pg_numrows($result);
 		if ($numrows) {
@@ -100,6 +95,7 @@ if (!empty($visitor)) {
 					# message for them to contact us.
 					#
 
+					die('cannot find user details');
 					freshports_CookieClear();
 					echo 'Database error: Account details corrupted.  Please contact ' . $ProblemSolverEmailAddress . '.<BR>';
 					echo 'You have been logged out.';
@@ -183,6 +179,7 @@ if (!empty($visitor)) {
 				}
 			}
 		} else {
+			die('could not find that cookie');
 			if ($Debug) echo "we didn't find anyone with that login... " . pg_errormessage() . "\n<br>";
 			if ($Debug) echo ' no cookie found for that person ';
 			# we were given a cookie which didn't refer to a cookie we found.

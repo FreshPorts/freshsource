@@ -5,6 +5,8 @@
 	# Copyright (c) 1998-2003 DVL Software Limited
 	#
 
+	GLOBAL $User;
+
 	$ColumnWidth = 155;
 
 	$Debug=0;
@@ -35,7 +37,7 @@
 	if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
 	if ($Debug) echo "OriginLocal = '$OriginLocal'<BR>\n";
 	if ($visitor) {
-		echo '<FONT SIZE="-1">Logged in as ', $UserName, "</FONT><BR>";
+		echo '<FONT SIZE="-1">Logged in as ', $User->name, "</FONT><BR>";
 
 		if ($EmailBounceCount > 0) {
 			echo '<IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><BR>';

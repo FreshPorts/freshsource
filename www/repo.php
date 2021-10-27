@@ -26,7 +26,7 @@ $Debug = 0;
 
     if (IsSet($_GET["path"])) {
       $path = htmlentities($_GET["path"]);
-      syslog(LOG_NOTICE, 'path = ' . $path);
+      if ($Debug) syslog(LOG_NOTICE, 'path = ' . $path);
       $parent_id = Pathname_ID($db, $path);
       if ($parent_id === NULL) {
         $path = '/';
@@ -78,7 +78,7 @@ $Debug = 0;
 	    	$sql .="
 	            left outer join watch_list_element
 				on (watch_list_element.element_id    = element.id
-			   and  watch_list_element.watch_list_id = $WatchListID) ";
+			       and  watch_list_element.watch_list_id = $WatchListID) ";
         }
 
 		if ($parent_id) {
