@@ -13,18 +13,18 @@ $Debug=0;
 
 if ($Debug) phpinfo();
 
-if ($_POST["LOGIN"] && $_POST["UserID"]) {
+if (IsSet($_POST["LOGIN"]) && IsSet($_POST["UserID"])) {
    // process form
 
    $OK = 1;
 
-   $errors = "";
+   $error = "";
    $UserID   = $_POST["UserID"];
    $Password = $_POST["Password"];
 
    // test for existance of user id
    $result = getLoginDetails($db, LOGIN_QUERY, $UserID, $Password);
-   if (!pg_numrows($result)) {
+   if (!pg_num_rows($result)) {
       $LoginFailed = 1;
    } else {
       $row    = pg_fetch_array($result,0);
@@ -62,7 +62,7 @@ if ($_POST["LOGIN"] && $_POST["UserID"]) {
          $Cookie = $user->createUserToken();
          # we should use $user to save this...
 
-         $sql = "UPDATE users SET cookie = '" . pg_escape_string($Cookie) . "' WHERE id = " . pg_escape_string($row['id']);
+         $sql = "UPDATE users SET cookie = '" . pg_escape_string($db, $Cookie) . "' WHERE id = " . pg_escape_string($db, $row['id']);
          # if we were doing this in a user object, we could retry when there was a cookie collision and we get a unique index error
          $result = pg_exec($db, $sql) or die('query failed ' . pg_errormessage());
 
@@ -98,7 +98,7 @@ if ($_POST["LOGIN"] && $_POST["UserID"]) {
    }
 }
 
-if ($_GET["resend"]) {
+if (IsSet($_GET["resend"])) {
 	$User = addslashes($_GET["user"]);
 
 	// get user id for that name
@@ -111,7 +111,7 @@ if ($_GET["resend"]) {
 
 	$result = pg_exec($db, $sql) or die('query failed ' . pg_errormessage());
 
-	if (pg_numrows($result)) {
+	if (pg_num_rows($result)) {
 		$row    = pg_fetch_array($result,0);
 		$ID		= $row["id"];
 		if (freshports_UserSendToken($ID, $db)) {
@@ -133,7 +133,7 @@ if ($_GET["resend"]) {
  <TR>
     <TD VALIGN="top" WIDTH="100%">
 <?php
-if ($LoginFailed) {
+if (IsSet($LoginFailed)) {
 ?>
 <TABLE WIDTH="100%" BORDER="1" ALIGN="center" CELLPADDING=1 CELLSPACING=0 BORDER="1">
 <TR><TD VALIGN=TOP>
@@ -167,7 +167,7 @@ if ($LoginFailed) {
 <?php
 }
 
-if ($error) {
+if (IsSet($error)) {
 ?>
 <TABLE WIDTH="100%" BORDER="1" ALIGN="center" CELLPADDING=1 CELLSPACING=0 BORDER="1">
 <TR><TD VALIGN=TOP>

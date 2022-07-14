@@ -72,8 +72,8 @@ if ($submit) {
 	if ($OK && $Password && $Password1 && $Password2) {
 		$result = getLoginDetails($db, LOGIN_QUERY, $User->name, $Password);
 		# there must be only 1 row in there.
-		if ($Debug) echo 'number of rows is ' . pg_numrows($result) . '<br>';
-		if (pg_numrows($result) != 1) {
+		if ($Debug) echo 'number of rows is ' . pg_num_rows($result) . '<br>';
+		if (pg_num_rows($result) != 1) {
 			$errors .= 'That is NOT your current password.<br>';
 			$OK = 0;
 		}

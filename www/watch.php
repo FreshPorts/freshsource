@@ -148,7 +148,7 @@ $port->LocalResult = $result;
 
 $LastCategory='';
 $GlobalHideLastChange = "N";
-$numrows = pg_numrows($result);
+$numrows = pg_num_rows($result);
 
 $HTML .= '<DL>';
 

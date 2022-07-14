@@ -417,7 +417,7 @@ function freshports_MainWatchID($UserID, $db) {
 
 	$result = pg_exec ($db, $sql);
 
-	if(pg_numrows($result)) {
+	if(pg_num_rows($result)) {
 		$myrow = pg_fetch_array ($result, 0);
 		$WatchID = $myrow["id"];
 	}
@@ -455,7 +455,7 @@ function freshports_in_array($value, $array) {
   return 0;
 }
 
-function BreadcrumbArrayToLinks($prefix = '', $breadcrumbs) {
+function BreadcrumbArrayToLinks($prefix, $breadcrumbs) {
 	$HTML = '';
 	
 	$Path = '';
@@ -478,7 +478,7 @@ function BreadcrumbArrayToLinks($prefix = '', $breadcrumbs) {
 	return $HTML;
 }
 
-function Breadcrumbs($db, $prefix = '', $element_id) {
+function Breadcrumbs($db, $prefix, $element_id) {
 
 	if (empty($element_id)) {
 		$element_id = 0;
@@ -507,7 +507,7 @@ function ElementPathname($db, $element_id) {
 
 		$result = pg_exec($db, $sql);
 		if ($result) {
-			if (pg_numrows($result)) {
+			if (pg_num_rows($result)) {
 				$myrow = pg_fetch_array($result, 0);
 				$ElementPathname = $myrow["elementpathname"];
 			}
@@ -526,7 +526,7 @@ function Pathname_ID($db, $Pathname) {
 
 	$result = pg_exec($db, $sql);
 	if ($result) {
-		if (pg_numrows($result)) {
+		if (pg_num_rows($result)) {
 			$myrow = pg_fetch_array($result, 0);
 			$ElementID = $myrow["element_id"];
 		}
@@ -547,7 +547,7 @@ function GetParent($db, $element_id) {
 
 	$result = pg_exec($db, $sql);
 	if ($result) {
-		if (pg_numrows($result)) {
+		if (pg_num_rows($result)) {
 			$myrow = pg_fetch_array($result, 0);
 			$ElementID = $myrow["parent_id"];
 		}
@@ -562,7 +562,7 @@ function freshports_PortIDFromPortCategory($category, $port, $db) {
 	$sql = "select pathname_id('ports/$category/$port') as id";
 
 	$result = pg_exec($db, $sql);
-	if (pg_numrows($result)) {
+	if (pg_num_rows($result)) {
 		$myrow = pg_fetch_array($result, 0);
 		$PortID = $myrow["id"];
 	}
@@ -574,7 +574,7 @@ function freshports_CategoryIDFromCategory($category, $db) {
    $sql = "select categories.id from categories where categories.name = '$category'";
 
    $result = pg_exec($db, $sql);
-   if(pg_numrows($result)) {
+   if(pg_num_rows($result)) {
       $myrow = pg_fetch_array($result, 0);
       $CategoryID = $myrow["id"];
    }
@@ -1121,7 +1121,7 @@ function freshports_GetNextValue($sequence, $dbh) {
 #	echo "\$sql = '$sql'<BR>";
 
 	$result = pg_exec($dbh, $sql);
-	if ($result && pg_numrows($result)) {
+	if ($result && pg_num_rows($result)) {
 		$retval    = true;
 		$row       = pg_fetch_array($result,0);
 		$NextValue = $row[0];
@@ -1182,7 +1182,7 @@ function freshports_UserSendToken($UserID, $dbh) {
 #	echo "\$sql = '$sql'<BR>";
 
 	$result = pg_exec($dbh, $sql);
-	if ($result && pg_numrows($result)) {
+	if ($result && pg_num_rows($result)) {
 		$retval	= true;
 		$row	= pg_fetch_array($result,0);
 		$email	= $row[0];
@@ -1365,7 +1365,7 @@ function getLoginDetails($db, $statementName, $UserID, $Password) {
 
   $sql = 'select *, password_hash not like \'$2_$' . PW_HASH_COST . '$%\' as insecure_hash ' .
     'from users where lower(name) = lower($1) and password_hash = crypt($2, password_hash)';
-  if ($Debug || 0) {
+  if (IsSet($Debug) || 0) {
     echo '<pre>' . htmlentities($sql) . '<pre> and UserId is ' . $UserId;
   }
 

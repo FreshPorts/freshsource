@@ -7,8 +7,8 @@
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST"  name=f>
       <input type="hidden" name="custom_settings" value="1"><input type="hidden" name="LOGIN" value="1">
       <p>User ID:<br>
-      <input SIZE="15" NAME="UserID" value="<?php echo htmlentities($UserID) ?>"></p>
+      <input SIZE="15" NAME="UserID" value="<?php echo htmlentities($UserID ?? '') ?>"></p>
       <p>Password:<br>
-      <input TYPE="PASSWORD" NAME="Password" VALUE = "<?php echo htmlentities($Password) ?>" size="20"></p>
+      <input TYPE="PASSWORD" NAME="Password" VALUE = "<?php echo htmlentities($Password ?? '') ?>" size="20"></p>
       <p><input TYPE="submit" VALUE="Login" name=submit> &nbsp;&nbsp;&nbsp;&nbsp; <input TYPE="reset" VALUE="reset form">
 </form>

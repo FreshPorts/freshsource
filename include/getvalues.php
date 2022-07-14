@@ -84,7 +84,7 @@ if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
 if (!empty($visitor)) {
 	if ($User->FetchByCookie($visitor) != 1) {
 		if ($Debug) echo "we found a result there...\n<br>";
-		$numrows = pg_numrows($result);
+		$numrows = pg_num_rows($result);
 		if ($numrows) {
 			$myrow = pg_fetch_array ($result, 0);
 			if ($myrow) {

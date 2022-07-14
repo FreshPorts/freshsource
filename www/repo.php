@@ -92,7 +92,7 @@ $Debug = 0;
 
 		$result = pg_exec($database, $sql);
 		if ($result) {
-			$numrows = pg_numrows($result);
+			$numrows = pg_num_rows($result);
 #			echo $numrows . " rows to fetch\n";
 			if ($numrows) { 
 

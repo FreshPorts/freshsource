@@ -155,7 +155,7 @@ $sql .= "order by commit_date_raw desc, revision_name, element_pathname";
 
 		$result = pg_exec($database, $sql);
 		if ($result) {
-			$numrows = pg_numrows($result);
+			$numrows = pg_num_rows($result);
 			if ($Debug) echo $numrows . " rows to fetch\n";
 			if ($numrows) { 
 

@@ -21,22 +21,8 @@
 	<TD>
 
 <?php
-	switch (basename($_SERVER["PHP_SELF"])) {
-//		case "watch.php":
-//		case "watch-categories.php":
-//		case "customize.php":
-//		case "port-watch.php":
-//			$OriginLocal = '/';
-//			break;
-
-		default:
-			$OriginLocal = rawurlencode($HTTP_SERVER_VARS["REQUEST_URI"]);
-			break;
-	}
-
 	if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
-	if ($Debug) echo "OriginLocal = '$OriginLocal'<BR>\n";
-	if ($visitor) {
+	if (IsSet($visitor)) {
 		echo '<FONT SIZE="-1">Logged in as ', $User->name, "</FONT><BR>";
 
 		if ($EmailBounceCount > 0) {

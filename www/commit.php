@@ -148,7 +148,7 @@ function GetPortNameFromFileName($file_name) {
 
          $result = pg_exec($database, $sql);
          if ($result) {
-            $numrows = pg_numrows($result);
+            $numrows = pg_num_rows($result);
 			if ($numrows) { 
 
 				$i=0;

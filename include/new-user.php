@@ -3,6 +3,11 @@
 	#
 	# Copyright (c) 1998-2002 DVL Software Limited
 
+	# These are customization features (see www/customize.php) and are needed
+	# by include/new-user.php - but with a new user, they must be set here.
+	$set_focus_search = $set_focus_search ?? false;
+	$page_size        = $page_size        ?? 0;
+	$numberofdays     = $numberofdays     ?? 0;
 ?>
 
 <BR>
@@ -18,16 +23,16 @@
 <? } else { ?>
               <INPUT TYPE="hidden" NAME="ADD" VALUE="1">
               User ID:<br>
-              <INPUT SIZE="15" NAME="UserLogin" VALUE="<? echo htmlentities($UserLogin) ?>"><br><br>
+              <INPUT SIZE="15" NAME="UserLogin" VALUE="<? echo htmlentities($UserLogin ?? '') ?>"><br><br>
 <? } ?>
                New password:<br>
-               <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?echo htmlentities($Password1) ?>" size="20"><br><br>
+               <INPUT TYPE="PASSWORD" NAME="Password1" VALUE="<?echo htmlentities($Password1 ?? '') ?>" size="20"><br><br>
                New password again:<br>
-               <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?echo htmlentities($Password2) ?>" size="20">
+               <INPUT TYPE="PASSWORD" NAME="Password2" VALUE="<?echo htmlentities($Password2 ?? '') ?>" size="20">
             </TD>
             <TD VALIGN="top">
                email address (required):<br>
-               <INPUT SIZE="35" NAME="email" VALUE="<?echo htmlentities($email) ?>">
+               <INPUT SIZE="35" NAME="email" VALUE="<?echo htmlentities($email ?? '') ?>">
 
 Number of Days to show in side-bar: 
 
@@ -44,7 +49,7 @@ Number of Days to show in side-bar:
     <OPTION <? if ($numberofdays == "9") echo "selected " ?> VALUE="9">9</OPTION>
 </SELECT>
 <br><br><BR>
-            <INPUT TYPE="submit" VALUE="<? if ($Customize) { echo "update";} else { echo "create";} ?> account" NAME="submit">
+            <INPUT TYPE="submit" VALUE="<? if (IsSet($Customize) && $Customize) { echo "update";} else { echo "create";} ?> account" NAME="submit">
             <INPUT TYPE="reset"  VALUE="reset form">
             </TD>
           </TR>

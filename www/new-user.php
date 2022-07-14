@@ -7,7 +7,7 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
-	$submit = $_POST["submit"];
+	$submit = $_POST["submit"] ?? 0;
 
 if ($submit) {
 
@@ -82,11 +82,11 @@ if ($submit) {
 		$result = pg_exec($db, $sql) or die('query failed');
 
 		// create user id if not found
-		if(!pg_numrows($result)) {
+		if(!pg_num_rows($result)) {
  //			echo "confirmed: user id is new\n";
 
 			# no need to validate that value as it's not put directly into the db.
-			if ($emailsitenotices_yn == "ON") {
+			if (IsSet($emailsitenotices_yn) && $emailsitenotices_yn == "ON") {
 				$emailsitenotices_yn_value = "Y";
 			} else {
 				$emailsitenotices_yn_value = "N";
@@ -170,7 +170,7 @@ function setfocus() { document.f.UserLogin.focus(); }
 <TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
 <TR><TD VALIGN="top" WIDTH="100%">
 <?php
-if ($errors) {
+if (IsSet($errors)) {
 echo '<TABLE CELLPADDING=1 CELLSPACING=0 BORDER=0 BGCOLOR="#AD0040" WIDTH=100%>
 <TR>
 <TD>
@@ -205,7 +205,7 @@ echo '<p>If you need help, please contact us via email.. </p>
 <BR>';
 }
 
-if (!$submit && !$errors) {
+if (!$submit && !IsSet($errors)) {
   // provide default values for an empy form.
   require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 }
