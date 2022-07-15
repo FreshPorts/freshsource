@@ -12,7 +12,7 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	freshports_Start($FreshPortsSlogan,
-					"$FreshSourceName - new ports, applications",
+					"FreshSource - new ports, applications",
 					"FreeBSD, index, applications, ports");
 $Debug = 0;
 
@@ -72,7 +72,7 @@ $Debug = 0;
 	}
 
 
-		$sql .= " FROM element ";
+	$sql .= " FROM element ";
 				
     	if ($WatchListID) {
 	    	$sql .="
@@ -81,35 +81,28 @@ $Debug = 0;
 			       and  watch_list_element.watch_list_id = $WatchListID) ";
         }
 
-		if ($parent_id) {
-			$sql .= " WHERE parent_id = $parent_id";
-		} else {
-			$sql .= " WHERE parent_id is NULL";
-		}
-		$sql .= " ORDER BY directory_file_flag, name";
+	if ($parent_id) {
+		$sql .= " WHERE parent_id = $parent_id";
+	} else {
+		$sql .= " WHERE parent_id is NULL";
+	}
+	$sql .= " ORDER BY directory_file_flag, name";
 
-		if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
+	if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
-		$result = pg_exec($database, $sql);
-		if ($result) {
-			$numrows = pg_num_rows($result);
-#			echo $numrows . " rows to fetch\n";
-			if ($numrows) { 
+	$result = pg_exec($database, $sql);
+	if ($result) {
+		$numrows = pg_num_rows($result);
+#		echo $numrows . " rows to fetch\n";
+		if ($numrows) { 
 
-				$i=0;
-				$GlobalHideLastChange = "N";
-				for ($i = 0; $i < $numrows; $i++) {
-					$myrow = pg_fetch_array ($result, $i);
-					$rows[$i] = $myrow;
-				}
+			$GlobalHideLastChange = "N";
+			for ($i = 0; $i < $numrows; $i++) {
+				$myrow = pg_fetch_array ($result, $i);
+				$rows[$i] = $myrow;
+			}
 
-				$NumRows = $numrows;
-				$LastDate = '';
-				if ($NumRows > 1) {
-					$LastChangeLogID = $rows[$i]["change_log_id"];
-					$LastChangeLogID = -1;
-				}
-
+			$NumRows = $numrows;
 ?>
 
 <TR><TD VALIGN="top" WIDTH="100%">

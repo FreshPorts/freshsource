@@ -13,7 +13,7 @@
 	GLOBAL $User;
 
 if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
-$visitor = pg_escape_string($_COOKIE[USER_COOKIE_NAME]);
+$visitor = pg_escape_string($db, $_COOKIE[USER_COOKIE_NAME]);
 
 // if we don't know who they are, we'll make sure they login first
 if (!$visitor) {
@@ -21,18 +21,18 @@ if (!$visitor) {
 	exit;  /* Make sure that code below does not get executed when we redirect. */
 }
 
-if ($submit) {
+if (IsSet($submit)) {
 
 	$Debug = 0;
 
 	// process form
 
-	$email         = pg_escape_string($_POST['email']);
+	$email         = pg_escape_string($db, $_POST['email']);
 	$Password      = $_POST['Password'];
 	$Password1     = $_POST['Password1'];
 	$Password2     = $_POST['Password2'];
-	$numberofdays  = pg_escape_string($_POST['numberofdays']);
-	$page_size     = pg_escape_string($_POST['page_size']);
+	$numberofdays  = pg_escape_string($db, $_POST['numberofdays']);
+	$page_size     = pg_escape_string($db, $_POST['page_size'] ?? '');
 
 
 	if (!is_numeric($numberofdays) || $numberofdays < 0 || $numberofdays > 9) {
@@ -62,7 +62,7 @@ if ($submit) {
 
    $AccountModified = 0;
    if ($OK) {
-      if ($emailsitenotices_yn == "ON") {
+      if (IsSet($emailsitenotices_yn) && $emailsitenotices_yn == "ON") {
           $emailsitenotices_yn_value = "t";
       } else {
           $emailsitenotices_yn_value = "f";
@@ -99,7 +99,7 @@ if ($submit) {
          }
 
          if ($Password1 != '') {
-				$sql .= ", password_hash = crypt('" . pg_escape_string($Password1) . "'";
+				$sql .= ", password_hash = crypt('" . pg_escape_string($db, $Password1) . "'";
 				$sql .= ", gen_salt('" . PW_HASH_METHOD . "', " . PW_HASH_COST ."))";
          }
 
@@ -111,7 +111,7 @@ if ($submit) {
 
          $result = pg_exec($db, $sql);
          if ($result) {
-			$AccountModified = 1;
+            $AccountModified = 1;
          }
       }
       
@@ -144,12 +144,12 @@ if ($submit) {
   <TR>
     <TD height="20"><?php
 
-if (!$submit) {
+if (!IsSet($submit)) {
 	include( $_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
     $numberofdays = $NumberOfDays;
 }
 
-if ($errors) {
+if (IsSet($errors)) {
 echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" width="100%">
 <TR>
 <TD>
@@ -178,7 +178,7 @@ echo '<p>If you need help, please contact us via email. </p>
 </TABLE>
 <br>';
 }
-if ($AccountModified) {
+if (IsSet($AccountModified) && $AccountModified) {
    echo "Your account details were successfully updated.";
 } else {
   // provide default values for an empy form.

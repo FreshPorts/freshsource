@@ -248,7 +248,7 @@ runs off the same database and displays only the port commits.
 							$HTML .= ' ]';
 							$HTML .= '</SMALL>';
 							$HTML .= '&nbsp;';
-							if ($WhichRepo != FREEBSD_REPO_GIT) {
+							if ($WhichRepo != FREEBSD_REPOSITORY_GIT) {
 								$HTML .= freshports_Email_Link($myrow["message_id"]);
 
 								$HTML .= "&nbsp;";
@@ -297,7 +297,7 @@ runs off the same database and displays only the port commits.
 									$HTML .= ' <A HREF="http://' . $myrow['repo_hostname'] . '/' . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' . $myrow["element_pathname"] . '</a>';
 									break;
 
-								case FREEBSD_REPO_GIT:
+								case FREEBSD_REPOSITORY_GIT:
 									# we want something like
 									# https://github.com/freebsd/freebsd-ports/blame/0957c7db9bf1fc4313cdefdcdc2608a0c965dda7/sysutils/goaccess/Makefile
 									# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=5ac839029d01c0f48e1b1ff1a599cb47cf5e98ee
@@ -345,7 +345,7 @@ runs off the same database and displays only the port commits.
 										$HTML .= freshports_Diff_Icon() . '</a> ';
 										break;
 
-									case FREEBSD_REPO_GIT:
+									case FREEBSD_REPOSITORY_GIT:
 										# we want: https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
 										$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
 										$HTML .= freshports_git_commit_Link_diff($myrow['message_id'], $myrow['repo_name'], $myrow['repo_hostname'], $url_text);
@@ -368,7 +368,7 @@ runs off the same database and displays only the port commits.
 								$HTML .= freshports_Revision_Icon() . '</a> ';
 								break;
 
-							case FREEBSD_REPO_GIT:
+							case FREEBSD_REPOSITORY_GIT:
 								# something like
 								# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
 								$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);

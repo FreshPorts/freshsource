@@ -6,7 +6,7 @@
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
 
-	require_once($_SERVER["DOCUMENT_ROOT"] . "/../include/constants.php");
+	require_once("/usr/local/www/freshports/include/constants.php");
 
 DEFINE('COPYRIGHTYEARS', '2000-' . date('Y'));
 
@@ -460,7 +460,7 @@ function BreadcrumbArrayToLinks($prefix, $breadcrumbs) {
 	
 	$Path = '';
 
-	while (list(, $dir) = each($breadcrumbs)) {
+	foreach($breadcrumbs as $value => $dir) {
 		$HTML .= ' ';
 		if (empty($dir)) {
 			$Path .= '';
@@ -522,7 +522,7 @@ function ElementPathname($db, $element_id) {
 function Pathname_ID($db, $Pathname) {
 	$ElementID = 0;
 
-	$sql = "select Pathname_ID('" . pg_escape_string($Pathname) . "') as element_id";
+	$sql = "select Pathname_ID('" . pg_escape_string($db, $Pathname) . "') as element_id";
 
 	$result = pg_exec($db, $sql);
 	if ($result) {
@@ -543,7 +543,7 @@ function GetParent($db, $element_id) {
 		return 0;
 	}
 
-	$sql = "select GetParentID(" . pg_escape_string($element_id) . ") as parent_id";
+	$sql = "select GetParentID(" . pg_escape_string($db, $element_id) . ") as parent_id";
 
 	$result = pg_exec($db, $sql);
 	if ($result) {
@@ -1290,7 +1290,7 @@ function freshports_MessageIdToRepoName($message_id)
   
   if (Empty($RepoName)) {
     if (strpos($message_id, '@') === false) {
-      $RepoName = FREEBSD_REPO_GIT;
+      $RepoName = FREEBSD_REPOSITORY_GIT;
     } else {
       $RepoName = FREEBSD_REPO_SVN;
     }

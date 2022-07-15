@@ -5,9 +5,10 @@
 
 	# These are customization features (see www/customize.php) and are needed
 	# by include/new-user.php - but with a new user, they must be set here.
-	$set_focus_search = $set_focus_search ?? false;
-	$page_size        = $page_size        ?? 0;
-	$numberofdays     = $numberofdays     ?? 0;
+	$set_focus_search        = $set_focus_search         ?? false;
+	$page_size               = $page_size                ?? 0;
+	$numberofdays            = $numberofdays             ?? 0;
+	$emailsitenotices_yn_val = $$emailsitenotices_yn_val ?? 'f';
 ?>
 
 <BR>

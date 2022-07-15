@@ -6,7 +6,7 @@
 	#
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/../classes/user.php');
-	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/constants.php');
+	require_once("/usr/local/www/freshports/include/constants.php");
 
 GLOBAL $User;
 $User = new User($db);
