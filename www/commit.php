@@ -5,12 +5,16 @@
 	# Copyright (c) 1998-2005 DVL Software Limited
 	#
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+$Debug=0;
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+#	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/constants.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
+	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+
+	require_once('/usr/local/www/freshports/include/freshports.php');
 	if (IsSet($_GET["message_id"])) $message_id = AddSlashes($_GET["message_id"]);
 	if (IsSet($_GET["commit_id"]))  $commit_id  = AddSlashes($_GET["commit_id"]);
 
@@ -23,8 +27,6 @@
 	freshports_Start($Title,
 					"$FreshPortsName - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug=0;
-
 if ($Debug) echo "UserID='$UserID'";
 
 if ($Debug) {
@@ -88,6 +90,8 @@ function GetPortNameFromFileName($file_name) {
 			commit_log_elements.change_type,
 			element.name as filename,
 			commit_log.committer, 
+		        commit_log.committer_name,
+		        commit_log.committer_email,
 			commit_log.message_id,
 			commit_log.encoding_losses, 
 			commit_log.description,
@@ -125,14 +129,14 @@ function GetPortNameFromFileName($file_name) {
 		$sql .="
 	            left outer join watch_list_element
 				on (watch_list_element.element_id    = commit_log_elements.element_id
-			   and  watch_list_element.watch_list_id = $WatchListID) ";
+			   and  watch_list_element.watch_list_id = $2) ";
 	}
 
-	$sql .= "
-	 where commit_log.message_id             = '$message_id'
+	$sql .= '
+	 where commit_log.message_id             = $1
 	   and commit_log_elements.commit_log_id = commit_log.id 
 	   and commit_log_elements.element_id    = element.id
-	 order by 1";
+	 order by 1';
 
 	if ($Debug) echo '<PRE>' . $sql . '</PRE>';
 
@@ -145,9 +149,17 @@ function GetPortNameFromFileName($file_name) {
 
 
 #exit;
-
-         $result = pg_exec($database, $sql);
+#         $result = pg_exec($database, $sql);
+         $result = pg_prepare($db, COMMIT_QUERY, $sql) or die('query failed ' . pg_last_error($db));
          if ($result) {
+            if ($WatchListID) {
+               $params = array($message_id, $WatchListID);
+            } else {
+               $params = array($message_id);
+            }
+            $result = pg_execute($db, COMMIT_QUERY, $params) or die('query failed ' . pg_last_error($db));
+         }
+         if ($result) { # yeah, I know there's a die above, but I didn't want to remove this if when going to prepared statements
             $numrows = pg_num_rows($result);
 			if ($numrows) { 
 
@@ -233,10 +245,10 @@ function GetPortNameFromFileName($file_name) {
 							GLOBAL $freshports_mail_archive;
 
 							$HTML .= '<SMALL>';
-							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]) . ' ]';
+							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow['committer_name'], $myrow["committer"]) . ' ]';
 							$HTML .= '</SMALL>';
 							$HTML .= '&nbsp;';
-							if ($WhichRepo != FREEBSD_REPO_GIT) {
+							if ($WhichRepo != FREEBSD_REPOSITORY_GIT) {
 								$HTML .= freshports_Email_Link($myrow["message_id"]);
 							}
 
@@ -262,7 +274,7 @@ function GetPortNameFromFileName($file_name) {
                     $HTML .= ' <A HREF="http://' . $myrow['repo_hostname']  . $myrow["element_pathname"] . '?view=log#rev' . $myrow["revision_name"] . '">' .  $myrow["element_pathname"] . '</a>';
                     break;
 
-		case FREEBSD_REPO_GIT:
+		case FREEBSD_REPOSITORY_GIT:
 			# we want something like
 			# https://github.com/freebsd/freebsd-ports/blame/0957c7db9bf1fc4313cdefdcdc2608a0c965dda7/sysutils/goaccess/Makefile
 			# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=5ac839029d01c0f48e1b1ff1a599cb47cf5e98ee
@@ -304,7 +316,7 @@ function GetPortNameFromFileName($file_name) {
         		$HTML .= freshports_Diff_Icon() . '</a> ';
                         break;
 
-                    case FREEBSD_REPO_GIT:
+                    case FREEBSD_REPOSITORY_GIT:
 			# we want: https://cgit.freebsd.org/src/diff/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
 			$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);
 			$HTML .= freshports_git_commit_Link_diff($myrow['message_id'], $myrow['repo_name'], $myrow['repo_hostname'], $url_text);
@@ -325,7 +337,7 @@ function GetPortNameFromFileName($file_name) {
                     $HTML .= freshports_Revision_Icon() . '</a> ';
                     break;
 
-                case FREEBSD_REPO_GIT:
+                case FREEBSD_REPOSITORY_GIT:
                 	# something like
 			# https://cgit.freebsd.org/src/blame/sys/netinet/sctp_timer.c?id=b963ce4588b33f733aef3f7a7f3fbe5018a89728
 			$url_text = freshports_Convert_Subversion_Path_To_Git($myrow["pathname"], $myrow['repo_name'], $myrow['db_root_prefix'], $myrow['branch_name']);

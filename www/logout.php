@@ -1,24 +1,29 @@
 <?php
-	# $Id: logout.php,v 1.1 2002-07-27 20:11:20 dan Exp $
-	#
-	# Copyright (c) 1998-2001 DVL Software Limited
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+	# $Id: logout.php,v 1.3 2011-10-02 18:58:36 dan Exp $
+	#
+	# Copyright (c) 1998-2003 DVL Software Limited
+
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/common.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/constants.php');
+	require_once('/usr/local/www/freshports/include/freshports.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/databaselogin.php');
+
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
+
 
 	freshports_CookieClear();
 
-	header("Location: http://" . $_SERVER["HTTP_HOST"] . "/");  /* Redirect browser to PHP web site */
+	if (IsSet($_COOKIE[USER_COOKIE_NAME])) {
+		$visitor = $_COOKIE[USER_COOKIE_NAME];
+
+		$sql = 'UPDATE users SET cookie = \'nocookie\' WHERE cookie = $1';
+		#echo $sql;
+		$result = pg_prepare($db, LOGOUT_QUERY, $sql);
+		if ($result) {
+			$result = pg_execute($db, LOGOUT_QUERY, array($_COOKIE[USER_COOKIE_NAME]));
+		}
+	}
+
+	header("Location: /");  /* Redirect browser to PHP web site */
 	exit;  /* Make sure that code below does not get executed when we redirect. */
-?>
-
-<html>
-
-<head>
-<title></title>
-</head
-
-<body>
-</body>
-</html>

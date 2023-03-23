@@ -8,6 +8,7 @@
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/common.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/freshports.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/databaselogin.php');
+	require_once('/usr/local/www/freshports/include/freshports.php');
 
 #	if (IN_MAINTENCE_MODE) {
 #                header('Location: /' . MAINTENANCE_PAGE, TRUE, 307);
@@ -46,13 +47,15 @@ if (IsSet($submit)) {
          echo $UserID . "<br>\n";
       }
 
-      $sql = "select * from users where name = '" . $UserID . "'";
+      $sql = 'select * from users where name = $1';
 
       if ($Debug) {
          echo "<pre>$sql</pre>\n";
       }
 
-      $result = pg_exec($db, $sql) or die('query failed ' . pg_errormessage());
+      $result = pg_prepare($db, FORGOTTEN_PASSWORD_QUERY1, $sql) or die('query failed ' . pg_last_error($db));
+      
+      $result = pg_execute($db, FORGOTTEN_PASSWORD_QUERY1, array($UserID));
 
       if (!pg_num_rows($result)) {
          $LoginFailed = 1;
@@ -63,15 +66,17 @@ if (IsSet($submit)) {
 
          if ($Debug) echo $eMail . "<br>\n";
 
-         $sql = "select * from users where lower(email) = '" . $eMail . "'";
-			if ($Debug) {
-				echo "<pre>This is the \$sql='$sql'</pre>\n";
-				echo "<pre>$sql</pre>\n";
-			}
+         $sql = 'select * from users where lower(email) = $1';
+	 if ($Debug) {
+	   echo "<pre>This is the \$sql='$sql'</pre>\n";
+	   echo "<pre>$sql</pre>\n";
+	 }
 
          if ($Debug) echo "$sql<br>\n";
 
-         $result = pg_exec($db, $sql) or die('query failed ' . pg_errormessage());
+         $result = pg_prepare($db, FORGOTTEN_PASSWORD_QUERY2, $sql)  or die('query failed ' . pg_last_error($db));
+
+         $result = pg_execute($db, FORGOTTEN_PASSWORD_QUERY2, array($eMail)) or die('query failed ' . pg_last_error($db));
 
          if (!pg_num_rows($result)) {
             $eMailFailed = 1;
@@ -101,8 +106,9 @@ if (IsSet($submit)) {
         }
 
         if ($OKToMail) {
-          $sql = "insert into user_password_reset (user_id, ip_address) values (" . pg_escape_string($db, $myrow["id"]) . ", '" . pg_escape_string($db, $_SERVER['REMOTE_ADDR']) . "') returning token";
-          $token_result = pg_exec($db, $sql) or die('password token creation failed ' . pg_errormessage());
+          $sql = 'insert into user_password_reset (user_id, ip_address) values ($1, $2) returning token';
+          $token_result = pg_prepare($db, FORGOTTEN_PASSWORD_QUERY3, $sql) or die('query failed ' . pg_last_error($db));
+          $token_result = pg_execute($db, FORGOTTEN_PASSWORD_QUERY3, array($myrow["id"], $_SERVER['REMOTE_ADDR'])) or die('password token creation failed ' . pg_last_error($db));
           $token_row = pg_fetch_array ($token_result, 0);
           $token = $token_row["token"];
           
@@ -265,9 +271,7 @@ we're only dealing with your FreshPorts login, not a financial transaction....</
 </td>
 
   <td class="sidebar">
-	<?
-	echo freshports_SideBar();
-	?>
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
   </td>
 
 </TR>

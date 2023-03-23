@@ -12,6 +12,7 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../classes/files-display.php");
 
+	require_once('/usr/local/www/freshports/include/freshports.php');
 	freshports_Start($FreshPortsSlogan,
 					"$FreshPortsName - new ports, applications",
 					"FreeBSD, index, applications, ports");
@@ -241,10 +242,10 @@ runs off the same database and displays only the port commits.
 						if ($NumberOfElementsInThisCommit == 1) {
 
 							$HTML .= '<SMALL>';
-							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow["committer"]);
-							if (!empty($mycommit->committer_name)) {
-								$HTML .= '(' . $mycommit->committer_name . ')';
-										}
+							$HTML .= '[ ' . $myrow["commit_time"] . ' ' . freshports_CommitterEmailLink($myrow['committer_name'], $myrow["committer"]);
+#							if (!empty($mycommit->committer_name)) {
+#								$HTML .= '(' . $mycommit->committer_name . ')';
+#										}
 							$HTML .= ' ]';
 							$HTML .= '</SMALL>';
 							$HTML .= '&nbsp;';

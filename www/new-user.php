@@ -1,21 +1,42 @@
 <?php
-	# $Id: new-user.php,v 1.7 2008-10-18 23:35:20 dan Exp $
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# $Id: new-user.php,v 1.6 2011-08-21 15:20:25 dan Exp $
+	#
+	# Copyright (c) 1998-2004 DVL Software Limited
+	#
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+	# for captcha
+	session_start();
 
-	$submit = $_POST["submit"] ?? 0;
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/common.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/freshports.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/databaselogin.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/htmlify.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/constants.php');
+	require_once('/usr/local/www/freshports/include/freshports.php');
 
-if ($submit) {
+	if (IN_MAINTENANCE_MODE) {
+                header('Location: /' . MAINTENANCE_PAGE, TRUE, 307);
+	}
+
+	if (defined('NO_LOGIN')) {
+		ob_start();
+		header( 'Location: /' );
+		ob_end_flush();
+		exit;
+	}
+
+	if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
+
+	$errors = '';
+
+if (IsSet($submit)) {
 
 	// process form
 
 	/*
-	while (list($name, $value) = each($HTTP_POST_VARS)) {
-		echo "$name = $value<BR>\n";
+	while (list($name, $value) = each($_REQUEST)) {
+		echo "$name = $value<br>\n";
 	}
 	*/
 
@@ -29,35 +50,35 @@ if ($submit) {
 	$Password1    = $_REQUEST["Password1"];
 	$Password2    = $_REQUEST["Password2"];
 	$numberofdays = $_REQUEST["numberofdays"];
-
+	
 	if ($UserLogin == '') {
-		$errors .= "Please enter a user id.<BR>";
+		$errors .= "Please enter a user id.<br>";
 		$OK = 0;
 	}
 
 	if ($UserLogin != trim($UserLogin, "\t\n\r\x0B")) {
-		syslog(LOG_ERR, 'FreshSource warning (odd UserLogin): '. $UserLogin);
+		syslog(LOG_ERR, 'FreshPorts (odd UserLogin): '. $UserLogin);
 		$errors .= "Please, just use plain text for your user id.  This event has been logged.<br>";
 		$OK = 0;
 	}
 
+	if (!freshports_IsEmailValid($email)) {
+		$errors .= "That email address doesn't look right to me<br>";
+		$OK = 0;
+	}
+
 	if ($email != trim($email, "\t\n\r\x0B")) {
-		syslog(LOG_ERR, 'FreshSource warning (odd email): '. $email);
+		syslog(LOG_ERR, 'FreshPorts (odd email): '. $email);
 		$errors .= "Please, just use plain text for your email.  This event has been logged.<br>";
 		$OK = 0;
 	}
 
-	if (!freshports_IsEmailValid($email)) {
-		$errors .= "That email address doesn't look right to me<BR>";
-		$OK = 0;
-	}
-
 	if ($Password1 != $Password2) {
-		$errors .= "The password was not confirmed.  It must be entered twice.<BR>";
+		$errors .= "The password was not confirmed.  It must be entered twice.<br>";
 		$OK = 0;
 	} else {
 		if ($Password1 == '') {
-			$errors .= 'A password must be supplied<BR>';
+			$errors .= 'A password must be supplied<br>';
 			$OK = 0;
 		}
 	}
@@ -70,59 +91,56 @@ if ($submit) {
 		$numberofdays = 0;
 	}
 
+	if ( isset( $_POST["captcha"] ) )
+	{
+		if ( $_SESSION["captcha"] == $_POST["captcha"] )
+		{
+			//CAPTHCA is valid; proceed the message: save to database, send by e-mail ...
+			// echo 'CAPTHCA is valid; proceed the message';
+		}
+		else
+		{
+			$errors .= 'Your CAPTHCA code is not valid<br>';
+			syslog(LOG_ERR, "FreshPorts captcha failure: '" . $UserLogin . "', '" . $email . "', "  . $_SERVER['REMOTE_ADDR']);
+			$OK = 0;
+		}
+	}
+
+
+
+	#
+	# make sure we have valid values in this variable.
+	# by default, they don't get notified.
+	#
+
 	$UserCreated = 0;
 	if ($OK) {
-		$Cookie = UserToCookie($UserLogin);
-//		echo "checking database\n";
-
 		// test for existance of user id
 
-		$sql = "select * from users where cookie = '$Cookie'";
+		$sql = "select * from users where name = '" . pg_escape_string($db, strtolower($UserLogin)) . "'";
+		syslog(LOG_ERR, "FreshPorts new user: $sql");
 
-		$result = pg_exec($db, $sql) or die('query failed');
+		$result = pg_query($db, $sql) or die('query failed');
 
 		// create user id if not found
 		if(!pg_num_rows($result)) {
- //			echo "confirmed: user id is new\n";
-
-			# no need to validate that value as it's not put directly into the db.
-			if (IsSet($emailsitenotices_yn) && $emailsitenotices_yn == "ON") {
-				$emailsitenotices_yn_value = "Y";
-			} else {
-				$emailsitenotices_yn_value = "N";
-			}
+			syslog(LOG_ERR, "FreshPorts new user: '$UserLogin', '$email', " . $_SERVER["REMOTE_ADDR"] . ' confirmed: user id is new');
 
 			$UserID = freshports_GetNextValue($Sequence_User_ID, $db);
-			if (IsSet($UserID)) {			
-/*
-				$sql = "insert into users (id, name, password_hash, cookie, email, " . 
-						"watch_notice_id, emailsitenotices_yn, type, ip_address, number_of_days) values (";
-				$sql .= AddSlashes($UserID) . ", '" . AddSlashes($UserLogin) . "', 
-                        crypt('" . AddSlashes($Password1) . "' , gen_salt('md5')), '" . AddSlashes($Cookie) . "', '" . 
-						AddSlashes($email) . "', '1', 'N', 'U', '" . $_SERVER["REMOTE_ADDR"] . "', " .
-						AddSlashes($numberofdays) . ')';
-
-				syslog(LOG_ERR, 'FreshSource new user: '. $sql);
-				$errors .= "<BR>sql=" . $sql;
-
-				$result = pg_exec($db, $sql);
-*/
-
-
-
-
+			if (IsSet($UserID)) {
 				$sql = "insert into " .
 					"users (id, name, cookie, email, watch_notice_id, emailsitenotices_yn, type, ip_address, number_of_days, password_hash) " .
 					"values ($1, $2, $3, $4, $5::integer, $6, $7, $8, $9::integer, crypt($10, gen_salt($11, $12::integer)))";
 
 				syslog(LOG_ERR, "FreshPorts new user: '$UserID', '$UserLogin', '$email', " . $_SERVER["REMOTE_ADDR"]);
 
-				$errors .= "<BR>sql=" . $sql;
+				$errors .= "<br>sql=" . $sql;
 
 				$result = pg_query_params($db, $sql, array(
 					$UserID, $UserLogin, 'nocookie', $email, 1, 'N', 'U', $_SERVER["REMOTE_ADDR"],
 					$numberofdays, $Password1, PW_HASH_METHOD, PW_HASH_COST
 				));
+
 				if ($result) {
 					$UserCreated = 1;
 
@@ -140,7 +158,7 @@ if ($submit) {
 			}
 
 	    } else {
-			$errors .= 'That User ID is already in use.  Please select a different  User ID.<BR>';
+			$errors .= 'That User ID is already in use.  Please select a different  User ID.<br>';
     	}
 	}
 
@@ -152,90 +170,101 @@ if ($submit) {
 	// not submit
 
 	// we can't do this if we are submitting because it overwrites the incoming values
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
-	$emailsitenotices_yn = "ON";
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
 }
 
-   freshports_Start("New User",
-               "freshports - new ports, applications",
-               "FreeBSD, index, applications, ports");
+	$Title = 'New User';
+	freshports_Start($Title,
+               $Title,
+               'FreeBSD, index, applications, ports');
 ?>
 
-<SCRIPT TYPE="text/javascript">
-<!--
-function setfocus() { document.f.UserLogin.focus(); }
-// -->
-</SCRIPT>
-
-<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
-<TR><TD VALIGN="top" WIDTH="100%">
+<?php echo freshports_MainTable(); ?>
+<tr><td class="content">
 <?php
-if (IsSet($errors)) {
-echo '<TABLE CELLPADDING=1 CELLSPACING=0 BORDER=0 BGCOLOR="#AD0040" WIDTH=100%>
-<TR>
-<TD>
-<TABLE WIDTH=100% BORDER=0 CELLPADDING=1>
-<TR BGCOLOR="#AD0040"><TD><B><FONT color="#ffffff" size=+0>Access Code Failed!</FONT></B></TD>
-</TR>
-<TR BGCOLOR="#ffffff">
-<TD>
-  <TABLE WIDTH=100% CELLPADDING=3 CELLSPACING=0 BORDER=0>
-  <TR VALIGN=top>
-   <TD><IMG SRC="/images/warning.gif"></TD>
-   <TD WIDTH=100%>
-  <p>Some errors have occurred which must be corrected before your login can be created.</p>';
+if ($errors != '') {
+echo '<table class="fullwidth borderless">
+<tr>
+<td>
+<table class="fullwidth borderless">
+<tr class="accent"><td>Access Code Failed!</td>
+</tr>
+<tr>
+<td>
+  <p><IMG SRC="/images/warning.gif"> Some errors have occurred which must be corrected before your login can be created.</p>';
 
 /*
-  while (list($name, $value) = each($HTTP_POST_VARS)) {
-    echo "$name = $value<BR>\n";
+  while (list($name, $value) = each($_REQUEST)) {
+    echo "$name = $value<br>\n";
   }
 */
 echo $errors;
 
-echo '<p>If you need help, please contact us via email.. </p>
- </TD>
- </TR>
- </TABLE>
-</TD>
-</TR>
-</TABLE>
-</TD>
-</TR>
-</TABLE>
-<BR>';
+echo '<p>If you need help, please email postmaster@. </p>
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+<br>';
 }
 
-if (!$submit && !IsSet($errors)) {
+if (!IsSet($submit) && $errors != '') {
   // provide default values for an empy form.
-  require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+  require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
 }
+
+echo freshports_MainContentTable();
 
 ?>
+      <tr>
+		<?php echo freshports_PageBannerText("New User Details"); ?>
+      </tr>
+      <tr>
+        <td>
 
-<TABLE CELLSPACING="0" BORDER="0" WIDTH="100%" CELLPADDING="5">
-      <TR>
-		<?php freshports_PageBannerText("New User Details"); ?>
-      </TR>
-      <TR>
-        <TD>
+<p class="element-details"><span>Please observe the following points:</span></p>
 
-<P><BIG><BIG>NOTE:</BIG>You must supply a valid email address.<BR>Instructions to enable your account 
-will be emailed to you at that address.  If you have are using a spam filter, please allow all
-mail from <CODE CLASS="code">unixathome.org</CODE> and <CODE CLASS="code">freshports.org</CODE>.</BIG></P>
-<P>Your browser must allow cookies for the login to work.</P>
-<P>&nbsp;</P>
+<ul>
+<li>
+You must supply a valid email address. Instructions to enable your account 
+will be emailed to you at that address.
 
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/new-user.php"); ?>
+<li>If you have a spam filter, please allow all
+mail from <code class="code">unixathome.org</code> and <code class="code">freshports.org</code>.
 
-    </TD>
-  </TR>
-</TABLE>
-</TD>
-  <TD VALIGN="top" WIDTH="*" ALIGN="center">
+<li>Please disable any auto-responders for the above domains.  I get enough email
+without being told when you'll be back from holiday or who else I can contact...
+
+<li>Your browser must allow cookies for the login to work.
+
+</ul>
+
+<P>
+Your cooperation with the above will make my life easier.  Thank you.
+
+<hr>
+
+<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/new-user.php'); ?>
+
+	<hr>
+
+    </td>
+  </tr>
+</table>
+</td>
+<td class="sidebar">
+
    <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
- </TD>
-</TR>
-</TABLE>
-<?php include("./../include/footer.php") ?>
+
+</td>
+</tr>
+</table>
+
+<?php
+echo freshports_ShowFooter();
+?>
+
 </BODY>
 </HTML>

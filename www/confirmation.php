@@ -8,25 +8,30 @@
     require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
     require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+    require_once('/usr/local/www/freshports/include/freshports.php');
 
 	freshports_Start("Account confirmation",
 					"freshports - new ports, applications",
 					"FreeBSD, index, applications, ports");
-	$Debug = 0;
+	$Debug = 1;
 
 	$ResultConfirm = 999;
 
 	$token = $_GET["token"];
 	if (IsSet($token)) {
-		$token = AddSlashes($token);
 		if ($Debug) echo "I'm confirming with token $token\n<BR>";
-		$sql = "select ConfirmUserAccount('$token')";
-		$result = pg_exec($db, $sql);
+		$sql = 'select ConfirmUserAccount($1)';
+		$result = pg_prepare($db, TOKEN_CONFIRM_QUERY, $sql);
 		if ($result) {
-			$row = pg_fetch_array($result,0);
-			$ResultConfirm = $row[0];
+			$result = pg_execute($db, TOKEN_CONFIRM_QUERY, array($token));
+			if ($result) {
+				$row = pg_fetch_array($result,0);
+				$ResultConfirm = $row[0];
+			} else {
+				echo pg_last_error($db)() . $sql;
+			}
 		} else {
-			echo pg_errormessage() . $sql;
+			echo pg_last_error($db)() . $sql;
 		}
 	}
 ?>

@@ -10,18 +10,19 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+	require_once('/usr/local/www/freshports/include/freshports.php');
 
 	freshports_Start($FreshPortsSlogan,
 					"FreshSource - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug = 0;
+$Debug = 1;
 
 #phpinfo();
     $parent_id = 0;
     $path      = '/';
 
     if (IsSet($_GET["parent_id"])) {
-      $parent_id = (int) $_GET["parent_id"];
+      $parent_id = intval($_GET["parent_id"]);
     }
 
     if (IsSet($_GET["path"])) {
@@ -62,35 +63,45 @@ $Debug = 0;
 #
 #$numrows=400;
 
-		$sql = "SELECT id, name, parent_id, directory_file_flag, status";
+		$sql = 'SELECT id, name, parent_id, directory_file_flag, status';
 		if ($WatchListID) {
-		  $sql .= ",
+		  $sql .= ',
 	       CASE when watch_list_element.element_id is null
     	      then 0
         	  else 1
-	       END as watch ";
+	       END as watch ';
 	}
 
 
 	$sql .= " FROM element ";
 				
     	if ($WatchListID) {
-	    	$sql .="
+	    	$sql .= '
 	            left outer join watch_list_element
 				on (watch_list_element.element_id    = element.id
-			       and  watch_list_element.watch_list_id = $WatchListID) ";
+			       and  watch_list_element.watch_list_id = $2) ';
         }
 
 	if ($parent_id) {
-		$sql .= " WHERE parent_id = $parent_id";
+		$sql .= ' WHERE parent_id = $1';
 	} else {
-		$sql .= " WHERE parent_id is NULL";
+		$sql .= ' WHERE parent_id is NULL';
 	}
-	$sql .= " ORDER BY directory_file_flag, name";
+	$sql .= ' ORDER BY directory_file_flag, name';
 
 	if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
-	$result = pg_exec($database, $sql);
+	$result = pg_prepare($database, REPO_QUERY, $sql) or die('query failed ' . pg_last_error($db));
+	if ($parent_id && $WatchListID) {
+		$params = array($parent_id, $WatchListID);
+	} elseif ($parent_id) {
+		$params = array($parent_id);
+	} elseif ($WatchListID) {
+		$params = array($WatchListID);
+	} else {
+		$params = array();
+	}
+	$result = pg_execute($database, REPO_QUERY, $params);
 	if ($result) {
 		$numrows = pg_num_rows($result);
 #		echo $numrows . " rows to fetch\n";

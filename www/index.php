@@ -6,7 +6,7 @@
 	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
+	require('/usr/local/www/freshports/include/freshports.php');
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");

@@ -1,28 +1,37 @@
 <?php
 	#
-	# $Id: customize.php,v 1.3 2008-10-18 23:35:20 dan Exp $
+	# $Id: customize.php,v 1.3 2008-08-06 13:36:16 dan Exp $
 	#
-	# Copyright (c) 1998-2003 DVL Software Limited
+	# Copyright (c) 1998-2022 DVL Software Limited
 	#
 
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
-	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/common.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/constants.php');
+	require('/usr/local/www/freshports/include/freshports.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/databaselogin.php');
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/htmlify.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../classes/page_options.php'); # needed to validate page_size
+	
+	if (IN_MAINTENANCE_MODE) {
+                header('Location: /' . MAINTENANCE_PAGE, TRUE, 307);
+	}
 
 	GLOBAL $User;
 
+	$errors          = 0;
+	$AccountModified = 0;
+
 if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
-$visitor = pg_escape_string($db, $_COOKIE[USER_COOKIE_NAME]);
+$visitor = pg_escape_string($db, $_COOKIE[USER_COOKIE_NAME] ?? '');
 
 // if we don't know who they are, we'll make sure they login first
-if (!$visitor) {
-	header("Location: login.php");  /* Redirect browser to PHP web site */
+if (empty($visitor)) {
+	header('Location: /login.php');  /* Redirect browser to PHP web site */
 	exit;  /* Make sure that code below does not get executed when we redirect. */
 }
 
 if (IsSet($submit)) {
-
 	$Debug = 0;
 
 	// process form
@@ -31,48 +40,55 @@ if (IsSet($submit)) {
 	$Password      = $_POST['Password'];
 	$Password1     = $_POST['Password1'];
 	$Password2     = $_POST['Password2'];
-	$numberofdays  = pg_escape_string($db, $_POST['numberofdays']);
-	$page_size     = pg_escape_string($db, $_POST['page_size'] ?? '');
+	$numberofdays  = pg_escape_string($db, intval($_POST['numberofdays']));
+	$page_size     = pg_escape_string($db, intval($_POST['page_size']));
 
+	# this is a checkbox
+	if (IsSet($_POST['set_focus_search'])) {
+		$set_focus_search = 'true';
+	} else {
+		$set_focus_search = 'false';
+	}
 
 	if (!is_numeric($numberofdays) || $numberofdays < 0 || $numberofdays > 9) {
 		$numberofdays = 9;
 	}
 
+	$PageOptions = new ItemsPerPage();
+	if (!is_numeric($page_size) || !array_key_exists($page_size, $PageOptions->Choices)) {
+		$page_size = DEFAULT_NUMBER_OF_COMMITS;
+	}
 
-   if ($Debug) {
-      while (list($name, $value) = each($_REQUEST)) {
-         echo "$name = $value<br>\n";
-      }
-   }
+	if ($Debug) {
+		foreach ($_REQUEST as $name => $value) {
+			echo "$name = $value<br>\n";
+		}
+	}
 
-   $OK = 1;
+	$OK = 1;
 
-   $errors = "";
+	$errors = '';
 
-	if ($email && !freshports_IsEmailValid($email)) {
-		$errors .= "That email address doesn't look right to me<BR>";
+	if (!freshports_IsEmailValid($email)) {
+		$errors .= 'That email address doesn\'t look right to me<br>';
 		$OK = 0;
 	}
 	
-   if ($Password1 != $Password2) {
-      $errors .= "The password was not confirmed.  It must be entered twice.<BR>";
-      $OK = 0;
-   }
+	# new passwords supplied, but not existing password
+	if ($Password1 && $Password2 && !$Password) {
+		$errors .= 'If changing your password, remember to supply your existing password first.<br>';
+		$OK = 0;
+	}
 
-   $AccountModified = 0;
-   if ($OK) {
-      if (IsSet($emailsitenotices_yn) && $emailsitenotices_yn == "ON") {
-          $emailsitenotices_yn_value = "t";
-      } else {
-          $emailsitenotices_yn_value = "f";
-      }
+	if ($Password1 != $Password2) {
+		$errors .= 'The new password was not confirmed.  It must be entered twice.<br>';
+		$OK = 0;
+	}
 
 	# if no errors so far, and all three password fields are populated
 	if ($OK && $Password && $Password1 && $Password2) {
 		$result = getLoginDetails($db, LOGIN_QUERY, $User->name, $Password);
 		# there must be only 1 row in there.
-		if ($Debug) echo 'number of rows is ' . pg_num_rows($result) . '<br>';
 		if (pg_num_rows($result) != 1) {
 			$errors .= 'That is NOT your current password.<br>';
 			$OK = 0;
@@ -80,152 +96,131 @@ if (IsSet($submit)) {
 	}
 
 	if ($OK) {
-      // get the existing email in case we need to reset the bounce count
-      $sql = "select email from users where cookie = '$visitor'";
-      $result = pg_exec($db, $sql);
-      if ($result) {
-         $myrow = pg_fetch_array ($result, 0);
+		// get the existing email in case we need to reset the bounce count
+		$sql = "select email from users where cookie = '$visitor'";
+		$result = pg_query($db, $sql);
+		if ($result) {
+			$myrow = pg_fetch_array ($result, 0);
 
-         $sql = "update users set ";
-         if (!empty($email)) {
-          $sql .= "email			= '$email', ";
-         }
-         $sql .= "emailsitenotices_yn = '$emailsitenotices_yn_value',";
-         $sql .= "number_of_days      = $numberofdays ";
+			$sql = "
+UPDATE users
+   SET email            = '$email',
+       number_of_days   = $numberofdays,
+       page_size        = $page_size,
+       set_focus_search = $set_focus_search";
 
-         // if they are changing the email, reset the bouncecount.
-         if (!empty($email) && $myrow["email"] != $email) {
-            $sql .= ", emailbouncecount = 0 ";
-         }
+			// if they are changing the email, reset the bouncecount.
+			if ($myrow["email"] != $email) {
+				$sql .= ", emailbouncecount = 0 ";
+			}
 
-         if ($Password1 != '') {
+			if ($Password1 != '') {
 				$sql .= ", password_hash = crypt('" . pg_escape_string($db, $Password1) . "'";
 				$sql .= ", gen_salt('" . PW_HASH_METHOD . "', " . PW_HASH_COST ."))";
-         }
+			}
 
-         $sql .= " where cookie = '$visitor'";
+			$sql .= " where cookie = '$visitor'";
 
-         if ($Debug) {
-            echo $sql;
-         }
+			if ($Debug) {
+				echo '<pre>' . htmlentities($sql) . '</pre>';
+			}
 
-         $result = pg_exec($db, $sql);
-         if ($result) {
-            $AccountModified = 1;
-         }
-      }
-      
-      } # $OK
+			$result = pg_query($db, $sql);
+			if ($result) {
+				$AccountModified = 1;
+			}
+		}
 
-      if ($AccountModified == 1) {
-         if ($Debug) {
-            echo "I would have taken you to '/' now, but debugging is on<br>\n";
-         } else {
-            header("Location: /");
-            exit;  /* Make sure that code below does not get executed when we redirect. */
-         }
-      } else {
-         $errors .= 'Something went terribly wrong there.<br>';
-         $errors .= $sql . "<br>\n";
-         $errors .= pg_errormessage();
-      }
-   }
+		if ($AccountModified == 1) {
+			if ($Debug) {
+				echo "I would have taken you to '' now, but debugging is on<br>\n";
+			} else {
+				header("Location: /");
+				exit;  /* Make sure that code below does not get executed when we redirect. */
+			}
+		} else {
+			$errors .= 'Something went terribly wrong there.<br>';
+			$errors .= $sql . "<br>\n";
+			$errors .= pg_last_error($db);
+		}
+	}
 } else {
+
+	$email            = $User->email;
+	$numberofdays     = $User->number_of_days;
+	$page_size        = $User->page_size;
+	$set_focus_search = $User->set_focus_search;
 }
 
-   freshports_Start("Customize User Account",
-               "freshports - new ports, applications",
-               "FreeBSD, index, applications, ports");
+#	echo '<br>the page size is ' . $page_size . ' : ' . $email;
+
+	$Title = 'Customize User Account';
+	freshports_Start($Title,
+						$Title,
+						'FreeBSD, index, applications, ports');
+	echo freshports_MainTable();
 ?>
 
-<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
-<TR><TD VALIGN="top" width="100%">
-<TABLE width="100%" border="0">
-  <TR>
-    <TD height="20"><?php
+<TR><td class="content">
+<?php echo freshports_MainContentTable(NOBORDER);
 
-if (!IsSet($submit)) {
-	include( $_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
-    $numberofdays = $NumberOfDays;
-}
-
-if (IsSet($errors)) {
-echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" width="100%">
+if ($errors) {
+echo '<TR><td class="accent">Access Code Failed!</td></TR>
 <TR>
-<TD>
-<TABLE width="100%" BORDER="0" CELLPADDING="1">
-<TR BGCOLOR="#AD0040"><TD><b><font color="#ffffff" size=+0>Access Code Failed!</font></b></TD>
-</TR>
-<TR BGCOLOR="#ffffff">
-<TD>
-  <TABLE width="100%" CELLPADDING="3" BORDER="0">
-  <TR VALIGN=top>
-   <TD><img src="/images/warning.gif"></TD>
-   <TD width="100%">
-  <p>Some errors have occurred which must be corrected before your login can be created.</p>';
+<td>
+   <td class="textcontent"><p><img src="/images/warning.gif"> Some errors have occurred which must be corrected before your login can be created.</p>';
 
 echo $errors;
 
-echo '<p>If you need help, please contact us via email. </p>
- </TD>
- </TR>
- </TABLE>
-</TD>
-</TR>
-</TABLE>
-</TD>
-</TR>
-</TABLE>
-<br>';
+echo '<p>If you need help, please email postmaster@. </p>
+</td>
+</TR>';
 }
-if (IsSet($AccountModified) && $AccountModified) {
-   echo "Your account details were successfully updated.";
+if ($AccountModified) {
+echo '<TR><td class="accent">Account updated!</td></TR>
+   <tr><td class="textcontent">Your account details were successfully updated.</td></tr>';
 } else {
-  // provide default values for an empy form.
-//  $daystoshow = 20;
-//  $maxarticles = 40;
-//  $daysnew = 20;
-//   require($_SERVER['DOCUMENT_ROOT'] . "/../include/commonphp3.inc");
-//	echo $DaysToShow,  '= days to show';
 
-echo '<TABLE CELLPADDING="1" BORDER="0" BGCOLOR="#AD0040" WIDTH="100%">
+echo '
 <TR>
-<TD VALIGN="top">
-<TABLE WIDTH="100%" BORDER="0" CELLPADDING="1">
-<TR>
-<TD BGCOLOR="#AD0040" HEIGHT="29" COLSPAN="1"><FONT COLOR="#FFFFFF"><BIG><BIG>Customize</BIG></BIG></FONT></TD>
+<td class="accent"><span>Customize</span></td>
 </TR>
-<TR BGCOLOR="#ffffff">
-<TD>';
+<TR>
+<td>';
 
-echo 'If you wish to change your password, supply your new password twice.  Otherwise, leave it blank.<br>';
-include($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+echo '<p>If you wish to change your password, first type your existing password, then your new password twice.  Otherwise, leave them all blank.</p><br>';
+require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
 
 $Customize=1;
-include($_SERVER['DOCUMENT_ROOT'] . "/../include/new-user.php");
+require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/new-user.php');
 
-echo "</TD>
+echo "</td>
 </TR>
-</TABLE>
-</TD>
-</TR>
-</TABLE>";
+";
 }
 
-?></TD>
-</TABLE>
-</TD>
-  <TD VALIGN="top" WIDTH="*" ALIGN="center">
-   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
- </TD>
-</TR>
-</TABLE>
+?>
 
-<TABLE WIDTH="<?php echo $TableWidth; ?>" BORDER="0" ALIGN="center">
-<TR><TD>
-<?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/footer.php") ?>
-</TD></TR>
-</TABLE>
+<tr>
+<td>
+
+<?php require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/spam-filter-information.php'); ?>
+
+</td>
+</TR>
+</table>
+</td>
+
+  <td class="sidebar">
+   <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
+  </td>
+
+</TR>
+</table>
+
+<?php
+echo freshports_ShowFooter();
+?>
 
 </body>
 </html>

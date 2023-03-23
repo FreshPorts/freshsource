@@ -7,6 +7,7 @@
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
+	require_once('/usr/local/www/freshports/include/freshports.php');
 
 	freshports_Start("About this site",
 					"freshports - new ports, applications",
