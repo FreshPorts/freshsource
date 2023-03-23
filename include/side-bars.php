@@ -34,7 +34,6 @@
 
 
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/logout.php',           '', "Logout"                 ) . '</FONT><BR>';
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/watch.php',            '', "your watched sources"   ) . '</FONT><BR>';
 	} else {
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/login.php',            '', "User Login"             ) . '</FONT><BR>';
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/new-user.php',         '', "Create account"         ) . '</FONT><BR>';
@@ -54,11 +53,11 @@
 	<TR>
 	<TD VALIGN="top">
 <?
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/about.php",            "What is FreshSource?") . '</FONT><BR>';
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/authors.php",          "About the Authors")    . '</FONT><BR>';
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/privacy.php",          "Privacy")              . '</FONT><BR>';
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/commits.php",			"Commits")				. '</FONT><BR>';
-	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/repo.php",				"Repository browse")	. '</FONT><BR>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/about.php",    "What?",   "What is FreshSource?") . '</FONT>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/authors.php",  "About",   "About the Authors")    . '</FONT>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/privacy.php",  "Privacy", "Privacy")              . '</FONT>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/commits.php",  "Commits", "Commits")              . '</FONT>';
+	echo '<FONT SIZE="-1">' . freshports_SideBarHTML($_SERVER["PHP_SELF"], "/repo.php",     "Repo",    "Repository browse")    . '</FONT>';
 ?>
 	</TD>
 	</TR>
