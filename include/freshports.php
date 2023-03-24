@@ -152,7 +152,7 @@ function ElementPathname($db, $element_id) {
 				$ElementPathname = $myrow["elementpathname"];
 			}
 		} else {
-			syslog(LOG_ERR, pg_errormessage() . ':' . $sql);
+			syslog(LOG_ERR, pg_last_error($db) . ':' . $sql);
 		}
 	}
 
@@ -171,7 +171,7 @@ function Pathname_ID($db, $Pathname) {
 			$ElementID = $myrow["element_id"];
 		}
 	} else {
-		syslog(LOG_ERR, pg_errormessage() . ':' . $sql);
+		syslog(LOG_ERR, pg_last_error($db) . ':' . $sql);
 	}
 
 	return $ElementID;
@@ -192,7 +192,7 @@ function GetParent($db, $element_id) {
 			$ElementID = $myrow["parent_id"];
 		}
 	} else {
-		syslog(LOG_ERR, pg_errormessage() . ':' . $sql);
+		syslog(LOG_ERR, pg_last_error($db) . ':' . $sql);
 	}
 
 	return $ElementID;

@@ -180,7 +180,7 @@ if (!empty($visitor)) {
 			}
 		} else {
 			die('could not find that cookie');
-			if ($Debug) echo "we didn't find anyone with that login... " . pg_errormessage() . "\n<br>";
+			if ($Debug) echo "we didn't find anyone with that login... " . pg_last_error($db) . "\n<br>";
 			if ($Debug) echo ' no cookie found for that person ';
 			# we were given a cookie which didn't refer to a cookie we found.
 			freshports_CookieClear();

@@ -173,7 +173,7 @@ will be provided from each page to various areas of the website.
 				echo "<P>Sorry, nothing found in the database....</P>\n";
 			}
 		} else {
-			echo "read from test failed " . pg_errormessage() . ' ' . $sql;
+			echo "read from test failed " . pg_last_error($db) . ' ' . $sql;
 		}
 	} else {
 		echo "no connection";

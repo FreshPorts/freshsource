@@ -65,7 +65,7 @@
 
 	$result = pg_exec ($db, $sql);
 	if (!$result) {
-		echo $sql . 'error = ' . pg_errormessage();
+		echo $sql . 'error = ' . pg_last_error($db);
 		exit;
 	}
 ?>
