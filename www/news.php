@@ -29,7 +29,7 @@
 
 	# From https://www.carronmedia.com/create-an-rss-feed-with-php/
 	header("Content-Type: application/rss+xml; charset=UTF-8");
-	$HTML .= '<rss version="0.91">' . "\n";
+	$HTML  = '<rss version="0.91">' . "\n";
 
 	$HTML .= "\n";
 
