@@ -87,7 +87,7 @@ if (IsSet($submit)) {
 
 	# if no errors so far, and all three password fields are populated
 	if ($OK && $Password && $Password1 && $Password2) {
-		$result = getLoginDetails($db, LOGIN_QUERY, $User->name, $Password);
+		$result = getLoginDetails($db, $User->name, $Password);
 		# there must be only 1 row in there.
 		if (pg_num_rows($result) != 1) {
 			$errors .= 'That is NOT your current password.<br>';
@@ -97,17 +97,18 @@ if (IsSet($submit)) {
 
 	if ($OK) {
 		// get the existing email in case we need to reset the bounce count
-		$sql = "select email from users where cookie = '$visitor'";
-		$result = pg_query($db, $sql);
+		$sql = "select email from users where cookie = $1";
+		$result = pg_query_params($db, $sql, array($visitor));
 		if ($result) {
 			$myrow = pg_fetch_array ($result, 0);
 
 			$sql = "
 UPDATE users
-   SET email            = '$email',
-       number_of_days   = $numberofdays,
-       page_size        = $page_size,
-       set_focus_search = $set_focus_search";
+   SET email            = $1,
+       number_of_days   = $2,
+       page_size        = $3,
+       set_focus_search = $4";
+			$params = array($email, $numberofdays, $page_size, $set_focus_search);
 
 			// if they are changing the email, reset the bouncecount.
 			if ($myrow["email"] != $email) {
@@ -115,17 +116,20 @@ UPDATE users
 			}
 
 			if ($Password1 != '') {
-				$sql .= ", password_hash = crypt('" . pg_escape_string($db, $Password1) . "'";
+				$sql .= ", password_hash = crypt($5";
 				$sql .= ", gen_salt('" . PW_HASH_METHOD . "', " . PW_HASH_COST ."))";
+				
+				$params[] = $Password1;
 			}
 
-			$sql .= " where cookie = '$visitor'";
+			$sql .= " where cookie = $" . count($params) + 1;
+			$params[] = $visitor;
 
 			if ($Debug) {
 				echo '<pre>' . htmlentities($sql) . '</pre>';
 			}
 
-			$result = pg_query($db, $sql);
+			$result = pg_query_params($db, $sql, $params);
 			if ($result) {
 				$AccountModified = 1;
 			}

@@ -18,16 +18,13 @@
 
 $Debug = 0;
 
-
-if (IsSet($_POST['submit'])) {
-	$submit = $_POST['submit'];
-}
+$submit = $_POST['submit'] ?? '';
 
 $MailSent    = 0;
 $LoginFailed = 0;
 $eMailFailed = 0;
 
-if (IsSet($submit)) {
+if ($submit) {
    // process form
    $error = '';
 
@@ -55,9 +52,7 @@ if (IsSet($submit)) {
          echo "<pre>$sql</pre>\n";
       }
 
-      $result = pg_prepare($db, FORGOTTEN_PASSWORD_QUERY1, $sql) or die('query failed ' . pg_last_error($db));
-      
-      $result = pg_execute($db, FORGOTTEN_PASSWORD_QUERY1, array($UserID));
+      $result = pg_query_params($db, $sql, array($UserID)) or die('query failed ' . pg_last_error($db));
 
       if (!pg_num_rows($result)) {
          $LoginFailed = 1;
@@ -72,9 +67,7 @@ if (IsSet($submit)) {
 
          if ($Debug) echo "$sql<br>\n";
 
-         $result = pg_prepare($db, FORGOTTEN_PASSWORD_QUERY2, $sql)  or die('query failed ' . pg_last_error($db));
-
-         $result = pg_execute($db, FORGOTTEN_PASSWORD_QUERY2, array($eMail)) or die('query failed ' . pg_last_error($db));
+         $result = pg_query_params($db, $sql, array($eMail)) or die('query failed ' . pg_last_error($db));
 
          if (!pg_num_rows($result)) {
             $eMailFailed = 1;
@@ -90,7 +83,7 @@ if (IsSet($submit)) {
         if ($myrow["emailbouncecount"] > 0) {
            $error = "Sorry, but previous email to you has bounced, so we're not sure it's going to get to you.  But we sent it out
 						anyway.  Please contact " .
-                    'the <a href="' . MAILTO . ':webmaster&#64;freshports.org?subject=I forgot my password" rel="noopener noreferrer">webmaster</A> for help
+                    'the <a href="' . MAILTO . ':' . htmleentities(PROBLEM_SOLVER_EMAIL_ADDRESS . '?subject=I forgot my password') . '" rel="noopener noreferrer">webmaster</a> for help
                     if it doesn\'t arrive.';
            $OKToMail = 1;
            syslog(LOG_NOTICE, "Forgotten password: previous email to '" . $myrow['email'] . "' bounced");
@@ -98,15 +91,14 @@ if (IsSet($submit)) {
 
         if ($myrow["email"] == "") {
           $error = 'Guess what?  You never gave us an email address.  So I guess you must ' . 
-              'contact the <a href="' . MAILTO . ':webmaster&#64;freshports.org?subject=I forgot my password" rel="noopener noreferrer">webmaster</A> for help.';
+              'contact the <a href="' . MAILTO . ':' . htmleentities(PROBLEM_SOLVER_EMAIL_ADDRESS . '?subject=I forgot my password') . '" rel="noopener noreferrer">webmaster</a> for help.';
               $OKToMail = 0;
           syslog(LOG_NOTICE, "Forgotten password: '" . $myrow['name'] . "' never supplied an email.");
         }
 
         if ($OKToMail) {
           $sql = 'insert into user_password_reset (user_id, ip_address) values ($1, $2) returning token';
-          $token_result = pg_prepare($db, FORGOTTEN_PASSWORD_QUERY3, $sql) or die('query failed ' . pg_last_error($db));
-          $token_result = pg_execute($db, FORGOTTEN_PASSWORD_QUERY3, array($myrow["id"], $_SERVER['REMOTE_ADDR'])) or die('password token creation failed ' . pg_last_error($db));
+          $token_result = pg_query_params($db, $sql, array($myrow["id"], $_SERVER['REMOTE_ADDR'])) or die('password token creation failed ' . pg_last_error($db));
           $token_row = pg_fetch_array ($token_result, 0);
           $token = $token_row["token"];
           
@@ -290,7 +282,6 @@ we're only dealing with your FreshPorts login, not a financial transaction....</
 </table>
 </td>
 
-  <td class="sidebar">
   <td class="sidebar">
    <?php include($_SERVER['DOCUMENT_ROOT'] . "/../include/side-bars.php") ?>
   </td>

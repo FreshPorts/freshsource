@@ -21,15 +21,10 @@
 	if (IsSet($token)) {
 		if ($Debug) echo "I'm confirming with token $token\n<BR>";
 		$sql = 'select ConfirmUserAccount($1)';
-		$result = pg_prepare($db, TOKEN_CONFIRM_QUERY, $sql);
+		$result = pg_execute($db, $sql, array($token));
 		if ($result) {
-			$result = pg_execute($db, TOKEN_CONFIRM_QUERY, array($token));
-			if ($result) {
-				$row = pg_fetch_array($result,0);
-				$ResultConfirm = $row[0];
-			} else {
-				echo pg_last_error($db)() . $sql;
-			}
+			$row = pg_fetch_array($result,0);
+			$ResultConfirm = $row[0];
 		} else {
 			echo pg_last_error($db)() . $sql;
 		}

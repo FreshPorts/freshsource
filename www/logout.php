@@ -17,12 +17,9 @@
 	if (IsSet($_COOKIE[USER_COOKIE_NAME])) {
 		$visitor = $_COOKIE[USER_COOKIE_NAME];
 
-		$sql = 'UPDATE users SET cookie = \'nocookie\' WHERE cookie = $1';
+		$sql = "UPDATE users SET cookie = 'nocookie' WHERE cookie = $1";
 		#echo $sql;
-		$result = pg_prepare($db, LOGOUT_QUERY, $sql);
-		if ($result) {
-			$result = pg_execute($db, LOGOUT_QUERY, array($_COOKIE[USER_COOKIE_NAME]));
-		}
+		$result = pg_query_Params($db, $sql, array($_COOKIE[USER_COOKIE_NAME]));
 	}
 
 	header("Location: /");  /* Redirect browser to PHP web site */

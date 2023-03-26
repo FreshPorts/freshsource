@@ -9,14 +9,25 @@ $Debug=0;
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");
-#	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/constants.php");
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/databaselogin.php");
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../include/getvalues.php");
 
 	require_once('/usr/local/www/freshports/include/freshports.php');
-	if (IsSet($_GET["message_id"])) $message_id = AddSlashes($_GET["message_id"]);
-	if (IsSet($_GET["commit_id"]))  $commit_id  = AddSlashes($_GET["commit_id"]);
+
+
+
+
+
+
+
+
+
+
+
+
+	$message_id = pg_escape_string($db, $_REQUEST['message_id'] ?? '');
+	$revision   = pg_escape_string($db, $_REQUEST['revision']   ?? '');
 
 	$Title = "Commit found by ";
 	if ($message_id) {
@@ -150,15 +161,12 @@ function GetPortNameFromFileName($file_name) {
 
 #exit;
 #         $result = pg_exec($database, $sql);
-         $result = pg_prepare($db, COMMIT_QUERY, $sql) or die('query failed ' . pg_last_error($db));
-         if ($result) {
-            if ($WatchListID) {
-               $params = array($message_id, $WatchListID);
-            } else {
-               $params = array($message_id);
-            }
-            $result = pg_execute($db, COMMIT_QUERY, $params) or die('query failed ' . pg_last_error($db));
+         if ($WatchListID) {
+            $params = array($message_id, $WatchListID);
+         } else {
+            $params = array($message_id);
          }
+         $result = pg_query_params($db, $sql, $params) or die('query failed ' . pg_last_error($db));
          if ($result) { # yeah, I know there's a die above, but I didn't want to remove this if when going to prepared statements
             $numrows = pg_num_rows($result);
 			if ($numrows) { 

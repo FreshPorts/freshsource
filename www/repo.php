@@ -91,7 +91,6 @@ $Debug = 1;
 
 	if ($Debug) echo "\n<pre>sql=$sql</pre>\n";
 
-	$result = pg_prepare($database, REPO_QUERY, $sql) or die('query failed ' . pg_last_error($db));
 	if ($parent_id && $WatchListID) {
 		$params = array($parent_id, $WatchListID);
 	} elseif ($parent_id) {
@@ -101,7 +100,7 @@ $Debug = 1;
 	} else {
 		$params = array();
 	}
-	$result = pg_execute($database, REPO_QUERY, $params);
+	$result = pg_query_params($database, $sql, $params);
 	if ($result) {
 		$numrows = pg_num_rows($result);
 #		echo $numrows . " rows to fetch\n";
