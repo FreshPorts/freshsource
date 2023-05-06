@@ -45,12 +45,12 @@ if (IsSet($submit)) {
 
 	$errors = "";
 
-	$UserLogin    = $_REQUEST["UserLogin"];
-	$email        = $_REQUEST["email"];
-	$Password1    = $_REQUEST["Password1"];
-	$Password2    = $_REQUEST["Password2"];
-	$numberofdays = $_REQUEST["numberofdays"];
-	
+	$UserLogin    = $_REQUEST["UserLogin"]    ?? '';
+	$email        = $_REQUEST["email"]        ?? '';
+	$Password1    = $_REQUEST["Password1"]    ?? '';
+	$Password2    = $_REQUEST["Password2"]    ?? '';
+	$numberofdays = $_REQUEST["numberofdays"] ?? '';
+
 	if ($UserLogin == '') {
 		$errors .= "Please enter a user id.<br>";
 		$OK = 0;
@@ -91,9 +91,9 @@ if (IsSet($submit)) {
 		$numberofdays = 0;
 	}
 
-	if ( isset( $_POST["captcha"] ) )
+	if (isset($_POST["captcha"] ) )
 	{
-		if ( $_SESSION["captcha"] == $_POST["captcha"] )
+		if (IsSet($_SESSION["captcha"]) && IsSet($_POST["captcha") && $_SESSION["captcha"] == $_POST["captcha"] )
 		{
 			//CAPTHCA is valid; proceed the message: save to database, send by e-mail ...
 			// echo 'CAPTHCA is valid; proceed the message';
@@ -117,13 +117,13 @@ if (IsSet($submit)) {
 	if ($OK) {
 		// test for existance of user id
 
-		$sql = "select * from users where name = '" . pg_escape_string($db, strtolower($UserLogin)) . "'";
+		$sql = 'select * from users where name = $1';
 		syslog(LOG_ERR, "FreshPorts new user: $sql");
 
-		$result = pg_query($db, $sql) or die('query failed');
+		$result = pg_query_params($db, $sql, array($UserLogin)) or die('query failed');
 
 		// create user id if not found
-		if(!pg_num_rows($result)) {
+		if (!pg_num_rows($result)) {
 			syslog(LOG_ERR, "FreshPorts new user: '$UserLogin', '$email', " . $_SERVER["REMOTE_ADDR"] . ' confirmed: user id is new');
 
 			$UserID = freshports_GetNextValue($Sequence_User_ID, $db);
