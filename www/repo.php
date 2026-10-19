@@ -15,7 +15,7 @@
 	freshports_Start($FreshPortsSlogan,
 					"FreshSource - new ports, applications",
 					"FreeBSD, index, applications, ports");
-$Debug = 1;
+$Debug = 0;
 
 #phpinfo();
     $parent_id = 0;
@@ -74,7 +74,7 @@ $Debug = 1;
 
 
 	$sql .= " FROM element ";
-				
+
     	if ($WatchListID) {
 	    	$sql .= '
 	            left outer join watch_list_element
@@ -104,7 +104,7 @@ $Debug = 1;
 	if ($result) {
 		$numrows = pg_num_rows($result);
 #		echo $numrows . " rows to fetch\n";
-		if ($numrows) { 
+		if ($numrows) {
 
 			$GlobalHideLastChange = "N";
 			for ($i = 0; $i < $numrows; $i++) {
