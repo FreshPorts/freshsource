@@ -2,7 +2,7 @@
 	#
 	# $Id: side-bars.php,v 1.18 2012-03-14 18:25:17 dan Exp $
 	#
-	# Copyright (c) 1998-2003 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 	#
 
 	GLOBAL $User;

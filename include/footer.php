@@ -1,7 +1,7 @@
 <?
 	# $Id: footer.php,v 1.8 2005-12-29 19:51:59 dan Exp $
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 ?>
 <HR>
 <TABLE WIDTH="98%" BORDER="0">

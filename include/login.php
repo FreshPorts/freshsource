@@ -1,7 +1,7 @@
 <?
 	# $Id: login.php,v 1.2 2005-09-06 00:14:12 dan Exp $
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 
 ?>
 <form action="<?php echo $_SERVER["PHP_SELF"] ?>" method="POST"  name=f>

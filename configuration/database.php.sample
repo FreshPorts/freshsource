@@ -1,7 +1,7 @@
 <?php
 	# $Id: database.php.sample,v 1.1 2002-06-24 19:01:53 dan Exp $
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 
 	$db = pg_connect("dbname=freshports user=www password=secret");
 	if ($db) {

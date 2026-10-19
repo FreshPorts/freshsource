@@ -2,7 +2,7 @@
 	#
 	# $Id: getvalues.php,v 1.4 2007-10-08 23:08:14 dan Exp $
 	#
-	# Copyright (c) 1998-2006 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 	#
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . '/../classes/user.php');

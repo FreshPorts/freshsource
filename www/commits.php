@@ -2,7 +2,7 @@
 	#
 	# $Id: commits.php,v 1.33 2012-11-06 00:53:35 dan Exp $
 	#
-	# Copyright (c) 1998-2003 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");

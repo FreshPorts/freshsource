@@ -1,7 +1,7 @@
 <?php
 	# $Id: about.php,v 1.1 2002-06-24 19:14:04 dan Exp $
 	#
-	# Copyright (c) 1998-2001 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/freshports.php");

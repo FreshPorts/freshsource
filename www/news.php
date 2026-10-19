@@ -2,7 +2,7 @@
 	#
 	# $Id: news.php,v 1.3 2003-04-14 01:04:22 dan Exp $
 	#
-	# Copyright (c) 1998-2003 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");

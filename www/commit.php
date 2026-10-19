@@ -2,7 +2,7 @@
 	#
 	# $Id: commit.php,v 1.6 2012-11-06 00:53:35 dan Exp $
 	#
-	# Copyright (c) 1998-2005 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 	#
 
 $Debug=0;

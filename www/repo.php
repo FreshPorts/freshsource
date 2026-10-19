@@ -2,7 +2,7 @@
     #
 	# $Id: repo.php,v 1.7 2012-03-14 18:16:45 dan Exp $
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 	#
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");

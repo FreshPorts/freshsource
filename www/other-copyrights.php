@@ -1,7 +1,7 @@
 <?php
 	# $Id: other-copyrights.php,v 1.1 2002-06-24 14:25:06 dan Exp $
 	#
-	# Copyright (c) 1998-2002 DVL Software Limited
+	# Copyright (c) 1998-2026 Dan Langille
 
 	require($_SERVER['DOCUMENT_ROOT'] . "/../include/common.php");
 	require('/usr/local/www/freshports/include/freshports.php');
