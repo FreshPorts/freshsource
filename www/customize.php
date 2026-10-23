@@ -26,7 +26,8 @@ if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
 $visitor = $_COOKIE[USER_COOKIE_NAME] ?? '';
 
 // if we don't know who they are, we'll make sure they login first
-if (empty($visitor)) {
+// a cookie which matches no login leaves $User empty
+if (empty($visitor) || empty($User->id)) {
 	header('Location: /login.php');  /* Redirect browser to PHP web site */
 	exit;  /* Make sure that code below does not get executed when we redirect. */
 }
