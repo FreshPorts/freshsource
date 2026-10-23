@@ -26,8 +26,8 @@ $Debug=0;
 
 
 
-	$message_id = pg_escape_string($db, $_REQUEST['message_id'] ?? '');
-	$revision   = pg_escape_string($db, $_REQUEST['revision']   ?? '');
+	$message_id = $_REQUEST['message_id'] ?? '';
+	$revision   = $_REQUEST['revision']   ?? '';
 
 	$Title = "Commit found by ";
 	if ($message_id) {

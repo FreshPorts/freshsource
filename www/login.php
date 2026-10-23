@@ -121,7 +121,7 @@ if (IsSet($_REQUEST['LOGIN']) && IsSet($_REQUEST['UserID']) && IsSet($_REQUEST['
 
 if (IsSet($_REQUEST["resend"]) && IsSet($_REQUEST["user"])) {
 
-   $User = pg_escape_string($db, $_REQUEST["user"]);
+   $User = $_REQUEST["user"];
 
    // get user id for that name
    $sql = 'select id from users where lower(name) = lower($1)';
