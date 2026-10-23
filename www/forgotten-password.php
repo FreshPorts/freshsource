@@ -105,12 +105,12 @@ if ($submit) {
           # send out email
           $message = "Someone, perhaps you, requested to reset your password.\n".
                      "If that wasn't you, and this message becomes a nuisance, please\n".
-                     "forward this message to webmaster@freshports.org and we will take\n". 
+                     "forward this message to " . PROBLEM_SOLVER_EMAIL_ADDRESS . " and we will take\n" .
                      "care of it for you.\n" .
                      " \n" .
                      "Your login id is: " . $myrow["name"] . "\n\n" . 
                      "Your password recovery URL is:\n" .
-                     "http://" . $_SERVER["HTTP_HOST"] . "/password-reset-via-token.php?token=" . $token . "\n" .
+                     "https://" . $_SERVER["HTTP_HOST"] . "/password-reset-via-token.php?token=" . $token . "\n" .
                      "\n" .
                      "the request came from " . $_SERVER["REMOTE_ADDR"] . ':' . $_SERVER["REMOTE_PORT"];
 
