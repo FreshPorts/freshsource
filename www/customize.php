@@ -97,7 +97,7 @@ if (IsSet($submit)) {
 
 	if ($OK) {
 		// get the existing email in case we need to reset the bounce count
-		$sql = "select email from users where cookie = $1";
+		$sql = "select email from users join user_cookie on users.id = user_cookie.user_id where user_cookie.cookie = $1";
 		$result = pg_query_params($db, $sql, array($visitor));
 		if ($result) {
 			$myrow = pg_fetch_array ($result, 0);
@@ -122,7 +122,7 @@ UPDATE users
 				$params[] = $Password1;
 			}
 
-			$sql .= " where cookie = $" . count($params) + 1;
+			$sql .= " where users.id = (select user_id from user_cookie where cookie = $" . (count($params) + 1) . ")";
 			$params[] = $visitor;
 
 			if ($Debug) {

@@ -13,20 +13,20 @@
 	freshports_Start("Account confirmation",
 					"freshports - new ports, applications",
 					"FreeBSD, index, applications, ports");
-	$Debug = 1;
+	$Debug = 0;
 
 	$ResultConfirm = 999;
 
-	$token = $_GET["token"];
+	$token = $_REQUEST["token"] ?? null;
 	if (IsSet($token)) {
-		if ($Debug) echo "I'm confirming with token $token\n<BR>";
+		if ($Debug) echo "I'm confirming with token " . htmlentities($token) . "\n<BR>";
 		$sql = 'select ConfirmUserAccount($1)';
-		$result = pg_execute($db, $sql, array($token));
+		$result = pg_query_params($db, $sql, array($token));
 		if ($result) {
 			$row = pg_fetch_array($result,0);
 			$ResultConfirm = $row[0];
 		} else {
-			echo pg_last_error($db)() . $sql;
+			echo pg_last_error($db) . $sql;
 		}
 	}
 ?>
