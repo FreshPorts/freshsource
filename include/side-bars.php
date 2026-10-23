@@ -21,16 +21,15 @@
 	<TD>
 
 <?php
-	if (IsSet($_COOKIE["visitor"])) $visitor = $_COOKIE["visitor"];
-	if (IsSet($visitor)) {
-		echo '<FONT SIZE="-1">Logged in as ', $User->name, "</FONT><BR>";
+	if (IsSet($User) && !empty($User->id)) {
+		echo '<FONT SIZE="-1">Logged in as ', htmlentities($User->name), "</FONT><BR>";
 
-		if ($EmailBounceCount > 0) {
+		if ($User->emailbouncecount > 0) {
 			echo '<IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><BR>';
 			echo '<FONT SIZE="-1">your email is <A HREF="bouncing.php">bouncing</A></FONT><BR>';
 			echo '<IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><IMG SRC="/images/warning.gif"><BR>';
 		}
-		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/customize.php',        '', "Customize"              ) . '</FONT><BR>';
+		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/customize.php',        '', "Your Account"           ) . '</FONT><BR>';
 
 
 		echo '<FONT SIZE="-1">' . freshports_SideBarHTMLParm($_SERVER["PHP_SELF"], '/logout.php',           '', "Logout"                 ) . '</FONT><BR>';

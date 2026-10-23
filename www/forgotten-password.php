@@ -11,6 +11,7 @@
 	require_once('/usr/local/share/phpmailer/PHPMailer.php');
 	require_once('/usr/local/share/phpmailer/SMTP.php');
 	require_once('/usr/local/www/freshports/include/freshports.php');
+	require_once($_SERVER['DOCUMENT_ROOT'] . '/../include/getvalues.php');
 
 	if (IN_MAINTENANCE_MODE) {
                 header('Location: /' . MAINTENANCE_PAGE, TRUE, 307);
