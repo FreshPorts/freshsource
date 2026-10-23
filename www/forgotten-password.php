@@ -36,8 +36,8 @@ if ($submit) {
 
    $OK = 1;
 
-   $UserID = pg_escape_string($db, $_REQUEST["UserID"] );
-   $eMail  = pg_escape_string($db, strtolower( $_REQUEST["eMail"] ) );
+   $UserID = $_REQUEST["UserID"] ?? '';
+   $eMail  = strtolower( $_REQUEST["eMail"] ?? '' );
 
    if ($UserID) {
       $error = '';

@@ -24,18 +24,18 @@
 	# user does not know password. Has been sent a token.
 	# Match that token against a user id, then let them reset the password
 
-if (IsSet($_REQUEST['submit'])) $submit = pg_escape_string($db,  $_REQUEST['submit'] );
-if (IsSet($_REQUEST['token']))  $token  = pg_escape_string($db,  $_REQUEST['token'] );
+if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
+if (IsSet($_REQUEST['token']))  $token  = $_REQUEST['token'];
 
-syslog(LOG_NOTICE, "Password reset page: loaded with: " . $token);
+syslog(LOG_NOTICE, "Password reset page: loaded with: " . ($token ?? ''));
 
 if (IsSet($submit)) {
   $Debug = 0;
 
   // process form
 
-  $Password1 = pg_escape_string($db,  $_POST['Password1'] );
-  $Password2 = pg_escape_string($db,  $_POST['Password2'] );
+  $Password1 = $_POST['Password1'] ?? '';
+  $Password2 = $_POST['Password2'] ?? '';
 
   if ($Debug) {
     foreach($_REQUEST as $name => $value) {
@@ -59,7 +59,7 @@ if (IsSet($submit)) {
       echo $sql;
     }
 
-    $result = pg_query_params($db, $sql, array( $Password1, $token )) or die('query failed ' . pg_last_error($db));
+    $result = pg_query_params($db, $sql, array( $Password1, $token ?? null )) or die('query failed ' . pg_last_error($db));
     if ($result) {
       $myrow = pg_fetch_array ($result);
       if ($myrow['rowcount'] == 1) {

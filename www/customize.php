@@ -23,7 +23,7 @@
 	$AccountModified = 0;
 
 if (IsSet($_REQUEST['submit'])) $submit = $_REQUEST['submit'];
-$visitor = pg_escape_string($db, $_COOKIE[USER_COOKIE_NAME] ?? '');
+$visitor = $_COOKIE[USER_COOKIE_NAME] ?? '';
 
 // if we don't know who they are, we'll make sure they login first
 if (empty($visitor)) {
@@ -36,7 +36,7 @@ if (IsSet($submit)) {
 
 	// process form
 
-	$email         = pg_escape_string($db, $_POST['email']);
+	$email         = $_POST['email'] ?? '';
 	$Password      = $_POST['Password'];
 	$Password1     = $_POST['Password1'];
 	$Password2     = $_POST['Password2'];
